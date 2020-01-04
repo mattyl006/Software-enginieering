@@ -41,6 +41,44 @@ public class ContactImporter {
     }
 
 
+    private void importContactsFromAndroid(){
+        String[] contactsProjection = {
+                ContactsContract.Contacts._ID,
+                ContactsContract.Contacts.DISPLAY_NAME,
+                ContactsContract.Contacts.HAS_PHONE_NUMBER
+        };
+
+        Cursor contactsCursor = context.getContentResolver().query(
+                ContactsContract.Contacts.CONTENT_URI,
+                contactsProjection,
+                null,
+                null,
+                null
+        );
+
+        int idColIndex = contactsCursor.getColumnIndex(ContactsContract.Contacts._ID);
+        int nameColIndex = contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+        int hasPhoneNumberColIndex = contactsCursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
+
+        contacts = new ArrayList<>();
+
+        while(contactsCursor.moveToNext()){
+            boolean hasPhoneNumber = contactsCursor.getInt(hasPhoneNumberColIndex) > 0 ? true : false;
+            if(hasPhoneNumber){
+                int contactId = contactsCursor.getInt(idColIndex);
+                String[] phoneNumbers = getPhoneNumbersForContact(contactId);
+
+                for (String phoneNumber: phoneNumbers
+                ) {
+                    contacts.add(new Contact(contactsCursor.getInt(idColIndex),
+                            contactsCursor.getString(nameColIndex),
+                            phoneNumber ));
+                }
+            }
+        }
+    }
+
+
     /**
      *
      * @param contactId contact id retrieved from ContactsContract.Contacts table
