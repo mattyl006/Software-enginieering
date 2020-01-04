@@ -18,9 +18,12 @@ public class ContactImporter {
     private ArrayList<Contact> contacts;
     private Context context;
 
+    public boolean areImported;
+
 
     public ContactImporter(Context context) {
         this.context = context;
+        areImported = false;
     }
 
     /**
@@ -40,6 +43,24 @@ public class ContactImporter {
         return true;
     }
 
+    /**
+     *
+     * @return {@code ArrayList}of contacts or {@code null} if importing contacts failed
+     */
+    public ArrayList<Contact> getAllContacts(){
+        if(areImported){
+            return contacts;
+        }
+        else{
+            if(checkReadContactsPermission()){
+                importContactsFromAndroid();
+            }
+            else{
+                return null;
+            }
+        }
+        return contacts;
+    }
 
     private void importContactsFromAndroid(){
         String[] contactsProjection = {
@@ -76,6 +97,8 @@ public class ContactImporter {
                 }
             }
         }
+
+        areImported = true;
     }
 
 
