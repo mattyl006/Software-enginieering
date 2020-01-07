@@ -17,12 +17,12 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
     private TextView contactNameTextView;
     private Button whatsappRedirectButton;
 
-    public ContactsViewHolder(@NonNull RelativeLayout parentView) {
-        super(parentView);
+    public ContactsViewHolder(@NonNull RelativeLayout itemView) {
+        super(itemView);
 
-        this.parentView = parentView;
-        contactNameTextView = parentView.findViewById(R.id.contactNameTextView_itemView);
-        whatsappRedirectButton = parentView.findViewById(R.id.whatsappRedirectButton_itemView);
+        this.parentView = itemView;
+        contactNameTextView = itemView.findViewById(R.id.contactNameTextView_itemView);
+        whatsappRedirectButton = itemView.findViewById(R.id.whatsappRedirectButton_itemView);
     }
 
 
