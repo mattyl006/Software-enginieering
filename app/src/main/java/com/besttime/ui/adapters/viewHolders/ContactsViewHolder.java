@@ -25,6 +25,10 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         whatsappRedirectButton = itemView.findViewById(R.id.whatsappRedirectButton_itemView);
     }
 
+    public void setContactName(String contactName){
+        contactNameTextView.setText(contactName);
+    }
+
 
 
 }
