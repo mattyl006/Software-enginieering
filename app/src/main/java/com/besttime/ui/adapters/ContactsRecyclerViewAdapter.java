@@ -7,11 +7,20 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.besttime.models.Contact;
 import com.besttime.ui.adapters.viewHolders.ContactsViewHolder;
 import com.example.besttime.R;
 
+import java.util.ArrayList;
+
 
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsViewHolder> {
+
+    private ArrayList<Contact> contactsList;
+
+    public ContactsRecyclerViewAdapter(ArrayList<Contact> contactsList) {
+        this.contactsList = contactsList;
+    }
 
     @NonNull
     @Override
