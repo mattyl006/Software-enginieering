@@ -16,7 +16,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
     @NonNull
     @Override
     public ContactsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        RelativeLayout viewHolderMainView = (RelativeLayout) LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.contact_item_view, parent, false);
+
+        ContactsViewHolder viewHolder = new ContactsViewHolder(viewHolderMainView);
+
+
+        return viewHolder;
     }
 
     @Override
