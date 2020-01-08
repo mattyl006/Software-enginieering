@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.besttime.models.Contact;
@@ -17,10 +18,15 @@ import java.util.ArrayList;
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsViewHolder> {
 
     private ArrayList<Contact> contactsList;
+    private SelectionTracker selectionTracker = null;
 
     public ContactsRecyclerViewAdapter(ArrayList<Contact> contactsList) {
         this.contactsList = contactsList;
         this.setHasStableIds(true);
+    }
+
+    public void setSelectionTracker(SelectionTracker selectionTracker) {
+        this.selectionTracker = selectionTracker;
     }
 
     @Override
@@ -43,6 +49,12 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
     @Override
     public void onBindViewHolder(@NonNull ContactsViewHolder holder, int position) {
         holder.setContactName(contactsList.get(position).getName());
+        if(selectionTracker != null){
+            boolean isActive = selectionTracker.isSelected((long)position);
+            holder.setActive(isActive);
+        }
+
+        
     }
 
     @Override
