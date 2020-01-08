@@ -27,6 +27,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     public void setSelectionTracker(SelectionTracker selectionTracker) {
         this.selectionTracker = selectionTracker;
+        selectionTracker.select((long)0);
     }
 
     @Override
