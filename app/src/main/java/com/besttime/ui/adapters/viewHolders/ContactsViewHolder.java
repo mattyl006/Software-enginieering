@@ -31,6 +31,17 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         contactNameTextView.setText(contactName);
     }
 
+    public void setActive(boolean isActive){
+        parentView.setActivated(isActive);
+        if(isActive){
+            whatsappRedirectButton.setVisibility(View.VISIBLE);
+            parentView.setClickable(false);
+        }
+        else{
+            whatsappRedirectButton.setVisibility(View.GONE);
+        }
+    }
+
 
     public ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
         ItemDetailsLookup.ItemDetails<Long> itemDetails = new ItemDetailsLookup.ItemDetails<Long>() {
