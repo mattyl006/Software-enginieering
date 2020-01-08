@@ -32,13 +32,15 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setActive(boolean isActive){
-        parentView.setActivated(isActive);
-        if(isActive){
-            whatsappRedirectButton.setVisibility(View.VISIBLE);
-            parentView.setClickable(false);
-        }
-        else{
-            whatsappRedirectButton.setVisibility(View.GONE);
+        if(isActive != this.isActive())
+        {
+            parentView.setActivated(isActive);
+            if(isActive){
+                whatsappRedirectButton.setVisibility(View.VISIBLE);
+            }
+            else{
+                whatsappRedirectButton.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -58,5 +60,9 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         };
 
         return itemDetails;
+    }
+
+    public boolean isActive() {
+        return parentView.isActivated();
     }
 }

@@ -19,15 +19,39 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     private ArrayList<Contact> contactsList;
     private SelectionTracker selectionTracker = null;
+    private boolean doNothingOnItemStateChanged;
+    private long previousSelectionKey;
+    private ContactsViewHolder selectedViewHolder;
 
     public ContactsRecyclerViewAdapter(ArrayList<Contact> contactsList) {
         this.contactsList = contactsList;
         this.setHasStableIds(true);
     }
 
-    public void setSelectionTracker(SelectionTracker selectionTracker) {
+    public void setSelectionTracker(final SelectionTracker selectionTracker) {
         this.selectionTracker = selectionTracker;
         selectionTracker.select((long)0);
+        selectionTracker.addObserver(new SelectionTracker.SelectionObserver<Long>() {
+            @Override
+            public void onItemStateChanged(@NonNull Long key, boolean selected) {
+                super.onItemStateChanged(key, selected);
+                if (!doNothingOnItemStateChanged) {
+                    int numOfSelectedItems = selectionTracker.getSelection().size();
+                    if (numOfSelectedItems == 1) {
+                        previousSelectionKey = key;
+                    } else if (numOfSelectedItems == 2) {
+                        doNothingOnItemStateChanged = true;
+                        selectionTracker.deselect(previousSelectionKey);
+                        previousSelectionKey = key;
+                        doNothingOnItemStateChanged = false;
+                    } else if (numOfSelectedItems == 0) {
+                        doNothingOnItemStateChanged = true;
+                        selectionTracker.select(previousSelectionKey);
+                        doNothingOnItemStateChanged = false;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -53,6 +77,16 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
         if(selectionTracker != null){
             boolean isActive = selectionTracker.isSelected((long)position);
             holder.setActive(isActive);
+
+            // Prevent selected view from being selected again (deselected, one view has always to be selected)
+            if(isActive != holder.isActive()){
+                if(isActive){
+                    selectedViewHolder = holder;
+                }
+                else{
+                    holder.setActive(isActive);
+                }
+            }
         }
 
         

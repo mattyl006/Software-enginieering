@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         contactsList = new ArrayList<>();
+        initializeSampleDataAndAddItToContactsList();
 
 
         contactsRecyclerView = findViewById(R.id.contactsRecyclerView);
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public boolean canSelectMultiple() {
-                        return false;
+                        return true;
                     }
                 })
                 .build();
