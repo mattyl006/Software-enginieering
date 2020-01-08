@@ -26,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeSampleDataAndAddItToContactsList();
+        contactsList = new ArrayList<>();
+
 
         contactsRecyclerView = findViewById(R.id.contactsRecyclerView);
 
@@ -50,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
                 new Contact(6, "Anna", "444555666"),
                 new Contact(7, "Noname", "444555666")};
 
-
-        contactsList = new ArrayList<>();
+        if(contactsList == null){
+            contactsList = new ArrayList<>();
+        }
         for (Contact sampleContact: sampleData) {
             contactsList.add(sampleContact);
         }
