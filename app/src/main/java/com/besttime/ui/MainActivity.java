@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         contactsList = new ArrayList<>();
-        initializeSampleDataAndAddItToContactsList();
 
 
         contactsRecyclerView = findViewById(R.id.contactsRecyclerView);
@@ -96,7 +95,14 @@ public class MainActivity extends AppCompatActivity {
                 new Contact(4, "Marek", "444555666"),
                 new Contact(5, "Janek", "444555666"),
                 new Contact(6, "Anna", "444555666"),
-                new Contact(7, "Noname", "444555666")};
+                new Contact(7, "Kot", "444555666"),
+                new Contact(8, "Kuzyn", "444555666"),
+                new Contact(9, "Siostra", "444555666"),
+                new Contact(10, "Brat", "444555666"),
+                new Contact(11, "Tata", "444555666"),
+                new Contact(12, "Mama", "444555666"),
+                new Contact(13, "Babcia", "444555666"),
+                new Contact(14, "Anthony", "444555666")};
 
         if(contactsList == null){
             contactsList = new ArrayList<>();
