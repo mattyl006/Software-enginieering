@@ -20,6 +20,12 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     public ContactsRecyclerViewAdapter(ArrayList<Contact> contactsList) {
         this.contactsList = contactsList;
+        this.setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return (long)position;
     }
 
     @NonNull
