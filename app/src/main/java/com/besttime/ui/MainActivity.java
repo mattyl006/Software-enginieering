@@ -1,8 +1,12 @@
 package com.besttime.ui;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StableIdKeyProvider;
+import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +18,7 @@ import android.widget.RelativeLayout;
 
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
+import com.besttime.ui.itemsSelecting.ContactItemDetailsLookup;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
@@ -43,6 +48,35 @@ public class MainActivity extends AppCompatActivity {
 
         ContactsRecyclerViewAdapter contactsAdapter = new ContactsRecyclerViewAdapter(contactsList);
         contactsRecyclerView.setAdapter(contactsAdapter);
+
+        // Create selection tracker
+
+        SelectionTracker selectionTracker =new SelectionTracker.Builder<Long>(
+                "selection-id",
+                contactsRecyclerView,
+                new StableIdKeyProvider(contactsRecyclerView),
+                new ContactItemDetailsLookup(contactsRecyclerView),
+                StorageStrategy.createLongStorage())
+                .withSelectionPredicate(new SelectionTracker.SelectionPredicate<Long>() {
+                    @Override
+                    public boolean canSetStateForKey(@NonNull Long key, boolean nextState) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean canSetStateAtPosition(int position, boolean nextState) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean canSelectMultiple() {
+                        return false;
+                    }
+                })
+                .build();
+
+        contactsAdapter.setSelectionTracker(selectionTracker);
+
 
     }
 
