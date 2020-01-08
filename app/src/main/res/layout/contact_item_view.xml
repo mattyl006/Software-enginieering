@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="75dp"
     android:id="@+id/itemParentView"
-    android:background="#888888">
+    android:background="@drawable/contact_item_state">
 
     <TextView
         android:id="@+id/contactNameTextView_itemView"
