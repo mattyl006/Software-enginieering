@@ -6,9 +6,14 @@
     android:layout_height="match_parent"
     tools:context="com.besttime.ui.MainActivity">
 
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/action_bar"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/actionBar"/>
 
 </RelativeLayout>
