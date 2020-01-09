@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
@@ -28,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView contactsRecyclerView;
     private ArrayList<Contact> contactsList;
 
+    private RelativeLayout staticSidebar;
+    private static final int numOfTimeSquaresOnStaticSidebar = 18;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         contactsList = new ArrayList<>();
-
+        //initializeSampleDataAndAddItToContactsList();
 
         contactsRecyclerView = findViewById(R.id.contactsRecyclerView);
 
@@ -76,6 +82,21 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         contactsAdapter.setSelectionTracker(selectionTracker);
+
+        staticSidebar = findViewById(R.id.static_sidebar);
+
+        staticSidebar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int timeSquaresHeight = staticSidebar.getHeight() / numOfTimeSquaresOnStaticSidebar;
+                for(int i = 0; i < numOfTimeSquaresOnStaticSidebar; i ++){
+                    TextView timeSquare = (TextView) staticSidebar.getChildAt(i);
+                    RelativeLayout.LayoutParams timeSquareLayoutParams = (RelativeLayout.LayoutParams) timeSquare.getLayoutParams();
+                    timeSquareLayoutParams.height = timeSquaresHeight;
+                    timeSquare.setLayoutParams(timeSquareLayoutParams);
+                }
+            }
+        });
 
 
     }
