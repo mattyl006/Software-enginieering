@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         contactsList = new ArrayList<>();
-        //initializeSampleDataAndAddItToContactsList();
+        initializeSampleDataAndAddItToContactsList();
 
         contactsRecyclerView = findViewById(R.id.contactsRecyclerView);
 
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     RelativeLayout.LayoutParams timeSquareLayoutParams = (RelativeLayout.LayoutParams) timeSquare.getLayoutParams();
                     timeSquareLayoutParams.height = timeSquaresHeight;
                     timeSquare.setLayoutParams(timeSquareLayoutParams);
+                    timeSquare.setBackgroundResource(R.drawable.rectangle_gray_border);
                 }
             }
         });
