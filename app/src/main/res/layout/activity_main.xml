@@ -24,6 +24,7 @@
         android:id="@+id/contactsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/actionBar"/>
+        android:layout_below="@id/actionBar"
+        android:layout_toRightOf="@id/static_sidebar"/>
 
 </RelativeLayout>
