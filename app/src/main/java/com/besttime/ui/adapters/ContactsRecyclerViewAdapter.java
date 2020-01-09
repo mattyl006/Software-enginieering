@@ -67,6 +67,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
         ContactsViewHolder viewHolder = new ContactsViewHolder(viewHolderMainView);
 
+        viewHolder.setIsRecyclable(false);
 
         return viewHolder;
     }
@@ -76,11 +77,11 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
         holder.setContactName(contactsList.get(position).getName());
         if(selectionTracker != null){
             boolean isActive = selectionTracker.isSelected((long)position);
-            holder.setActive(isActive);
 
             // Prevent selected view from being selected again (deselected, one view has always to be selected)
             if(isActive != holder.isActive()){
                 if(isActive){
+                    holder.setActive(isActive);
                     selectedViewHolder = holder;
                 }
                 else{
