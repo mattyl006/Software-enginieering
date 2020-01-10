@@ -22,6 +22,14 @@
         android:layout_below="@id/actionBar"
         android:layout_alignParentLeft="true"/>
 
+    <View
+        android:id="@+id/shadowMakerAndClickBlocker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:translationZ="5dp"
+        android:alpha="0" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsRecyclerView"
