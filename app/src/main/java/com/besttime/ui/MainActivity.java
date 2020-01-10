@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean isSidebarOpened = false;
     private static final int numOfTimeRectanglesOnMovingSidebar = 36;
 
+
+    private View shadowMakerAndClickBlocker;
+    private final float shadowValue = 0.5f;
+
     private static final int partOfScreenForSidebars = 11;
     private static final int widthChangeAfterOpeningSidebar = 4;
 
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        shadowMakerAndClickBlocker = findViewById(R.id.shadowMakerAndClickBlocker);
 
         screenWidth = displayMetrics.widthPixels;
 
@@ -163,6 +169,11 @@ public class MainActivity extends AppCompatActivity {
                     movingSidebar.setLayoutParams(sidebarLayoutParams);
 
                     movingSidebar.setAlpha(1);
+
+                    shadowMakerAndClickBlocker.setClickable(true);
+                    shadowMakerAndClickBlocker.setFocusable(true);
+                    shadowMakerAndClickBlocker.setAlpha(shadowValue);
+
                     isSidebarOpened = true;
                 }
 
@@ -178,6 +189,11 @@ public class MainActivity extends AppCompatActivity {
                     movingSidebar.setLayoutParams(sidebarLayoutParams);
 
                     movingSidebar.setAlpha(0);
+
+                    shadowMakerAndClickBlocker.setClickable(false);
+                    shadowMakerAndClickBlocker.setFocusable(false);
+                    shadowMakerAndClickBlocker.setAlpha(0f);
+                    
                     isSidebarOpened = false;
                 }
 
