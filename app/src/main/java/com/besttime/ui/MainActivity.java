@@ -10,6 +10,8 @@ import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -48,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int widthChangeAfterOpeningSidebar = 4;
 
     private int screenWidth;
+
+    private ValueAnimator sidebarOpeningWidthAnimation;
+    private ValueAnimator sidebarOpeningAlphaAnimation;
+    private ValueAnimator shadowCastingAnimation;
+    private long sidebarOpeningAnimationDuration = 500;
 
 
 
@@ -148,9 +155,31 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                sidebarOpeningWidthAnimation = ValueAnimator.ofInt(movingSidebar.getWidth(), movingSidebar.getWidth() * widthChangeAfterOpeningSidebar);
+                sidebarOpeningWidthAnimation.setDuration(sidebarOpeningAnimationDuration);
+                sidebarOpeningWidthAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        int animatedValue = (int) valueAnimator.getAnimatedValue();
+
+                        RelativeLayout.LayoutParams movingSidebarLayoutParams = (RelativeLayout.LayoutParams) movingSidebar.getLayoutParams();
+                        movingSidebarLayoutParams.width = animatedValue;
+                        movingSidebar.setLayoutParams(movingSidebarLayoutParams);
+
+                    }
+                });
+
+                sidebarOpeningAlphaAnimation = ObjectAnimator.ofFloat(movingSidebar, "alpha", 0f, 1f);
+                sidebarOpeningAlphaAnimation.setDuration(sidebarOpeningAnimationDuration);
+
+
                 movingSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+
+
+        shadowCastingAnimation = ObjectAnimator.ofFloat(shadowMakerAndClickBlocker, "alpha", 0f, shadowValue);
+        shadowCastingAnimation.setDuration(sidebarOpeningAnimationDuration);
 
 
         movingSidebar.setOnTouchListener(new OnSwipeTouchListener(this){
@@ -164,15 +193,13 @@ public class MainActivity extends AppCompatActivity {
                 super.onSwipeRight();
 
                 if(!isSidebarOpened){
-                    RelativeLayout.LayoutParams sidebarLayoutParams = (RelativeLayout.LayoutParams) movingSidebar.getLayoutParams();
-                    sidebarLayoutParams.width *= widthChangeAfterOpeningSidebar;
-                    movingSidebar.setLayoutParams(sidebarLayoutParams);
 
-                    movingSidebar.setAlpha(1);
+                    sidebarOpeningWidthAnimation.start();
+                    sidebarOpeningAlphaAnimation.start();
+                    shadowCastingAnimation.start();
 
                     shadowMakerAndClickBlocker.setClickable(true);
                     shadowMakerAndClickBlocker.setFocusable(true);
-                    shadowMakerAndClickBlocker.setAlpha(shadowValue);
 
                     isSidebarOpened = true;
                 }
@@ -184,21 +211,22 @@ public class MainActivity extends AppCompatActivity {
                 super.onSwipeLeft();
 
                 if(isSidebarOpened){
-                    RelativeLayout.LayoutParams sidebarLayoutParams = (RelativeLayout.LayoutParams) movingSidebar.getLayoutParams();
-                    sidebarLayoutParams.width /= widthChangeAfterOpeningSidebar;
-                    movingSidebar.setLayoutParams(sidebarLayoutParams);
 
-                    movingSidebar.setAlpha(0);
+                    sidebarOpeningWidthAnimation.reverse();
+                    sidebarOpeningAlphaAnimation.reverse();
+                    shadowCastingAnimation.reverse();
 
                     shadowMakerAndClickBlocker.setClickable(false);
                     shadowMakerAndClickBlocker.setFocusable(false);
-                    shadowMakerAndClickBlocker.setAlpha(0f);
-                    
+
                     isSidebarOpened = false;
                 }
 
             }
         });
+
+
+
 
 
     }
