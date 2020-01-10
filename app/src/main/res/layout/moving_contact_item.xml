@@ -3,8 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/contact_item_height"
     android:id="@+id/itemParentView"
-    android:background="@android:color/transparent"
-    android:translationZ="2dp">
+    android:background="@color/contactItemSelected"
+    android:alpha="0.7"
+    android:translationZ="2dp"
+    android:visibility="gone">
 
     <Button
         android:id="@+id/whatsappRedirectButton_movingContactItem"
