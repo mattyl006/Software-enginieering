@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -37,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout movingSidebar;
     private static final int numOfTimeRectanglesOnMovingSidebar = 36;
 
+    private static final int partOfScreenForSidebars = 11;
+    private static final int widthChangeAfterOpeningSidebar = 5;
+
+    private int screenWidth;
+
 
 
     @Override
@@ -47,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
         final Toolbar actionBar = findViewById(R.id.actionBar);
         setSupportActionBar(actionBar);
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        screenWidth = displayMetrics.widthPixels;
 
         contactsList = new ArrayList<>();
         initializeSampleDataAndAddItToContactsList();
@@ -92,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
         staticSidebar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                RelativeLayout.LayoutParams sidebarLayoutParams = (RelativeLayout.LayoutParams) staticSidebar.getLayoutParams();
+                sidebarLayoutParams.width = screenWidth / partOfScreenForSidebars;
+                staticSidebar.setLayoutParams(sidebarLayoutParams);
+
+
                 int timeSquaresHeight = staticSidebar.getHeight() / numOfTimeSquaresOnStaticSidebar;
                 for(int i = 0; i < numOfTimeSquaresOnStaticSidebar; i ++){
                     TextView timeSquare = (TextView) staticSidebar.getChildAt(i);
@@ -108,6 +124,10 @@ public class MainActivity extends AppCompatActivity {
         movingSidebar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                RelativeLayout.LayoutParams sidebarLayoutParams = (RelativeLayout.LayoutParams) movingSidebar.getLayoutParams();
+                sidebarLayoutParams.width = screenWidth / partOfScreenForSidebars;
+                movingSidebar.setLayoutParams(sidebarLayoutParams);
+
                 int timeRectanglesHeight = (movingSidebar.getHeight() - actionBar.getHeight()) / numOfTimeRectanglesOnMovingSidebar;
                 for(int i = 0; i < numOfTimeRectanglesOnMovingSidebar + 1; i ++){
                     View childOfSidebar = movingSidebar.getChildAt(i);
