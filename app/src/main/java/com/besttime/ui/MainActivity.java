@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout staticSidebar;
     private static final int numOfTimeSquaresOnStaticSidebar = 18;
 
+    private RelativeLayout movingSidebar;
+    private static final int numOfTimeRectanglesOnMovingSidebar = 36;
+
 
 
     @Override
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar actionBar = findViewById(R.id.actionBar);
+        final Toolbar actionBar = findViewById(R.id.actionBar);
         setSupportActionBar(actionBar);
 
 
@@ -95,6 +99,24 @@ public class MainActivity extends AppCompatActivity {
                     timeSquareLayoutParams.height = timeSquaresHeight;
                     timeSquare.setLayoutParams(timeSquareLayoutParams);
                     timeSquare.setBackgroundResource(R.drawable.rectangle_gray_border);
+                }
+            }
+        });
+
+
+        movingSidebar = findViewById(R.id.movingSidebar);
+        movingSidebar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int timeRectanglesHeight = (movingSidebar.getHeight() - actionBar.getHeight()) / numOfTimeRectanglesOnMovingSidebar;
+                for(int i = 0; i < numOfTimeRectanglesOnMovingSidebar + 1; i ++){
+                    View childOfSidebar = movingSidebar.getChildAt(i);
+                    if(childOfSidebar.getId() != R.id.contactNameTextView_movingSidebar){
+                        RelativeLayout.LayoutParams timeRectangleLayoutParams = (RelativeLayout.LayoutParams) childOfSidebar.getLayoutParams();
+                        timeRectangleLayoutParams.height = timeRectanglesHeight;
+                        childOfSidebar.setLayoutParams(timeRectangleLayoutParams);
+                        childOfSidebar.setBackgroundResource(R.drawable.rectangle_gray_border);
+                    }
                 }
             }
         });
