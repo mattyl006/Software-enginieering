@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.viewHolders.ContactsViewHolder;
+import com.besttime.ui.animation.ContactSelectAnimationManager;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
@@ -22,6 +23,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
     private boolean doNothingOnItemStateChanged;
     private long previousSelectionKey;
     private ContactsViewHolder selectedViewHolder;
+
+    public void setAnimationManager(ContactSelectAnimationManager animationManager) {
+        this.animationManager = animationManager;
+
+    }
+
+    private ContactSelectAnimationManager animationManager;
 
     public ContactsRecyclerViewAdapter(ArrayList<Contact> contactsList) {
         this.contactsList = contactsList;
@@ -81,7 +89,12 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
             // Prevent selected view from being selected again (deselected, one view has always to be selected)
             if(isActive != holder.isActive()){
                 if(isActive){
-                    holder.setActive(isActive);
+                    if(animationManager != null){
+                        animationManager.PlaySelectAnimation(selectedViewHolder, holder);
+                    }
+                    else{
+                        holder.setActive(isActive);
+                    }
                     selectedViewHolder = holder;
                 }
                 else{
