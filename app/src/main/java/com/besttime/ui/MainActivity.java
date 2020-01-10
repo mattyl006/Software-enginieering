@@ -12,18 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
 import com.besttime.ui.itemsSelecting.ContactItemDetailsLookup;
+import com.besttime.ui.listeners.OnSwipeTouchListener;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
@@ -37,10 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int numOfTimeSquaresOnStaticSidebar = 18;
 
     private RelativeLayout movingSidebar;
+    private boolean isSidebarOpened = false;
     private static final int numOfTimeRectanglesOnMovingSidebar = 36;
 
     private static final int partOfScreenForSidebars = 11;
-    private static final int widthChangeAfterOpeningSidebar = 5;
+    private static final int widthChangeAfterOpeningSidebar = 4;
 
     private int screenWidth;
 
@@ -116,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
                     timeSquare.setLayoutParams(timeSquareLayoutParams);
                     timeSquare.setBackgroundResource(R.drawable.rectangle_gray_border);
                 }
+
+                staticSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
 
@@ -138,6 +141,46 @@ public class MainActivity extends AppCompatActivity {
                         childOfSidebar.setBackgroundResource(R.drawable.rectangle_gray_border);
                     }
                 }
+
+                movingSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
+
+        movingSidebar.setOnTouchListener(new OnSwipeTouchListener(this){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return super.onTouch(v, event);
+            }
+
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+
+                if(!isSidebarOpened){
+                    RelativeLayout.LayoutParams sidebarLayoutParams = (RelativeLayout.LayoutParams) movingSidebar.getLayoutParams();
+                    sidebarLayoutParams.width *= widthChangeAfterOpeningSidebar;
+                    movingSidebar.setLayoutParams(sidebarLayoutParams);
+
+                    movingSidebar.setAlpha(1);
+                    isSidebarOpened = true;
+                }
+
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+
+                if(isSidebarOpened){
+                    RelativeLayout.LayoutParams sidebarLayoutParams = (RelativeLayout.LayoutParams) movingSidebar.getLayoutParams();
+                    sidebarLayoutParams.width /= widthChangeAfterOpeningSidebar;
+                    movingSidebar.setLayoutParams(sidebarLayoutParams);
+
+                    movingSidebar.setAlpha(0);
+                    isSidebarOpened = false;
+                }
+
             }
         });
 
