@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
+import com.besttime.ui.animation.ContactSelectAnimationManager;
 import com.besttime.ui.itemsSelecting.ContactItemDetailsLookup;
 import com.besttime.ui.listeners.OnSwipeTouchListener;
 import com.example.besttime.R;
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
     private long sidebarOpeningAnimationDuration = 500;
 
 
+    private View movingContactItem;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         contactsRecyclerView.setLayoutManager(layoutManager);
 
-        ContactsRecyclerViewAdapter contactsAdapter = new ContactsRecyclerViewAdapter(contactsList);
+        final ContactsRecyclerViewAdapter contactsAdapter = new ContactsRecyclerViewAdapter(contactsList);
         contactsRecyclerView.setAdapter(contactsAdapter);
 
         // Create selection tracker
@@ -225,6 +229,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        movingContactItem = findViewById(R.id.movingContactItem);
+
+        actionBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                contactsAdapter.setAnimationManager(new ContactSelectAnimationManager(movingContactItem, shadowMakerAndClickBlocker, 500, actionBar.getHeight()));
+
+                actionBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
 
 
 
