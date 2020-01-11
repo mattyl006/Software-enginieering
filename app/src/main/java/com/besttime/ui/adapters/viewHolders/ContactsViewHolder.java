@@ -6,10 +6,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.besttime.models.Contact;
 import com.example.besttime.R;
 
 public class ContactsViewHolder extends RecyclerView.ViewHolder {
@@ -18,6 +18,10 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
     private RelativeLayout parentView;
     private TextView contactNameTextView;
     private Button whatsappRedirectButton;
+
+    private boolean isSelected = false;
+
+    private Contact contact;
 
     public ContactsViewHolder(@NonNull RelativeLayout itemView) {
         super(itemView);
@@ -31,18 +35,30 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         contactNameTextView.setText(contactName);
     }
 
+    public void bind(Contact contact){
+        this.contact = contact;
+        contactNameTextView.setText(contact.getName());
+    }
+
+    public Contact getContact(){
+        return contact;
+    }
+
     public void setActive(boolean isActive){
-        if(isActive != this.isActive())
+        if(isActive != this.isViewActive())
         {
             parentView.setActivated(isActive);
             if(isActive){
                 whatsappRedirectButton.setVisibility(View.VISIBLE);
+                isSelected = true;
             }
             else{
                 whatsappRedirectButton.setVisibility(View.GONE);
+                isSelected = false;
             }
         }
     }
+
 
 
     public ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
@@ -61,7 +77,11 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         return itemDetails;
     }
 
-    public boolean isActive() {
+    public boolean isSelected(){
+        return isSelected;
+    }
+
+    public boolean isViewActive() {
         return parentView.isActivated();
     }
 }

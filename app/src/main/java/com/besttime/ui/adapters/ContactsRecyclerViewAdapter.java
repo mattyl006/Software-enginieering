@@ -27,12 +27,21 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
     private boolean doNothingOnItemStateChanged;
     private long previousSelectionKey;
     private ContactsViewHolder selectedViewHolder;
-
+    private Contact selectedContact = null;
     private boolean clearingSelection = false;
+
+    private boolean isSelectedContactViewHolderRecycled = false;
+
+
+
+    public Contact getSelectedContact() {
+        return selectedContact;
+    }
+
+
 
     public void setAnimationManager(ContactSelectAnimationManager animationManager) {
         this.animationManager = animationManager;
-
     }
 
     private ContactSelectAnimationManager animationManager;
@@ -87,30 +96,55 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     @Override
     public void onBindViewHolder(@NonNull ContactsViewHolder holder, int position) {
-        holder.setContactName(contactsListFiltered.get(position).getName());
+        holder.bind(contactsListFiltered.get(position));
         if(selectionTracker != null){
-            boolean isActive = selectionTracker.isSelected((long)position);
+            boolean activeStateInSelectionTracker = selectionTracker.isSelected((long)position);
 
             // Prevent selected view from being selected again (deselected, one view has always to be selected)
-            if(isActive != holder.isActive()){
-                if(isActive){
-                    if(animationManager != null){
-                        animationManager.PlaySelectAnimation(selectedViewHolder, holder);
+            if(activeStateInSelectionTracker != holder.isViewActive()){
+                if(activeStateInSelectionTracker == true){
+
+                    if(selectedContact != null){
+                        if(selectedContact.getId() == holder.getContact().getId()){
+                            holder.setActive(true);
+                            return;
+                        }
                     }
-                    else{
-                        holder.setActive(isActive);
+
+                    if(animationManager == null){
+                        holder.setActive(true);
                     }
+                    else if(animationManager != null){
+                        animationManager.PlaySelectAnimation(selectedViewHolder, holder, isSelectedContactViewHolderRecycled);
+                    }
+
+                    // Deselect previously selected view
                     if(selectedViewHolder != null){
                         selectedViewHolder.setActive(false);
                     }
                     selectedViewHolder = holder;
+                    selectedContact = contactsListFiltered.get(position);
+                    isSelectedContactViewHolderRecycled = false;
                 }
-                else{
-                    holder.setActive(isActive);
+                else if(activeStateInSelectionTracker == false){
+                    holder.setActive(false);
                 }
             }
         }
 
+    }
+
+
+    @Override
+    public void onViewRecycled(@NonNull ContactsViewHolder holder) {
+        super.onViewRecycled(holder);
+
+        if(selectedContact != null){
+            if(holder.getContact().getId() == selectedContact.getId()){
+                isSelectedContactViewHolderRecycled = true;
+            }
+
+        }
     }
 
     @Override

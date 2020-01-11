@@ -27,16 +27,22 @@ public class ContactSelectAnimationManager {
         this.yOffset = yOffset;
     }
 
-    public void PlaySelectAnimation(final ContactsViewHolder viewHolderFrom, final ContactsViewHolder viewHolderTo){
+    public void PlaySelectAnimation(final ContactsViewHolder viewHolderFrom, final ContactsViewHolder viewHolderTo, boolean isViewHolderFromRecycled){
 
         float startingY = yOffset;
         float endingY = yOffset;
 
-        if (viewHolderFrom != null) {
-            startingY += viewHolderFrom.itemView.getY();
-        } else {
-            startingY += viewHolderTo.itemView.getY();
+        if(!isViewHolderFromRecycled){
+            if (viewHolderFrom != null) {
+                startingY += viewHolderFrom.itemView.getY();
+            } else {
+                startingY += viewHolderTo.itemView.getY();
+            }
         }
+        else{
+            startingY = 0;
+        }
+
 
         endingY += viewHolderTo.itemView.getY();
 
