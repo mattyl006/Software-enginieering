@@ -52,7 +52,6 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
                 return getAdapterPosition();
             }
 
-            @Nullable
             @Override
             public Long getSelectionKey() {
                 return (long)getAdapterPosition();

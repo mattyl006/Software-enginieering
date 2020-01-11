@@ -2,6 +2,8 @@ package com.besttime.ui.adapters;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -14,15 +16,19 @@ import com.besttime.ui.animation.ContactSelectAnimationManager;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsViewHolder> {
+public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsViewHolder> implements Filterable {
 
     private ArrayList<Contact> contactsList;
+    private ArrayList<Contact> contactsListFiltered;
     private SelectionTracker selectionTracker = null;
     private boolean doNothingOnItemStateChanged;
     private long previousSelectionKey;
     private ContactsViewHolder selectedViewHolder;
+
+    private boolean clearingSelection = false;
 
     public void setAnimationManager(ContactSelectAnimationManager animationManager) {
         this.animationManager = animationManager;
@@ -33,6 +39,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     public ContactsRecyclerViewAdapter(ArrayList<Contact> contactsList) {
         this.contactsList = contactsList;
+        contactsListFiltered =  new ArrayList<>(contactsList);
         this.setHasStableIds(true);
     }
 
@@ -43,7 +50,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
             @Override
             public void onItemStateChanged(@NonNull Long key, boolean selected) {
                 super.onItemStateChanged(key, selected);
-                if (!doNothingOnItemStateChanged) {
+                if (!doNothingOnItemStateChanged && !clearingSelection) {
                     int numOfSelectedItems = selectionTracker.getSelection().size();
                     if (numOfSelectedItems == 1) {
                         previousSelectionKey = key;
@@ -75,14 +82,12 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
         ContactsViewHolder viewHolder = new ContactsViewHolder(viewHolderMainView);
 
-        viewHolder.setIsRecyclable(false);
-
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ContactsViewHolder holder, int position) {
-        holder.setContactName(contactsList.get(position).getName());
+        holder.setContactName(contactsListFiltered.get(position).getName());
         if(selectionTracker != null){
             boolean isActive = selectionTracker.isSelected((long)position);
 
@@ -95,6 +100,9 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                     else{
                         holder.setActive(isActive);
                     }
+                    if(selectedViewHolder != null){
+                        selectedViewHolder.setActive(false);
+                    }
                     selectedViewHolder = holder;
                 }
                 else{
@@ -103,11 +111,51 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
             }
         }
 
-        
     }
 
     @Override
     public int getItemCount() {
-        return contactsList.size();
+        return contactsListFiltered.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString().trim();
+                if(charString.isEmpty()){
+                    contactsListFiltered.clear();
+                    contactsListFiltered.addAll(contactsList);
+                }
+                else {
+                    List<Contact> filteredList = new ArrayList<>();
+                    for(Contact contact: contactsList){
+                        if(contact.getName().toLowerCase().contains(charString.toLowerCase())){
+                            filteredList.add(contact);
+                        }
+                    }
+
+                    contactsListFiltered = (ArrayList<Contact>) filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = contactsListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                contactsListFiltered = (ArrayList<Contact>) filterResults.values;
+
+                clearingSelection = true;
+
+                selectionTracker.clearSelection();
+                notifyDataSetChanged();
+
+                clearingSelection = false;
+                selectionTracker.select((long)0);
+            }
+        };
     }
 }
