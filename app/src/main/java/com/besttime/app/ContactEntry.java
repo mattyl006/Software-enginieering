@@ -11,4 +11,10 @@ public class ContactEntry {
         this.contactInfo = contactInfo;
         this.callCount = callCount;
     }
+
+    public int getCallCount(){
+        return callCount;
+    }
+
+    
 }
