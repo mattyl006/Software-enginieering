@@ -26,4 +26,6 @@ public class ContactEntry {
     public  String getContactNumber(){
         return contactInfo.getPhoneNumber();
     }
+
+    public int getContactId(){ return contactInfo.getId();}
 }
