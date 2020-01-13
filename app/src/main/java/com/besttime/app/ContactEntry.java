@@ -19,4 +19,8 @@ public class ContactEntry {
     public void addCallCount(){
         callCount++;
     }
+
+    public String getContactName(){
+        return contactInfo.getName();
+    }
 }
