@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.selection.ItemDetailsLookup;
@@ -29,6 +30,13 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         this.parentView = itemView;
         contactNameTextView = itemView.findViewById(R.id.contactNameTextView_itemView);
         whatsappRedirectButton = itemView.findViewById(R.id.whatsappRedirectButton_itemView);
+
+        whatsappRedirectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(parentView.getContext(), contact.getPhoneNumber(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void setContactName(String contactName){
