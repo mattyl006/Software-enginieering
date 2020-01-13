@@ -23,4 +23,8 @@ public class ContactEntry {
     public String getContactName(){
         return contactInfo.getName();
     }
+
+    public  String getContactNumber(){
+        return contactInfo.getPhoneNumber();
+    }
 }
