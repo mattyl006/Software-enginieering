@@ -23,6 +23,14 @@ public class ContactEntryTest {
 
     @Test
     public void addCallCount() {
+        ContactEntry testContactEntry = new ContactEntry(testContact);
+        int expectedCallCount = 1;
+        int callCount;
+
+        testContactEntry.addCallCount();
+        callCount = testContactEntry.getCallCount();
+
+        assertEquals(expectedCallCount, callCount);
     }
 
     @Test
