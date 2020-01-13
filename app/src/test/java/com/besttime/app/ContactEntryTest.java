@@ -35,9 +35,22 @@ public class ContactEntryTest {
 
     @Test
     public void getContactName() {
+        String expectedName = testContact.getName();
+        ContactEntry testContactEntry = new ContactEntry(testContact);
+
+        String contactName = testContactEntry.getContactName();
+
+        assertEquals(expectedName, contactName);
     }
 
     @Test
     public void getContactNumber() {
+        String expectedNumber = testContact.getPhoneNumber();
+        ContactEntry testContactEntry = new ContactEntry(testContact);
+
+        String contactNumber = testContactEntry.getContactNumber();
+
+        assertEquals(expectedNumber, contactNumber);
+
     }
 }
