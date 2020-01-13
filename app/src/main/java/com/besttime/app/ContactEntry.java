@@ -7,9 +7,8 @@ public class ContactEntry {
     private Contact contactInfo;
     private int callCount;
 
-    public ContactEntry(Contact contactInfo, int callCount) {
+    public ContactEntry(Contact contactInfo) {
         this.contactInfo = contactInfo;
-        this.callCount = callCount;
     }
 
     public int getCallCount(){
