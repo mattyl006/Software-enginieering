@@ -16,5 +16,7 @@ public class ContactEntry {
         return callCount;
     }
 
-    
+    public void addCallCount(){
+        callCount++;
+    }
 }
