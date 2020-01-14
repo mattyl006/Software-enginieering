@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="30dp"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:translationZ="10dp"
+    android:alpha="0">
+
+    <TextView
+        android:id="@+id/contactNameTextView_movingSidebar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:hint="Contact name" />
+
+
+    <TextView
+
+        android:id="@+id/timeRectangle_6.00_movingSideBar"
+        android:layout_below="@+id/contactNameTextView_movingSidebar"
+        android:text="6.00"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_6.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_6.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_7.00_movingSideBar"
+        android:text="7.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_6.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_7.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_7.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_8.00_movingSideBar"
+        android:text="8.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_7.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_8.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_8.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_9.00_movingSideBar"
+        android:text="9.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_8.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_9.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_9.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_10.00_movingSideBar"
+        android:text="10.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_9.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_10.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_10.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_11.00_movingSideBar"
+        android:text="11.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_10.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_11.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_11.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_12.00_movingSideBar"
+        android:text="12.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_11.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_12.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_12.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_13.00_movingSideBar"
+        android:text="13.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_12.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_13.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_13.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_14.00_movingSideBar"
+        android:text="14.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_13.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_14.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_14.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_15.00_movingSideBar"
+        android:text="15.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_14.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_15.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_15.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_16.00_movingSideBar"
+        android:text="16.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_15.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_16.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_16.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_17.00_movingSideBar"
+        android:text="17.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_16.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_17.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_17.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_18.00_movingSideBar"
+        android:text="18.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_17.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_18.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_18.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_19.00_movingSideBar"
+        android:text="19.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_18.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_19.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_19.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_20.00_movingSideBar"
+        android:text="20.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_19.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_20.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_20.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_21.00_movingSideBar"
+        android:text="21.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_20.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_21.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_21.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_22.00_movingSideBar"
+        android:text="22.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_21.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_22.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_22.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_23.00_movingSideBar"
+        android:text="23.00"
+        android:gravity="center"
+        android:layout_below="@+id/timeRectangle_22.30_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+
+        android:id="@+id/timeRectangle_23.30_movingSideBar"
+        android:layout_below="@+id/timeRectangle_23.00_movingSideBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>
