@@ -4,7 +4,6 @@ public class Availability {
 
 
 
-
     public void swapDays(){
 
     }
