@@ -57,7 +57,11 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         return contactEntryWithWhatsappId.getContactEntry();
     }
 
-    
+    public long getWhatsappVideCallId(){
+        return contactEntryWithWhatsappId.getWhatsappVideCallId();
+    }
+
+
 
     public void setActive(boolean isActive){
         if(isActive != this.isViewActive())
