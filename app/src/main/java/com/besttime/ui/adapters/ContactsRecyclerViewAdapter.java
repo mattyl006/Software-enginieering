@@ -10,9 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.besttime.app.ContactEntry;
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.viewHolders.ContactsViewHolder;
 import com.besttime.ui.animation.ContactSelectAnimationManager;
+import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
@@ -21,23 +23,16 @@ import java.util.List;
 
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsViewHolder> implements Filterable {
 
-    private ArrayList<Contact> contactsList;
-    private ArrayList<Contact> contactsListFiltered;
+    private ArrayList<ContactEntryWithWhatsappId> contactsList;
+    private ArrayList<ContactEntryWithWhatsappId> contactsListFiltered;
     private SelectionTracker selectionTracker = null;
     private boolean doNothingOnItemStateChanged;
     private long previousSelectionKey;
     private ContactsViewHolder selectedViewHolder;
-    private Contact selectedContact = null;
+    private ContactEntryWithWhatsappId selectedContact = null;
     private boolean clearingSelection = false;
 
     private boolean isSelectedContactViewHolderRecycled = false;
-
-
-
-    public Contact getSelectedContact() {
-        return selectedContact;
-    }
-
 
 
     public void setAnimationManager(ContactSelectAnimationManager animationManager) {
@@ -46,7 +41,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     private ContactSelectAnimationManager animationManager;
 
-    public ContactsRecyclerViewAdapter(ArrayList<Contact> contactsList) {
+    public ContactsRecyclerViewAdapter(ArrayList<ContactEntryWithWhatsappId> contactsList) {
         this.contactsList = contactsList;
         contactsListFiltered =  new ArrayList<>(contactsList);
         this.setHasStableIds(true);
@@ -105,7 +100,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                 if(activeStateInSelectionTracker == true){
 
                     if(selectedContact != null){
-                        if(selectedContact.getId() == holder.getContact().getId()){
+                        if(selectedContact.getContactEntry().getContactId() == holder.getContact().getContactId()){
                             holder.setActive(true);
                             return;
                         }
@@ -140,7 +135,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
         super.onViewRecycled(holder);
 
         if(selectedContact != null){
-            if(holder.getContact().getId() == selectedContact.getId()){
+            if(holder.getContactEntryWithWhatsappId().getContactEntry().getContactId() == selectedContact.getContactEntry().getContactId()){
                 isSelectedContactViewHolderRecycled = true;
             }
 
@@ -163,14 +158,14 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                     contactsListFiltered.addAll(contactsList);
                 }
                 else {
-                    List<Contact> filteredList = new ArrayList<>();
-                    for(Contact contact: contactsList){
-                        if(contact.getName().toLowerCase().contains(charString.toLowerCase())){
+                    ArrayList<ContactEntryWithWhatsappId> filteredList = new ArrayList<>();
+                    for(ContactEntryWithWhatsappId contact: contactsList){
+                        if(contact.getContactEntry().getContactName().toLowerCase().contains(charString.toLowerCase())){
                             filteredList.add(contact);
                         }
                     }
 
-                    contactsListFiltered = (ArrayList<Contact>) filteredList;
+                    contactsListFiltered = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
@@ -180,7 +175,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                contactsListFiltered = (ArrayList<Contact>) filterResults.values;
+                contactsListFiltered = (ArrayList<ContactEntryWithWhatsappId>) filterResults.values;
 
                 clearingSelection = true;
 
