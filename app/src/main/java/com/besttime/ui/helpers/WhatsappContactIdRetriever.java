@@ -13,7 +13,9 @@ public class WhatsappContactIdRetriever {
     private ContentResolver contentResolver;
 
 
-
+    public WhatsappContactIdRetriever(ContentResolver contentResolver) {
+        this.contentResolver = contentResolver;
+    }
 
     public long getWhatsappVideoCallIdForContact(long contactId){
 
