@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.besttime.models.Contact;
+import com.besttime.app.ContactEntry;
 import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.example.besttime.R;
 
@@ -23,7 +23,7 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
 
     private boolean isSelected = false;
 
-    private ContactEntryWithWhatsappId contact;
+    private ContactEntryWithWhatsappId contactEntryWithWhatsappId;
 
     public ContactsViewHolder(@NonNull RelativeLayout itemView) {
         super(itemView);
@@ -35,7 +35,7 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         whatsappRedirectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(parentView.getContext(), contact.getContactEntry().getContactNumber(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(parentView.getContext(), contactEntryWithWhatsappId.getContactEntry().getContactNumber(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -44,14 +44,20 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         contactNameTextView.setText(contactName);
     }
 
-    public void bind(ContactEntryWithWhatsappId contact){
-        this.contact = contact;
-        contactNameTextView.setText(contact.getContactEntry().getContactName());
+    public void bind(ContactEntryWithWhatsappId contactEntryWithWhatsappId){
+        this.contactEntryWithWhatsappId = contactEntryWithWhatsappId;
+        contactNameTextView.setText(contactEntryWithWhatsappId.getContactEntry().getContactName());
     }
 
-    public ContactEntryWithWhatsappId getContact(){
-        return contact;
+    public ContactEntryWithWhatsappId getContactEntryWithWhatsappId(){
+        return contactEntryWithWhatsappId;
     }
+
+    public ContactEntry getContact(){
+        return contactEntryWithWhatsappId.getContactEntry();
+    }
+
+    
 
     public void setActive(boolean isActive){
         if(isActive != this.isViewActive())
