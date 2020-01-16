@@ -11,6 +11,7 @@ import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.besttime.models.Contact;
+import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.example.besttime.R;
 
 public class ContactsViewHolder extends RecyclerView.ViewHolder {
@@ -22,7 +23,7 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
 
     private boolean isSelected = false;
 
-    private Contact contact;
+    private ContactEntryWithWhatsappId contact;
 
     public ContactsViewHolder(@NonNull RelativeLayout itemView) {
         super(itemView);
@@ -34,7 +35,7 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         whatsappRedirectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(parentView.getContext(), contact.getPhoneNumber(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(parentView.getContext(), contact.getContactEntry().getContactNumber(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -43,12 +44,12 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         contactNameTextView.setText(contactName);
     }
 
-    public void bind(Contact contact){
+    public void bind(ContactEntryWithWhatsappId contact){
         this.contact = contact;
-        contactNameTextView.setText(contact.getName());
+        contactNameTextView.setText(contact.getContactEntry().getContactName());
     }
 
-    public Contact getContact(){
+    public ContactEntryWithWhatsappId getContact(){
         return contact;
     }
 
