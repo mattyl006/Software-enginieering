@@ -24,11 +24,15 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.besttime.app.ContactEntry;
+import com.besttime.app.helpers.ContactImporter;
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
 import com.besttime.ui.animation.ContactSelectAnimationManager;
+import com.besttime.ui.helpers.WhatsappContactIdRetriever;
 import com.besttime.ui.itemsSelecting.ContactItemDetailsLookup;
 import com.besttime.ui.listeners.OnSwipeTouchListener;
+import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
@@ -36,7 +40,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView contactsRecyclerView;
-    private ArrayList<Contact> contactsList;
+    private ArrayList<ContactEntry> contactsList = new ArrayList<>();
 
     private RelativeLayout staticSidebar;
     private static final int numOfTimeSquaresOnStaticSidebar = 18;
@@ -63,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
     private View movingContactItem;
 
 
+    // TEMPORARILY ADDED
+    private ContactImporter contactImporter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         final Toolbar actionBar = findViewById(R.id.actionBar);
         setSupportActionBar(actionBar);
 
+        contactImporter = new ContactImporter(this);
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
@@ -79,15 +89,24 @@ public class MainActivity extends AppCompatActivity {
 
         screenWidth = displayMetrics.widthPixels;
 
-        contactsList = new ArrayList<>();
-        initializeSampleDataAndAddItToContactsList();
+        //initializeSampleDataAndAddItToContactsList();
+        getDataFromContactsImporter();
 
         contactsRecyclerView = findViewById(R.id.contactsRecyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         contactsRecyclerView.setLayoutManager(layoutManager);
 
-        final ContactsRecyclerViewAdapter contactsAdapter = new ContactsRecyclerViewAdapter(contactsList);
+        WhatsappContactIdRetriever whatsappContactIdRetriever = new WhatsappContactIdRetriever(this.getContentResolver());
+        ArrayList<ContactEntryWithWhatsappId> contactEntriesWithWhatsappId = new ArrayList<>();
+        for (ContactEntry contactEntry :
+                contactsList) {
+            ContactEntryWithWhatsappId contactEntryWithWhatsappId = new ContactEntryWithWhatsappId(contactEntry, whatsappContactIdRetriever);
+            if(contactEntryWithWhatsappId.getWhatsappVideCallId() >= 0){
+                contactEntriesWithWhatsappId.add(contactEntryWithWhatsappId);
+            }
+        }
+        final ContactsRecyclerViewAdapter contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId);
         contactsRecyclerView.setAdapter(contactsAdapter);
 
         // Create selection tracker
@@ -248,6 +267,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public void getDataFromContactsImporter(){
+        ArrayList<Contact> contacts = contactImporter.getAllContacts();
+        if(contacts != null){
+            for (Contact contact :
+                    contacts) {
+                contactsList.add(new ContactEntry(contact));
+            }
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -293,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
             contactsList = new ArrayList<>();
         }
         for (Contact sampleContact: sampleData) {
-            contactsList.add(sampleContact);
+            contactsList.add(new ContactEntry(sampleContact));
         }
 
     }
