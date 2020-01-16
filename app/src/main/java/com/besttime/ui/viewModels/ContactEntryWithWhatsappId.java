@@ -32,5 +32,7 @@ public class ContactEntryWithWhatsappId {
 
             // NOTHING
         }
+
+        return whatsappVideoCallId;
     }
 }
