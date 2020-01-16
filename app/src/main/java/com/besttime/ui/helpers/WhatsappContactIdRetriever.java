@@ -13,10 +13,19 @@ public class WhatsappContactIdRetriever {
     private ContentResolver contentResolver;
 
 
+    /**
+     * This class is used to retrieve ids used to make whatsapp video or voice calls.
+     * @param contentResolver
+     */
     public WhatsappContactIdRetriever(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
     }
-    
+
+    /**
+     *
+     * @param contactId
+     * @return Id which can be used for making whatsapp video call or -1 if no id was found.
+     */
     public long getWhatsappVideoCallIdForContact(long contactId){
 
         long whatsappId = -1;
@@ -48,7 +57,11 @@ public class WhatsappContactIdRetriever {
     }
 
 
-
+    /**
+     *
+     * @param contactId
+     * @return Id which can be used to make whatsapp voice call or -1 if no id was found.
+     */
     public long getWhatsappVoiceCallIdForContact(long contactId){
 
         long whatsappId = -1;
