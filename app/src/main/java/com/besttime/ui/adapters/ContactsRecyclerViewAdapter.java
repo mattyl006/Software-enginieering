@@ -7,18 +7,17 @@ import android.widget.Filterable;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.besttime.app.ContactEntry;
-import com.besttime.models.Contact;
+import com.besttime.app.helpers.WhatsappCallPerformable;
 import com.besttime.ui.adapters.viewHolders.ContactsViewHolder;
 import com.besttime.ui.animation.ContactSelectAnimationManager;
 import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsViewHolder> implements Filterable {
@@ -34,16 +33,23 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     private boolean isSelectedContactViewHolderRecycled = false;
 
+    private WhatsappCallPerformable whatsappCallPerformable;
+
 
     public void setAnimationManager(ContactSelectAnimationManager animationManager) {
         this.animationManager = animationManager;
     }
 
+    public void setWhatsappCallPerformable(WhatsappCallPerformable whatsappCallPerformable) {
+        this.whatsappCallPerformable = whatsappCallPerformable;
+    }
+
     private ContactSelectAnimationManager animationManager;
 
-    public ContactsRecyclerViewAdapter(ArrayList<ContactEntryWithWhatsappId> contactsList) {
+    public ContactsRecyclerViewAdapter(ArrayList<ContactEntryWithWhatsappId> contactsList, @Nullable WhatsappCallPerformable whatsappCallPerformable) {
         this.contactsList = contactsList;
         contactsListFiltered =  new ArrayList<>(contactsList);
+        this.whatsappCallPerformable = whatsappCallPerformable;
         this.setHasStableIds(true);
     }
 
@@ -84,7 +90,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
         RelativeLayout viewHolderMainView = (RelativeLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.contact_item_view, parent, false);
 
-        ContactsViewHolder viewHolder = new ContactsViewHolder(viewHolderMainView);
+        ContactsViewHolder viewHolder = new ContactsViewHolder(viewHolderMainView, whatsappCallPerformable);
 
         return viewHolder;
     }

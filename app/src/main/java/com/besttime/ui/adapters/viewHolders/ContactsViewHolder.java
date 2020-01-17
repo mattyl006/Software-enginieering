@@ -7,10 +7,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.besttime.app.ContactEntry;
+import com.besttime.app.helpers.WhatsappCallPerformable;
 import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.example.besttime.R;
 
@@ -25,19 +27,30 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
 
     private ContactEntryWithWhatsappId contactEntryWithWhatsappId;
 
-    public ContactsViewHolder(@NonNull RelativeLayout itemView) {
+    private WhatsappCallPerformable whatsappCallPerformable;
+
+    public ContactsViewHolder(@NonNull RelativeLayout itemView, @Nullable final WhatsappCallPerformable whatsappCallPerformable) {
         super(itemView);
 
         this.parentView = itemView;
         contactNameTextView = itemView.findViewById(R.id.contactNameTextView_itemView);
         whatsappRedirectButton = itemView.findViewById(R.id.whatsappRedirectButton_itemView);
+        this.whatsappCallPerformable = whatsappCallPerformable;
 
         whatsappRedirectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(parentView.getContext(), contactEntryWithWhatsappId.getContactEntry().getContactNumber(), Toast.LENGTH_SHORT).show();
+                if(whatsappCallPerformable != null){
+                    if(contactEntryWithWhatsappId != null){
+                        whatsappCallPerformable.whatsappForward(contactEntryWithWhatsappId.getContactEntry());
+                    }
+                }
             }
         });
+    }
+
+    public void setWhatsappCallPerformable(WhatsappCallPerformable whatsappCallPerformable) {
+        this.whatsappCallPerformable = whatsappCallPerformable;
     }
 
     public void setContactName(String contactName){
