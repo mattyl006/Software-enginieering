@@ -40,6 +40,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView contactsRecyclerView;
+    private ContactsRecyclerViewAdapter contactsAdapter;
     private ArrayList<ContactEntry> contactsList = new ArrayList<>();
 
     private RelativeLayout staticSidebar;
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
     private View movingContactItem;
 
+    private Toolbar actionBar;
+
 
     // TEMPORARILY ADDED
     private ContactImporter contactImporter;
@@ -77,21 +80,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Toolbar actionBar = findViewById(R.id.actionBar);
-        setSupportActionBar(actionBar);
+        intitializeActionBar();
 
-        contactImporter = new ContactImporter(this);
+        initializeData();
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        initializeDisplayMetrics();
 
         shadowMakerAndClickBlocker = findViewById(R.id.shadowMakerAndClickBlocker);
 
-        screenWidth = displayMetrics.widthPixels;
+        initializeContactsRecyclerView();
 
+        initializeStaticSidebar();
+
+        initializeMovingSidebar();
+
+        initializeMovingContactItem();
+
+    }
+
+    private void initializeData() {
+        contactImporter = new ContactImporter(this);
         //initializeSampleDataAndAddItToContactsList();
         getDataFromContactsImporter();
+    }
 
+    private void initializeDisplayMetrics() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenWidth = displayMetrics.widthPixels;
+    }
+
+    private void intitializeActionBar() {
+        actionBar = findViewById(R.id.actionBar);
+        setSupportActionBar(actionBar);
+    }
+
+    private void initializeContactsRecyclerView() {
         contactsRecyclerView = findViewById(R.id.contactsRecyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -106,12 +130,17 @@ public class MainActivity extends AppCompatActivity {
                 contactEntriesWithWhatsappId.add(contactEntryWithWhatsappId);
             }
         }
-        final ContactsRecyclerViewAdapter contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId);
+        contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId);
         contactsRecyclerView.setAdapter(contactsAdapter);
+        SelectionTracker selectionTracker = buildSelectionTracker();
 
+        contactsAdapter.setSelectionTracker(selectionTracker);
+    }
+
+    private SelectionTracker buildSelectionTracker() {
         // Create selection tracker
 
-        SelectionTracker selectionTracker =new SelectionTracker.Builder<Long>(
+        return new SelectionTracker.Builder<Long>(
                 "selection-id",
                 contactsRecyclerView,
                 new StableIdKeyProvider(contactsRecyclerView),
@@ -134,33 +163,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .build();
+    }
 
-        contactsAdapter.setSelectionTracker(selectionTracker);
+    private void initializeMovingContactItem() {
+        movingContactItem = findViewById(R.id.movingContactItem);
 
-        staticSidebar = findViewById(R.id.static_sidebar);
-
-        staticSidebar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        actionBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                RelativeLayout.LayoutParams sidebarLayoutParams = (RelativeLayout.LayoutParams) staticSidebar.getLayoutParams();
-                sidebarLayoutParams.width = screenWidth / partOfScreenForSidebars;
-                staticSidebar.setLayoutParams(sidebarLayoutParams);
+                contactsAdapter.setAnimationManager(new ContactSelectAnimationManager(movingContactItem, shadowMakerAndClickBlocker, 500, actionBar.getHeight()));
 
-
-                int timeSquaresHeight = staticSidebar.getHeight() / numOfTimeSquaresOnStaticSidebar;
-                for(int i = 0; i < numOfTimeSquaresOnStaticSidebar; i ++){
-                    TextView timeSquare = (TextView) staticSidebar.getChildAt(i);
-                    RelativeLayout.LayoutParams timeSquareLayoutParams = (RelativeLayout.LayoutParams) timeSquare.getLayoutParams();
-                    timeSquareLayoutParams.height = timeSquaresHeight;
-                    timeSquare.setLayoutParams(timeSquareLayoutParams);
-                    timeSquare.setBackgroundResource(R.drawable.rectangle_gray_border);
-                }
-
-                staticSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                actionBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+    }
 
-
+    private void initializeMovingSidebar() {
         movingSidebar = findViewById(R.id.movingSidebar);
         movingSidebar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -249,22 +267,31 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    private void initializeStaticSidebar() {
+        staticSidebar = findViewById(R.id.static_sidebar);
 
-        movingContactItem = findViewById(R.id.movingContactItem);
-
-        actionBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        staticSidebar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                contactsAdapter.setAnimationManager(new ContactSelectAnimationManager(movingContactItem, shadowMakerAndClickBlocker, 500, actionBar.getHeight()));
+                RelativeLayout.LayoutParams sidebarLayoutParams = (RelativeLayout.LayoutParams) staticSidebar.getLayoutParams();
+                sidebarLayoutParams.width = screenWidth / partOfScreenForSidebars;
+                staticSidebar.setLayoutParams(sidebarLayoutParams);
 
-                actionBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                int timeSquaresHeight = staticSidebar.getHeight() / numOfTimeSquaresOnStaticSidebar;
+                for(int i = 0; i < numOfTimeSquaresOnStaticSidebar; i ++){
+                    TextView timeSquare = (TextView) staticSidebar.getChildAt(i);
+                    RelativeLayout.LayoutParams timeSquareLayoutParams = (RelativeLayout.LayoutParams) timeSquare.getLayoutParams();
+                    timeSquareLayoutParams.height = timeSquaresHeight;
+                    timeSquare.setLayoutParams(timeSquareLayoutParams);
+                    timeSquare.setBackgroundResource(R.drawable.rectangle_gray_border);
+                }
+
+                staticSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-
-
-
-
     }
 
 
