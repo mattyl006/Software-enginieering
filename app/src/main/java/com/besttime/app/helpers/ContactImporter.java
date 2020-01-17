@@ -10,6 +10,7 @@ import android.provider.ContactsContract;
 import com.besttime.models.Contact;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ContactImporter {
 
@@ -87,17 +88,26 @@ public class ContactImporter {
             boolean hasPhoneNumber = contactsCursor.getInt(hasPhoneNumberColIndex) > 0 ? true : false;
             if(hasPhoneNumber){
                 int contactId = contactsCursor.getInt(idColIndex);
-                String[] phoneNumbers = getPhoneNumbersForContact(contactId);
+                String contactName = contactsCursor.getString(nameColIndex);
 
-                for (String phoneNumber: phoneNumbers
-                ) {
-                    contacts.add(new Contact(contactsCursor.getInt(idColIndex),
-                            contactsCursor.getString(nameColIndex),
-                            phoneNumber ));
+                List<String> phoneNumbers = getPhoneNumbersForContact(contactId);
+                int phoneNumbersNum = phoneNumbers.size();
+
+                if(phoneNumbersNum == 1){
+                    contacts.add(new Contact(contactId, contactName, phoneNumbers.get(0)));
+                }
+                else{
+                    for(int i = 0; i < phoneNumbersNum; i ++){
+                        if(i == 0){
+                            contacts.add(new Contact(contactId, contactName, phoneNumbers.get(i)));
+                        }
+                        else{
+                            contacts.add(new Contact(contactId, String.format("%s (%d)", contactName, i+1), phoneNumbers.get(i)));
+                        }
+                    }
                 }
             }
         }
-
         areImported = true;
     }
 
@@ -107,9 +117,9 @@ public class ContactImporter {
      * @param contactId contact id retrieved from ContactsContract.Contacts table
      * @return Array of phone numbers for given contact id
      */
-    private String[] getPhoneNumbersForContact(int contactId) {
+    private List<String> getPhoneNumbersForContact(int contactId) {
 
-        String[] phoneNumbers;
+        List<String> phoneNumbers;
 
         String[] phonesProjection = {
                 ContactsContract.CommonDataKinds.Phone.NUMBER
@@ -124,11 +134,17 @@ public class ContactImporter {
 
         int phoneNumberColIndex = phonesCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
-        phoneNumbers = new String[phonesCursor.getCount()];
+        phoneNumbers = new ArrayList<>();
 
-        int i = 0;
+
         while(phonesCursor.moveToNext()){
-            phoneNumbers[i] = phonesCursor.getString(phoneNumberColIndex);
+            String phoneNumber = phonesCursor.getString(phoneNumberColIndex);
+            // Remove whitespace
+            phoneNumber = phoneNumber.replaceAll("\\s","");
+
+            if(!phoneNumbers.contains(phoneNumber)){
+                phoneNumbers.add(phoneNumber);
+            }
         }
 
         return phoneNumbers;
