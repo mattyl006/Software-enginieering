@@ -26,6 +26,8 @@ import android.widget.TextView;
 
 import com.besttime.app.ContactEntry;
 import com.besttime.app.helpers.ContactImporter;
+import com.besttime.app.helpers.WhatsappRedirector;
+import com.besttime.app.mockClasses.MockApp;
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
 import com.besttime.ui.animation.ContactSelectAnimationManager;
@@ -74,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
     private ContactImporter contactImporter;
 
 
+    private MockApp mockApp;
+    private WhatsappContactIdRetriever mockWhatsappContactIdRetriever;
+    private WhatsappRedirector mockWhatsappRedirector;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +102,16 @@ public class MainActivity extends AppCompatActivity {
 
         initializeMovingContactItem();
 
+        initializeMockApp();
+
+    }
+
+    private void initializeMockApp() {
+        mockWhatsappContactIdRetriever = new WhatsappContactIdRetriever(this.getContentResolver());
+        mockWhatsappRedirector = new WhatsappRedirector(this, mockWhatsappContactIdRetriever);
+        mockApp = new MockApp(mockWhatsappRedirector);
+
+        contactsAdapter.setWhatsappCallPerformable(mockApp);
     }
 
     private void initializeData() {
@@ -130,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 contactEntriesWithWhatsappId.add(contactEntryWithWhatsappId);
             }
         }
-        contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId);
+        contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId, null);
         contactsRecyclerView.setAdapter(contactsAdapter);
         SelectionTracker selectionTracker = buildSelectionTracker();
 
