@@ -1,1 +1,1 @@
-Tutaj powinny być przechowywane wszelkie pomocnicze dokumenty utworzone przez User-Interface Designers.
+Tutaj powinny być przechowywane wszelkie pomocnicze pliki utworzone przez User-Interface Designers.
