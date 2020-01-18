@@ -76,10 +76,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                         selectionTracker.deselect(previousSelectionKey);
                         previousSelectionKey = key;
                         doNothingOnItemStateChanged = false;
-                    } else if (numOfSelectedItems == 0 + 1) {
-                        doNothingOnItemStateChanged = true;
-                        selectionTracker.select(previousSelectionKey);
-                        doNothingOnItemStateChanged = false;
+                    }
+
+                    else if (numOfSelectedItems == 0 + 1) {
+                        selectedContact = null;
+                        if(contactSelectionChangeListener != null){
+                            contactSelectionChangeListener.contactSelectionChanged(null);
+                        }
                     }
                 }
             }
@@ -204,6 +207,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                     contactSelectionChangeListener.contactSelectionChanged(null);
                 }
 
+                selectionTracker.select(ghostSelectionKey);
                 clearingSelection = false;
             }
         };

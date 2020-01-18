@@ -437,11 +437,18 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
             if(contactNameTextView != null){
                 contactNameTextView.setText(newSelectedContact.getContactName());
             }
+
+            movingSidebar.setVisibility(View.VISIBLE);
+            staticSidebar.setVisibility(View.VISIBLE);
+
         }
-        else{
+        else if(newSelectedContact == null){
             if(contactNameTextView != null){
                 contactNameTextView.setText("");
             }
+            staticSidebar.setVisibility(View.GONE);
+            movingSidebar.setVisibility(View.GONE);
+
         }
     }
 }
