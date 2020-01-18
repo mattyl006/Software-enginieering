@@ -281,10 +281,11 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
                 contactNameTextView = movingSidebar.findViewById(R.id.contactNameTextView_movingSidebar);
 
+                movingSidebar.setVisibility(View.GONE);
+
                 movingSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-
 
         shadowCastingAnimation = ObjectAnimator.ofFloat(shadowMakerAndClickBlocker, "alpha", 0f, shadowValue);
         shadowCastingAnimation.setDuration(sidebarOpeningAnimationDuration);
@@ -363,6 +364,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                 RelativeLayout.LayoutParams lastTimeSquareLayoutParams = (RelativeLayout.LayoutParams) lastTimeSquare.getLayoutParams();
                 lastTimeSquareLayoutParams.height = heightOfLastTimeSquare;
                 lastTimeSquare.setLayoutParams(lastTimeSquareLayoutParams);
+
+
+                staticSidebar.setVisibility(View.GONE);
 
                 staticSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
