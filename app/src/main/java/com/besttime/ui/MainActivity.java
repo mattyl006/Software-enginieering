@@ -2,6 +2,7 @@ package com.besttime.ui;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -37,12 +38,13 @@ import com.besttime.ui.animation.ContactSelectAnimationManager;
 import com.besttime.ui.helpers.WhatsappContactIdRetriever;
 import com.besttime.ui.itemsSelecting.ContactItemDetailsLookup;
 import com.besttime.ui.listeners.OnSwipeTouchListener;
+import com.besttime.ui.utils.ContactSelectionListenable;
 import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ContactSelectionListenable {
 
     private RecyclerView contactsRecyclerView;
     private ContactsRecyclerViewAdapter contactsAdapter;
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private View movingContactItem;
 
     private Toolbar actionBar;
+
+    private TextView contactNameTextView;
 
 
     // TEMPORARILY ADDED
@@ -184,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 contactEntriesWithWhatsappId.add(contactEntryWithWhatsappId);
             }
         }
-        contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId, null);
+        contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId, null, this);
         contactsRecyclerView.setAdapter(contactsAdapter);
         SelectionTracker selectionTracker = buildSelectionTracker();
 
@@ -275,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
                 sidebarOpeningAlphaAnimation = ObjectAnimator.ofFloat(movingSidebar, "alpha", 0f, 1f);
                 sidebarOpeningAlphaAnimation.setDuration(sidebarOpeningAnimationDuration);
 
+                contactNameTextView = movingSidebar.findViewById(R.id.contactNameTextView_movingSidebar);
 
                 movingSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
@@ -424,5 +429,19 @@ public class MainActivity extends AppCompatActivity {
             contactsList.add(new ContactEntry(sampleContact));
         }
 
+    }
+
+    @Override
+    public void contactSelectionChanged(@Nullable ContactEntry newSelectedContact) {
+        if(newSelectedContact != null){
+            if(contactNameTextView != null){
+                contactNameTextView.setText(newSelectedContact.getContactName());
+            }
+        }
+        else{
+            if(contactNameTextView != null){
+                contactNameTextView.setText("");
+            }
+        }
     }
 }
