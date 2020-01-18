@@ -1,1 +1,6 @@
-package com.besttime.workhorse
+package com.besttime.workhorse;
+
+
+        public class QueryComputation{
+
+        }
