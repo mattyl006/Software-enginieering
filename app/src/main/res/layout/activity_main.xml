@@ -26,7 +26,7 @@
     <ImageView
         android:id="@+id/background_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/background_image_height"
         android:layout_below="@id/actionBar"
         android:layout_toRightOf="@id/static_sidebar"
         android:background="@drawable/whatsapp_redirect_drawable"
