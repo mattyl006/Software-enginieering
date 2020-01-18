@@ -1,19 +1,22 @@
 package com.besttime.workhorse;
 
-import java.util.Calendar;
-import java.util.Date;
 
+import java.util.Date;
 
 public class Context {
 
     private Date time;
+    private ContactEntry contact;
 
-    public Context(){
-        this.time = Calendar.getInstance().getTime();
+    public Context(ContactEntry contact, CurrentTime currentTime){
+        this.time = currentTime.getTime();
+        this.contact = contact;
     }
 
     public Date getTime() {
-        return time;
+        return this.time;
     }
-
+    public ContactEntry getContact() {
+        return this.contact;
+    }
 }
