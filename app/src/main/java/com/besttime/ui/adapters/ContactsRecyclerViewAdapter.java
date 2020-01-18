@@ -80,6 +80,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
                     else if (numOfSelectedItems == 0 + 1) {
                         selectedContact = null;
+                        selectedViewHolder = null;
                         if(contactSelectionChangeListener != null){
                             contactSelectionChangeListener.contactSelectionChanged(null);
                         }
@@ -115,6 +116,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
             if(activeStateInSelectionTracker != holder.isViewActive()){
                 if(activeStateInSelectionTracker == true){
 
+                    // Select contact without animation on view rebind
                     if(selectedContact != null){
                         if(selectedContact.getContactEntry().getContactId() == holder.getContact().getContactId()){
                             holder.setActive(true);
@@ -122,10 +124,11 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                         }
                     }
 
-                    if(animationManager == null){
+
+                    if(selectedContact == null || animationManager == null){
                         holder.setActive(true);
                     }
-                    else if(animationManager != null){
+                    else if(selectedContact != null && animationManager != null){
                         animationManager.PlaySelectAnimation(selectedViewHolder, holder, isSelectedContactViewHolderRecycled);
                     }
 
