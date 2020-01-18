@@ -60,7 +60,6 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     public void setSelectionTracker(final SelectionTracker selectionTracker) {
         this.selectionTracker = selectionTracker;
-        selectionTracker.select((long)0);
         selectionTracker.addObserver(new SelectionTracker.SelectionObserver<Long>() {
             @Override
             public void onItemStateChanged(@NonNull Long key, boolean selected) {
@@ -130,7 +129,6 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                     }
                     selectedViewHolder = holder;
                     selectedContact = contactsListFiltered.get(position);
-                    // TODO: call some method signalising that selected contact has changed
                     if(contactSelectionChangeListener != null){
                         contactSelectionChangeListener.contactSelectionChanged(selectedContact.getContactEntry());
                     }
@@ -199,13 +197,11 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                 selectedContact = null;
                 notifyDataSetChanged();
 
-                // TODO: call some method signalising that there is no contact selected
                 if(contactSelectionChangeListener != null){
                     contactSelectionChangeListener.contactSelectionChanged(null);
                 }
 
                 clearingSelection = false;
-                selectionTracker.select((long)0);
             }
         };
     }
