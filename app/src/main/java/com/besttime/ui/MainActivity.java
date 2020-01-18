@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.besttime.app.ContactEntry;
 import com.besttime.app.helpers.ContactImporter;
@@ -106,10 +108,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case MockApp.PERMISSIONS_PHONE_CALL:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay!
+
+                }
+                else {
+                    // permission denied, boo!
+                    Toast.makeText(this, "Phone call permission is necessary", Toast.LENGTH_LONG).show();
+                }
+
+                break;
+        }
+    }
+
     private void initializeMockApp() {
         mockWhatsappContactIdRetriever = new WhatsappContactIdRetriever(this.getContentResolver());
         mockWhatsappRedirector = new WhatsappRedirector(this, mockWhatsappContactIdRetriever);
-        mockApp = new MockApp(mockWhatsappRedirector);
+        mockApp = new MockApp(mockWhatsappRedirector, this);
 
         contactsAdapter.setWhatsappCallPerformable(mockApp);
     }
@@ -284,6 +305,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 
     private void initializeStaticSidebar() {
         staticSidebar = findViewById(R.id.static_sidebar);
