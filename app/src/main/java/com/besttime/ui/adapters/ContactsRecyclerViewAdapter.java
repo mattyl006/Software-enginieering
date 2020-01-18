@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.besttime.app.helpers.WhatsappCallPerformable;
 import com.besttime.ui.adapters.viewHolders.ContactsViewHolder;
 import com.besttime.ui.animation.ContactSelectAnimationManager;
+import com.besttime.ui.utils.ContactSelectionListenable;
 import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.example.besttime.R;
 
@@ -35,6 +36,8 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     private WhatsappCallPerformable whatsappCallPerformable;
 
+    private ContactSelectionListenable contactSelectionChangeListener;
+
 
     public void setAnimationManager(ContactSelectAnimationManager animationManager) {
         this.animationManager = animationManager;
@@ -46,10 +49,12 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     private ContactSelectAnimationManager animationManager;
 
-    public ContactsRecyclerViewAdapter(ArrayList<ContactEntryWithWhatsappId> contactsList, @Nullable WhatsappCallPerformable whatsappCallPerformable) {
+    public ContactsRecyclerViewAdapter(ArrayList<ContactEntryWithWhatsappId> contactsList, @Nullable WhatsappCallPerformable whatsappCallPerformable,
+                                       @Nullable ContactSelectionListenable contactSelectionChangeListener) {
         this.contactsList = contactsList;
         contactsListFiltered =  new ArrayList<>(contactsList);
         this.whatsappCallPerformable = whatsappCallPerformable;
+        this.contactSelectionChangeListener = contactSelectionChangeListener;
         this.setHasStableIds(true);
     }
 
@@ -125,6 +130,11 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                     }
                     selectedViewHolder = holder;
                     selectedContact = contactsListFiltered.get(position);
+                    // TODO: call some method signalising that selected contact has changed
+                    if(contactSelectionChangeListener != null){
+                        contactSelectionChangeListener.contactSelectionChanged(selectedContact.getContactEntry());
+                    }
+
                     isSelectedContactViewHolderRecycled = false;
                 }
                 else if(activeStateInSelectionTracker == false){
@@ -186,7 +196,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                 clearingSelection = true;
 
                 selectionTracker.clearSelection();
+                selectedContact = null;
                 notifyDataSetChanged();
+
+                // TODO: call some method signalising that there is no contact selected
+                if(contactSelectionChangeListener != null){
+                    contactSelectionChangeListener.contactSelectionChanged(null);
+                }
 
                 clearingSelection = false;
                 selectionTracker.select((long)0);
