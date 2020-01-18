@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                         RelativeLayout.LayoutParams timeRectangleLayoutParams = (RelativeLayout.LayoutParams) childOfSidebar.getLayoutParams();
                         timeRectangleLayoutParams.height = timeRectanglesHeight;
                         childOfSidebar.setLayoutParams(timeRectangleLayoutParams);
-                        childOfSidebar.setBackgroundResource(R.drawable.rectangle_gray_border);
+                        childOfSidebar.setBackgroundResource(R.drawable.time_available_drawable);
                     }
                 }
 
@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
                     RelativeLayout.LayoutParams timeSquareLayoutParams = (RelativeLayout.LayoutParams) timeSquare.getLayoutParams();
                     timeSquareLayoutParams.height = timeSquaresHeight;
                     timeSquare.setLayoutParams(timeSquareLayoutParams);
-                    timeSquare.setBackgroundResource(R.drawable.rectangle_gray_border);
+                    timeSquare.setBackgroundResource(R.drawable.time_available_drawable);
                     timeSquare.setGravity(Gravity.CENTER);
                 }
 
