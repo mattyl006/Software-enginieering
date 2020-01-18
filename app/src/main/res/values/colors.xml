@@ -14,5 +14,6 @@
     <color name="timePerhapsAvailable">#C691C5</color>
     <color name="timeUndefined">#FFFFFF</color>
 
+    <color name="splashScreenBackground">#E8CFE7</color>
 
 </resources>
