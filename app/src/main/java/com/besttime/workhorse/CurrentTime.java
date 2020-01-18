@@ -6,7 +6,7 @@ import java.util.Date;
 public class CurrentTime {
     private Date time;
 
-    public CurrentTime(){
+    public CurrentTime() {
 
     }
 
@@ -15,7 +15,7 @@ public class CurrentTime {
         return this.time;
     }
 
-    public Integer getDayOfWeekAsDecimal(){
+    public Integer getDayOfWeekAsDecimal() {
         return getTime().getDay();                      // 0 to niedziela i tak dalej 6 sobota
     }
 }
