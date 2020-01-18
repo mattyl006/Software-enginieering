@@ -38,6 +38,8 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     private ContactSelectionListenable contactSelectionChangeListener;
 
+    private final long ghostSelectionKey = 1111;
+
 
     public void setAnimationManager(ContactSelectAnimationManager animationManager) {
         this.animationManager = animationManager;
@@ -60,20 +62,21 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     public void setSelectionTracker(final SelectionTracker selectionTracker) {
         this.selectionTracker = selectionTracker;
+        selectionTracker.select(ghostSelectionKey);
         selectionTracker.addObserver(new SelectionTracker.SelectionObserver<Long>() {
             @Override
             public void onItemStateChanged(@NonNull Long key, boolean selected) {
                 super.onItemStateChanged(key, selected);
                 if (!doNothingOnItemStateChanged && !clearingSelection) {
                     int numOfSelectedItems = selectionTracker.getSelection().size();
-                    if (numOfSelectedItems == 1) {
+                    if (numOfSelectedItems == 1 + 1) {
                         previousSelectionKey = key;
-                    } else if (numOfSelectedItems == 2) {
+                    } else if (numOfSelectedItems == 2 + 1) {
                         doNothingOnItemStateChanged = true;
                         selectionTracker.deselect(previousSelectionKey);
                         previousSelectionKey = key;
                         doNothingOnItemStateChanged = false;
-                    } else if (numOfSelectedItems == 0) {
+                    } else if (numOfSelectedItems == 0 + 1) {
                         doNothingOnItemStateChanged = true;
                         selectionTracker.select(previousSelectionKey);
                         doNothingOnItemStateChanged = false;
