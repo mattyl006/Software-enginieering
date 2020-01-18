@@ -16,6 +16,7 @@ import android.animation.ValueAnimator;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -235,6 +236,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                int heightOfLastTimeRectangle = (movingSidebar.getHeight() - actionBar.getHeight()) - (timeRectanglesHeight * (numOfTimeRectanglesOnMovingSidebar - 1));
+                TextView lastTimeRectangle = movingSidebar.findViewById(R.id.timeRectangle_23_30_movingSideBar);
+                RelativeLayout.LayoutParams lastTimeRectangleLayoutParams = (RelativeLayout.LayoutParams) lastTimeRectangle.getLayoutParams();
+                lastTimeRectangleLayoutParams.height = heightOfLastTimeRectangle;
+                lastTimeRectangle.setLayoutParams(lastTimeRectangleLayoutParams);
+
                 sidebarOpeningWidthAnimation = ValueAnimator.ofInt(movingSidebar.getWidth(), movingSidebar.getWidth() * widthChangeAfterOpeningSidebar);
                 sidebarOpeningWidthAnimation.setDuration(sidebarOpeningAnimationDuration);
                 sidebarOpeningWidthAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -327,7 +334,14 @@ public class MainActivity extends AppCompatActivity {
                     timeSquareLayoutParams.height = timeSquaresHeight;
                     timeSquare.setLayoutParams(timeSquareLayoutParams);
                     timeSquare.setBackgroundResource(R.drawable.rectangle_gray_border);
+                    timeSquare.setGravity(Gravity.CENTER);
                 }
+
+                int heightOfLastTimeSquare = staticSidebar.getHeight() - (timeSquaresHeight * (numOfTimeSquaresOnStaticSidebar - 1));
+                TextView lastTimeSquare = staticSidebar.findViewById(R.id.timeSquare_textView_23_00);
+                RelativeLayout.LayoutParams lastTimeSquareLayoutParams = (RelativeLayout.LayoutParams) lastTimeSquare.getLayoutParams();
+                lastTimeSquareLayoutParams.height = heightOfLastTimeSquare;
+                lastTimeSquare.setLayoutParams(lastTimeSquareLayoutParams);
 
                 staticSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
