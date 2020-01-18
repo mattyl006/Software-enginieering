@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
     private WhatsappRedirector mockWhatsappRedirector;
 
 
+    private View backgroundImage;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +110,19 @@ public class MainActivity extends AppCompatActivity {
 
         initializeMockApp();
 
+        initializeBackgroundImage();
+
+    }
+
+    private void initializeBackgroundImage() {
+        backgroundImage = findViewById(R.id.background_image);
+        contactsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                backgroundImage.setY(backgroundImage.getY() - dy);
+            }
+        });
     }
 
     @Override
