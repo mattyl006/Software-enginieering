@@ -26,6 +26,7 @@ public class Availability {
         // Fill availability list with all days and all hours in them as undefined
         for(int i = 0; i < 7; i ++){
 
+            availability.add(new HashMap<Hours, AvailType>());
             for (Hours hour :
                     Hours.values()) {
                 availability.get(i).put(hour, AvailType.undefined);
