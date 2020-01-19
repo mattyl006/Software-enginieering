@@ -13,6 +13,8 @@ public class Availability {
     private Map<Hours, AvailType> currentDay = new HashMap<Hours, AvailType>();
     private List<Map<Hours, AvailType>> availability = new ArrayList<Map<Hours, AvailType>>();
 
+
+
     public void setCurrentDay(Map<Hours, AvailType> currentDay) {
         this.currentDay = currentDay;
     }
@@ -26,5 +28,10 @@ public class Availability {
         int dayAsDec = currentTime.getDayOfWeekAsDecimal();
         setCurrentDay(availability.get(dayAsDec));
 
+    }
+
+
+    public List<Map<Hours, AvailType>> getAvailability() {
+        return availability;
     }
 }
