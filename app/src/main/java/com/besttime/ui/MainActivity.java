@@ -623,7 +623,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                         break;
                 }
             }
-            else if(hour.getHourValue() != currentHour && hour.getHourValue() != (currentHour + 0.30)){
+            else if(hour.getHourValue() != currentHour){
                 switch (availType){
                     case unavailable:
                         if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);}
