@@ -12,6 +12,7 @@ public class ContactEntry {
     
     public ContactEntry(Contact contactInfo) {
         this.contactInfo = contactInfo;
+        availability = new Availability(this);
     }
 
     public int getCallCount(){
