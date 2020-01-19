@@ -45,4 +45,8 @@ public class Availability {
     public List<Map<Hours, AvailType>> getAvailability() {
         return availability;
     }
+
+    public Map<Hours, AvailType> getCurrentDay() {
+        return currentDay;
+    }
 }
