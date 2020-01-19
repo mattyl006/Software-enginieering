@@ -112,10 +112,4 @@
         android:layout_below="@+id/timeSquare_textView_21.00"
         android:text="22" />
 
-    <TextView
-        android:id="@+id/timeSquare_textView_23.00"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/timeSquare_textView_22.00" />
-
 </RelativeLayout>

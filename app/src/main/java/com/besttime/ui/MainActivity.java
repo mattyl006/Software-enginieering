@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     private ArrayList<ContactEntry> contactsList = new ArrayList<>();
 
     private RelativeLayout staticSidebar;
-    private static final int numOfTimeSquaresOnStaticSidebar = 18;
+    private static final int numOfTimeSquaresOnStaticSidebar = 17;
 
     private RelativeLayout movingSidebar;
     private boolean isSidebarOpened = false;
@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                 }
 
                 int heightOfLastTimeSquare = staticSidebar.getHeight() - (timeSquaresHeight * (numOfTimeSquaresOnStaticSidebar - 1));
-                TextView lastTimeSquare = staticSidebar.findViewById(R.id.timeSquare_textView_23_00);
+                TextView lastTimeSquare = staticSidebar.findViewById(R.id.timeSquare_textView_22_00);
                 RelativeLayout.LayoutParams lastTimeSquareLayoutParams = (RelativeLayout.LayoutParams) lastTimeSquare.getLayoutParams();
                 lastTimeSquareLayoutParams.height = heightOfLastTimeSquare;
                 lastTimeSquare.setLayoutParams(lastTimeSquareLayoutParams);
