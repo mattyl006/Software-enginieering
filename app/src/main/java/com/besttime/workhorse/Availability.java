@@ -32,6 +32,7 @@ public class Availability {
                 availability.get(i).put(hour, AvailType.undefined);
             }
         }
+        swapCurrentDay(new CurrentTime());
     }
 
 
