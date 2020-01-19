@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
     private RelativeLayout movingSidebar;
     private boolean isSidebarOpened = false;
-    private static final int numOfTimeRectanglesOnMovingSidebar = 36;
+    private static final int numOfTimeRectanglesOnMovingSidebar = 23;
 
 
     private View shadowMakerAndClickBlocker;
@@ -259,11 +259,14 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     }
                 }
 
+
                 int heightOfLastTimeRectangle = (movingSidebar.getHeight() - actionBar.getHeight()) - (timeRectanglesHeight * (numOfTimeRectanglesOnMovingSidebar - 1));
-                TextView lastTimeRectangle = movingSidebar.findViewById(R.id.timeRectangle_23_30_movingSideBar);
+                TextView lastTimeRectangle = movingSidebar.findViewById(R.id.timeRectangle_22_00_movingSideBar);
                 RelativeLayout.LayoutParams lastTimeRectangleLayoutParams = (RelativeLayout.LayoutParams) lastTimeRectangle.getLayoutParams();
                 lastTimeRectangleLayoutParams.height = heightOfLastTimeRectangle;
                 lastTimeRectangle.setLayoutParams(lastTimeRectangleLayoutParams);
+
+
 
                 sidebarOpeningWidthAnimation = ValueAnimator.ofInt(movingSidebar.getWidth(), movingSidebar.getWidth() * widthChangeAfterOpeningSidebar);
                 sidebarOpeningWidthAnimation.setDuration(sidebarOpeningAnimationDuration);
