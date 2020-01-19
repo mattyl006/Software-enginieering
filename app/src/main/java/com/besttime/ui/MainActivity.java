@@ -41,11 +41,15 @@ import com.besttime.ui.listeners.OnSwipeTouchListener;
 import com.besttime.ui.utils.ContactSelectionListenable;
 import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.besttime.workhorse.AvailType;
+import com.besttime.workhorse.CurrentTime;
 import com.besttime.workhorse.Hours;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
+
+import static java.util.Calendar.HOUR;
 
 public class MainActivity extends AppCompatActivity implements ContactSelectionListenable {
 
@@ -469,6 +473,16 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     private void changeColorsOfTimeSquaresOnSideBar(@NonNull ContactEntry newSelectedContact) {
         Map<Hours, AvailType> currentDay = newSelectedContact.getAvailability().getCurrentDay();
 
+        Calendar rightNow = Calendar.getInstance();
+        double currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
+
+        double minutes = rightNow.get(Calendar.MINUTE);
+        if(minutes >= 30){
+            currentHour += 0.30;
+        }
+
+
+
         // Iterate over all hours in current day and set background of time squares based on avail type
         for (Hours hour:
              currentDay.keySet()) {
@@ -588,24 +602,48 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     break;
             }
 
-            switch (availType){
-                case unavailable:
-                    if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);}
-                    timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
-                    break;
-                case available:
-                    if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);}
-                    timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_available_drawable);
-                    break;
-                case undefined:
-                    if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);}
-                    timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
-                    break;
-                case perhaps:
-                    if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);}
-                    timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
-                    break;
+
+            if(hour.getHourValue() == currentHour){
+                switch (availType){
+                    case unavailable:
+                        if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable_active);}
+                        timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable_active);
+                        break;
+                    case available:
+                        if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable_active);}
+                        timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_available_drawable_active);
+                        break;
+                    case undefined:
+                        if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable_active);}
+                        timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_undefined_drawable_active);
+                        break;
+                    case perhaps:
+                        if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable_active);}
+                        timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable_active);
+                        break;
+                }
             }
+            else if(hour.getHourValue() != currentHour && hour.getHourValue() != (currentHour + 0.30)){
+                switch (availType){
+                    case unavailable:
+                        if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);}
+                        timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                        break;
+                    case available:
+                        if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);}
+                        timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                        break;
+                    case undefined:
+                        if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);}
+                        timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                        break;
+                    case perhaps:
+                        if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);}
+                        timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                        break;
+                }
+            }
+
         }
     }
 }
