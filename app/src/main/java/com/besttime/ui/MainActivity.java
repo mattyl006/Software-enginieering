@@ -40,9 +40,12 @@ import com.besttime.ui.itemsSelecting.ContactItemDetailsLookup;
 import com.besttime.ui.listeners.OnSwipeTouchListener;
 import com.besttime.ui.utils.ContactSelectionListenable;
 import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
+import com.besttime.workhorse.AvailType;
+import com.besttime.workhorse.Hours;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements ContactSelectionListenable {
 
@@ -442,6 +445,10 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                 contactNameTextView.setText(newSelectedContact.getContactName());
             }
 
+
+            changeColorsOfTimeSquaresOnSideBar(newSelectedContact);
+
+
             movingSidebar.setVisibility(View.VISIBLE);
             staticSidebar.setVisibility(View.VISIBLE);
 
@@ -453,6 +460,339 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
             staticSidebar.setVisibility(View.GONE);
             movingSidebar.setVisibility(View.GONE);
 
+        }
+    }
+
+    private void changeColorsOfTimeSquaresOnSideBar(@NonNull ContactEntry newSelectedContact) {
+        Map<Hours, AvailType> currentDay = newSelectedContact.getAvailability().getCurrentDay();
+
+        // Iterate over all hours in current day and set background of time squares based on avail type
+        for (Hours hour:
+             currentDay.keySet()) {
+
+            View timeSquareOnStaticSidebar;
+            View timeRectangleOnMovingSidebar;
+            AvailType availType;
+            switch (hour){
+                case h6_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_6_00);
+                    availType = currentDay.get(Hours.h6_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h7_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_7_00);
+                    availType = currentDay.get(Hours.h7_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h8_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_8_00);
+                    availType = currentDay.get(Hours.h8_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h9_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_9_00);
+                    availType = currentDay.get(Hours.h9_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h10_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_10_00);
+                    availType = currentDay.get(Hours.h10_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h11_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_11_00);
+                    availType = currentDay.get(Hours.h11_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h12_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_12_00);
+                    availType = currentDay.get(Hours.h12_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h13_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_13_00);
+                    availType = currentDay.get(Hours.h13_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h14_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_14_00);
+                    availType = currentDay.get(Hours.h14_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h15_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_15_00);
+                    availType = currentDay.get(Hours.h15_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h16_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_16_00);
+                    availType = currentDay.get(Hours.h16_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h16_30:
+                    break;
+                case h17_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_17_00);
+                    availType = currentDay.get(Hours.h17_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h_17_30:
+                    break;
+                case h18_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_18_00);
+                    availType = currentDay.get(Hours.h18_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h18_30:
+                    break;
+                case h19_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_19_00);
+                    availType = currentDay.get(Hours.h19_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h19_30:
+                    break;
+                case h20_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_20_00);
+                    availType = currentDay.get(Hours.h20_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h20_30:
+                    break;
+                case h21_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_21_00);
+                    availType = currentDay.get(Hours.h21_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+                case h21_30:
+                    break;
+                case h22_00:
+                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_22_00);
+                    availType = currentDay.get(Hours.h22_00);
+                    switch (availType){
+                        case unavailable:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_unavailable_drawable);
+                            break;
+                        case available:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_available_drawable);
+                            break;
+                        case undefined:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable);
+                            break;
+                        case perhaps:
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_perhaps_drawable);
+                            break;
+                    }
+                    break;
+            }
         }
     }
 }
