@@ -475,11 +475,14 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
         Calendar rightNow = Calendar.getInstance();
         double currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
-
-        double minutes = rightNow.get(Calendar.MINUTE);
-        if(minutes >= 30){
-            currentHour += 0.30;
+        if(currentHour >= 16){
+            double minutes = rightNow.get(Calendar.MINUTE);
+            if(minutes >= 30){
+                currentHour += 0.30;
+            }
         }
+
+
 
 
 
