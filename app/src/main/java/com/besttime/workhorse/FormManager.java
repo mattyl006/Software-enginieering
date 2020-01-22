@@ -18,10 +18,10 @@ public class FormManager {
     }
 
 
-    public void addToMap(Long formId, Date data){
+    public void addToMap(Long formId, Date date){
         try {
 
-            this.sentForms.put(formId,data);
+            this.sentForms.put(formId,date);
         }
         catch (Exception e)
         {
@@ -30,6 +30,11 @@ public class FormManager {
     }
 
 
+    /**
+     *
+     * @param formId
+     * @return null if form hasn't been filled yet.
+     */
     public Date findDateWhenFormWasFilled(Long formId){
         try {
             return this.sentForms.get(formId);
