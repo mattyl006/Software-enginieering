@@ -8,10 +8,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.besttime.app.ContactEntry;
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
+import com.besttime.workhorse.Context;
+import com.besttime.workhorse.CurrentTime;
 import com.besttime.workhorse.SmsManager;
 import com.example.besttime.R;
 
@@ -26,24 +33,34 @@ public class MainActivity extends AppCompatActivity {
 
     private SmsManager smsManager = new SmsManager(this, PERMISSIONS_REQUEST_SEND_SMS);
 
+    private EditText smsMessageTextView;
+    private EditText phoneNumberTextView;
+    private Button sendSMSButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        smsMessageTextView = findViewById(R.id.smsMessage_textView);
+        phoneNumberTextView = findViewById(R.id.phoneNumber_TextView);
+        sendSMSButton = findViewById(R.id.sendSms_button);
+
+        sendSMSButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String phoneNum = phoneNumberTextView.getText().toString();
+                String message = smsMessageTextView.getText().toString();
+
+                smsManager.sendSmsPrompt(new Context(new ContactEntry(new Contact(123, "ASD", phoneNum)), new CurrentTime()), message);
+            }
+        });
+
+
+
         smsManager.checkSendSmsPermission(this, PERMISSIONS_REQUEST_SEND_SMS);
-
-        contactsList = new ArrayList<>();
-
-
-        contactsRecyclerView = findViewById(R.id.contactsRecyclerView);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        contactsRecyclerView.setLayoutManager(layoutManager);
-
-        ContactsRecyclerViewAdapter contactsAdapter = new ContactsRecyclerViewAdapter(contactsList);
-        contactsRecyclerView.setAdapter(contactsAdapter);
 
     }
 

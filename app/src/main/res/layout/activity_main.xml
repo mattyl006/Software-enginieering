@@ -6,9 +6,26 @@
     android:layout_height="match_parent"
     tools:context="com.besttime.ui.MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/contactsRecyclerView"
+    <EditText
+        android:id="@+id/smsMessage_textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:hint="SMS Message"/>
+
+    <EditText
+        android:id="@+id/phoneNumber_TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/smsMessage_textView"
+        android:hint="Phone number"/>
+
+
+    <Button
+        android:id="@+id/sendSms_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/phoneNumber_TextView"
+        android:layout_centerInParent="true"
+        android:text="Send SMS"/>
 
 </RelativeLayout>
