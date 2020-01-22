@@ -8,12 +8,19 @@ public class SmsManager {
 
     private android.telephony.SmsManager androidSmsManager;
 
-    public SmsManager() {
+    private android.content.Context androidContext;
+    private final int sendSmsRequestCode;
+
+    public SmsManager(android.content.Context androidContext, int sendSmsRequestCode) {
+        this.androidContext = androidContext;
+        this.sendSmsRequestCode = sendSmsRequestCode;
         androidSmsManager = android.telephony.SmsManager.getDefault();
     }
 
     public void sendSmsPrompt(Context context, String message){
-        androidSmsManager.sendTextMessage(context.getContact().getContactNumber(), null, message, null, null);
+        if(checkSendSmsPermission(androidContext, sendSmsRequestCode)){
+            androidSmsManager.sendTextMessage(context.getContact().getContactNumber(), null, message, null, null);
+        }
     }
 
     public boolean checkSendSmsPermission(android.content.Context androidContext, int sendSmsRequestCode){
