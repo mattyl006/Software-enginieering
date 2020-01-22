@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.besttime.models.Contact;
@@ -26,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST_SEND_SMS = 121;
 
-    private SmsManager smsManager = new SmsManager();
+    private SmsManager smsManager = new SmsManager(this, PERMISSIONS_REQUEST_SEND_SMS);
 
 
     @Override
