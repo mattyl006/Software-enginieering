@@ -26,8 +26,10 @@
     <ImageView
         android:id="@+id/background_image"
         android:layout_width="@dimen/background_image_height"
-        android:layout_height="@dimen/background_image_height"
-        android:layout_marginTop="100dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginRight="250dp"
         android:layout_centerInParent="true"
         android:layout_below="@id/actionBar"
         android:background="@drawable/kot"
@@ -60,6 +62,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/actionBar"
-        android:layout_toRightOf="@id/static_sidebar"/>
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="0dp"
+        android:layout_toRightOf="@id/static_sidebar" />
 
 </RelativeLayout>
