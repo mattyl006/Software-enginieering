@@ -23,4 +23,15 @@ public class Form {
             allDaysAnswers.add(dayOfTheWeek);
         }
     }
+
+    public Week generateResult(){
+        Week result = new Week();
+        if(hasResponded){
+            for (DayOfTheWeek day :
+                    allDaysAnswers) {
+                result.updateDay(day);
+            }
+        }
+        return result;
+    }
 }
