@@ -3,27 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/contact_item_height"
     android:id="@+id/itemParentView"
-    android:background="@drawable/contact_item_state">
-
-    <TextView
-        android:id="@+id/contactNameTextView_itemView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:hint="textHere"
-        android:layout_alignParentLeft="true"
-        android:layout_centerInParent="true"
-        android:gravity="left|center"
-        android:textSize="30dp"
-        android:textColor="@color/colorPrimaryDark"/>
+    android:background="@color/contactItemSelected"
+    android:alpha="0.7"
+    android:translationZ="2dp"
+    android:visibility="gone">
 
     <Button
-        android:id="@+id/whatsappRedirectButton_itemView"
+        android:id="@+id/whatsappRedirectButton_movingContactItem"
         android:layout_width="@dimen/whatsapp_button_size"
         android:layout_height="@dimen/whatsapp_button_size"
         android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
         android:layout_marginRight="20dp"
-        android:visibility="gone"
         android:background="@drawable/whatsapp_redirect_drawable"/>
 
 </RelativeLayout>

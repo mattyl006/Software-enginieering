@@ -3,4 +3,17 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="contactItemDefault">#E8CFE7</color>
+    <color name="contactItemSelected">#D89FD6</color>
+
+    <color name="actionBarColor">#AE44A9</color>
+    <color name="actionBarItemsColor">#FFD2F0</color>
+
+    <color name="timeAvailable">#E62EA9</color>
+    <color name="timeUnavailable">#FFFFFF</color>
+    <color name="timePerhapsAvailable">#C691C5</color>
+    <color name="timeUndefined">#FFFFFF</color>
+
+    <color name="splashScreenBackground">#E8CFE7</color>
+
 </resources>

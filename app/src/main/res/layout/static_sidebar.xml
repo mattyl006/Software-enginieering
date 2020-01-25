@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="30dp"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <TextView
+        android:id="@+id/timeSquare_textView_6.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:text="6" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_7.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_6.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_8.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_7.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_9.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_8.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_10.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_9.00"
+        android:text="10" />
+
+
+    <TextView
+        android:id="@+id/timeSquare_textView_11.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_10.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_12.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_11.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_13.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_12.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_14.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_13.00"
+        android:text="14" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_15.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_14.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_16.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_15.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_17.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_16.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_18.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_17.00"
+        android:text="18" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_19.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_18.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_20.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_19.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_21.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_20.00" />
+
+    <TextView
+        android:id="@+id/timeSquare_textView_22.00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/timeSquare_textView_21.00"
+        android:text="22" />
+
+</RelativeLayout>
