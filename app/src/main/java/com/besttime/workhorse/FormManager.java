@@ -3,13 +3,14 @@ package com.besttime.workhorse;
 import com.besttime.workhorse.helpers.ParsedRowFromSheet;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class FormManager {
+public class FormManager implements Serializable {
 
     private List<Form> sentForms;
     private SheetsAndJava dataRetriever;

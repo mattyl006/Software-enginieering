@@ -1,9 +1,10 @@
 package com.besttime.workhorse;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Form {
+public class Form implements Serializable {
 
     private Context context;
     private long id;
