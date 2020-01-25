@@ -32,7 +32,7 @@ public class Form {
         return id;
     }
 
-    public boolean isHasResponded() {
+    public boolean hasResponded() {
         return hasResponded;
     }
 
