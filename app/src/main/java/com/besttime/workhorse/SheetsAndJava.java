@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +27,8 @@ public class SheetsAndJava {
     private final String SPREADSHEET_ID = "1vFmyVumydY92lfRME4bpROJ_7WrwH6yrGXBb8FZpJCc";
 
     private final String range = "dostepnosc!A2:I100000";
+
+    public static final DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
 
     private Credential authorize() throws IOException, GeneralSecurityException {
         InputStream in = SheetsAndJava.class.getResourceAsStream("/credentials.json");
