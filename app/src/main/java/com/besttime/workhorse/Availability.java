@@ -11,6 +11,13 @@ public class Availability {
 
     private ContactEntry contact;
     private Map<Hours, AvailType> currentDay = new HashMap<Hours, AvailType>();
+    /**
+     * Map at index:
+     * - 0 is Monday
+     * - 1 is Tuesday
+     * ...
+     * - 6 is Sunday
+     */
     private List<Map<Hours, AvailType>> availability = new ArrayList<Map<Hours, AvailType>>();
 
 
@@ -50,4 +57,12 @@ public class Availability {
     public Map<Hours, AvailType> getCurrentDay() {
         return currentDay;
     }
+
+
+    public void updateAvailabilityListByForm(Form form){
+
+
+    }
+
+
 }

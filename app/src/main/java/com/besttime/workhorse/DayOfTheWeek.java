@@ -6,9 +6,18 @@ public class DayOfTheWeek {
 
     private int id; //0 - niedziela, 1 - pn...
 
+    /**
+     * Map of hours and integers:
+     * - If somewhere is 0 it means that this hour has undefined availability
+     * - If somewhere is 1 it means that this hour is available
+     */
     private HashMap <Hours, Integer> map;
     private List<Hours> hoursList;
 
+    /**
+     * Creates day of the week and sets it all as undefined
+     * @param id 0 - Sunday, 1 - Monday
+     */
     public DayOfTheWeek(int id){
         this.id = id;
         map  = new HashMap<>();
@@ -59,11 +68,27 @@ public class DayOfTheWeek {
         }
     }
 
+    /**
+     * Sets one hour of a day as available
+     * @param hour
+     * @param min
+     */
     public void loadOneTime(int hour, int min){
         Enum myHour = timeToEnum(hour,min);
         map.put((Hours) myHour, 1);
     }
-    public Enum timeToEnum(int hour, int min){
+
+    public void loadOneTime(Hours hour){
+        map.put(hour, 1);
+    }
+
+    /**
+     * Converts given time to Enum, used when loading something to map field, because it is using Hours enum.
+     * @param hour
+     * @param min
+     * @return
+     */
+    public Hours timeToEnum(int hour, int min){
 
         switch (hour){
             case 6:
