@@ -24,6 +24,22 @@ public class Form {
         }
     }
 
+    public Context getContext() {
+        return context;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public boolean isHasResponded() {
+        return hasResponded;
+    }
+
+    public Date getDateWhenResponded() {
+        return dateWhenResponded;
+    }
+
     public Week generateResult(){
         Week result = new Week();
         if(hasResponded){
@@ -33,5 +49,12 @@ public class Form {
             }
         }
         return result;
+    }
+
+
+    public void updateAllDaysAnswers(List<DayOfTheWeek> newAnswers, Date dateWhenFilled){
+        hasResponded = true;
+        dateWhenResponded = dateWhenFilled;
+        allDaysAnswers = newAnswers;
     }
 }
