@@ -13,6 +13,10 @@ public class FormManager {
 
     private List<Form> sentForms;
     private SheetsAndJava dataRetriever;
+    private SmsManager smsManager;
+
+    public static final String smsMessage = "Hej, zaznacz kiedy jesteś dostępny abym mógł do Ciebie zadzwonić: \n";
+    public static final String formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScEiidNdn1cDF3GkJ1Gaysv5fnDebM4BjWzMuRoNDGF6jTKQQ/viewform?usp=pp_url&entry.1877286907=";
 
     public List<Form> getSentForms() {
         return sentForms;
@@ -22,10 +26,21 @@ public class FormManager {
      *
      * @throws IOException When there was error creating forms data retriever
      * @throws GeneralSecurityException When there was error creating forms data retriever
+     * @param smsManager
      */
-    public FormManager() throws IOException, GeneralSecurityException {
+    public FormManager(SmsManager smsManager) throws IOException, GeneralSecurityException {
+        this.smsManager = smsManager;
         this.sentForms = new ArrayList<>();
         dataRetriever = new SheetsAndJava();
+    }
+
+    private String makeSmsMessage(Form form){
+        return smsMessage + formUrl + form.getContext().getContact().getContactId();
+    }
+
+
+    public void sendForm(Form form){
+        smsManager.sendSmsPrompt(form.getContext(), makeSmsMessage(form));
     }
 
 
