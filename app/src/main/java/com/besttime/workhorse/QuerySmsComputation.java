@@ -17,7 +17,7 @@ public class QuerySmsComputation {
 
     }
 
-    public Enum compareDays(int sms,int query){
+    public AvailType compareDays(int sms,int query){
         if(sms > 0){
             return AvailType.available;
         }else {
@@ -105,7 +105,7 @@ public class QuerySmsComputation {
         for(int i = 0; i < hoursList.size(); i++){
             int s = (int) sM.get(hoursList.get(i));
             int q = (int) qM.get(hoursList.get(i));
-            Enum availability = (Enum) compareDays(s,q);
+            AvailType availability = compareDays(s,q);
             mMap.put(hoursList.get(i), (AvailType) availability);
         }
         return mMap;
@@ -125,8 +125,8 @@ public class QuerySmsComputation {
         return mMap;
     }
 
-    public List<Map> getWeek(){
-        List<Map> week = new ArrayList();
+    public List<Map<Hours, AvailType>> getWeek(){
+        List<Map<Hours, AvailType>> week = new ArrayList();
         week.add(getSunday());
         week.add(getMonday());
         week.add(getTuesday());

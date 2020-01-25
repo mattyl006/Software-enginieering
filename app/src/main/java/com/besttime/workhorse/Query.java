@@ -35,7 +35,14 @@ public class Query {
         }
     }
 
-    public ArrayList generateResult() {
+    /**
+     * Generates result based on answer field.
+     * @return Returns list of DayOfTheWeek objects. These objects contain map of <Hours, Integer>.
+     * If at Hours.h6_00 is :
+     * - 1 it means that this hour is available
+     * - 0 it means that this hout is not available
+     */
+    public ArrayList<DayOfTheWeek> generateResult() {
         ArrayList list = new ArrayList();
 
         switch (queriesType){
