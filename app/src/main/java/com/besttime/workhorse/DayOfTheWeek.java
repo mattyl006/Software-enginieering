@@ -79,7 +79,7 @@ public class DayOfTheWeek {
     }
 
     /**
-     * Converts given time to Enum, used then loading something to map field, because it is using Hours enum.
+     * Converts given time to Enum, used when loading something to map field, because it is using Hours enum.
      * @param hour
      * @param min
      * @return
