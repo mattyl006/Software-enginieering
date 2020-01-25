@@ -1,11 +1,22 @@
 package com.besttime.json;
+import android.content.Context;
+
 import java.io.*;
 
 public class Json {
 
+
+    Context androidContext;
+
+    public Json(Context androidContext) {
+        this.androidContext = androidContext;
+    }
+
     public void serialize(String name, Object object){
         try{
-            FileOutputStream fs = new FileOutputStream(name+".ser");
+
+
+            FileOutputStream fs = androidContext.openFileOutput(name+".ser", Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(object);
             os.close();
@@ -15,15 +26,15 @@ public class Json {
         }
     }
 
-    public Object deserialize(String name){
+    public Object deserialize(String name) throws IOException, ClassNotFoundException {
         try {
-            FileInputStream strumienPlk = new FileInputStream(name+".ser");
+
+            FileInputStream strumienPlk = androidContext.openFileInput(name+".ser");
             ObjectInputStream os = new ObjectInputStream(strumienPlk);
             Object obj = os.readObject();
             return obj;
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw e;
         }
     }
 
