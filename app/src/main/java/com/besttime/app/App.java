@@ -2,10 +2,13 @@ package com.besttime.app;
 
 import com.besttime.workhorse.FormManager;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class App {
+public class App implements Serializable {
+
+    public final static String nameToDeserialize = "app";
 
     private boolean firstUse;
     private List<String> contactListNames;
@@ -15,7 +18,7 @@ public class App {
 
     public App(){
 
-        
+
     }
 
     public void appLoop(){
