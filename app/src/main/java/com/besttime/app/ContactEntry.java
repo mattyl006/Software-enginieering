@@ -3,7 +3,9 @@ package com.besttime.app;
 import com.besttime.models.Contact;
 import com.besttime.workhorse.Availability;
 
-public class ContactEntry {
+import java.io.Serializable;
+
+public class ContactEntry implements Serializable {
 
     private Contact contactInfo;
     private int callCount;

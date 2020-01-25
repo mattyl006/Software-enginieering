@@ -35,6 +35,7 @@ import com.besttime.app.helpers.WhatsappRedirector;
 import com.besttime.app.mockClasses.MockApp;
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
+import com.besttime.workhorse.SmsManager;
 import com.besttime.ui.animation.ContactSelectAnimationManager;
 import com.besttime.ui.helpers.WhatsappContactIdRetriever;
 import com.besttime.ui.itemsSelecting.ContactItemDetailsLookup;
@@ -60,7 +61,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
     private RelativeLayout staticSidebar;
     private static final int numOfTimeSquaresOnStaticSidebar = 17;
+    private static final int PERMISSIONS_REQUEST_SEND_SMS = 121;
 
+    private SmsManager smsManager = new SmsManager(this, PERMISSIONS_REQUEST_SEND_SMS);
     private RelativeLayout movingSidebar;
     private boolean isSidebarOpened = false;
     private static final int numOfTimeRectanglesOnMovingSidebar = 23;
@@ -104,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        smsManager.checkSendSmsPermission(this, PERMISSIONS_REQUEST_SEND_SMS);
         intitializeActionBar();
 
         initializeData();
@@ -154,6 +158,19 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
+            case PERMISSIONS_REQUEST_SEND_SMS:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay!
+                }
+                else {
+                    // permission denied, boo!
+                    Toast.makeText(this, "Send SMS permission is necessary", Toast.LENGTH_LONG).show();
+                    finishAndRemoveTask();
+                }
+                break;
+
             case MockApp.PERMISSIONS_PHONE_CALL:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
