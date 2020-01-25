@@ -1,32 +1,27 @@
 package com.besttime.workhorse;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class FormManager {
 
-    private Map<Long,Date> sentForms;
+    private List<Form> sentForms;
 
-    public Map<Long, Date> getSentForms() {
+    public List<Form> getSentForms() {
         return sentForms;
     }
 
     public FormManager(){
-        this.sentForms = new HashMap<Long,Date>();
+        this.sentForms = new ArrayList<>();
     }
 
 
-    public void addToMap(Long formId, Date date){
-        try {
-
-            this.sentForms.put(formId,date);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e);
-        }
+    public void addNewFormToSentForms(Form newForm){
+        sentForms.add(newForm);
     }
 
 
@@ -35,14 +30,20 @@ public class FormManager {
      * @param formId
      * @return null if form hasn't been filled yet.
      */
-    public Date findDateWhenFormWasFilled(Long formId){
-        try {
-            return this.sentForms.get(formId);
+    public Form getSentFormWithId(Long formId){
+        for (Form form :
+                sentForms) {
+            if(formId == form.getId()){
+                return form;
+            }
         }
-        catch (Exception e )
-        {
-            System.out.println(e);
-        }
+
+        return null;
+    }
+
+    private List<DayOfTheWeek> parseFetchedRowFromSheet(List<String> row){
+
+
         return null;
     }
 
