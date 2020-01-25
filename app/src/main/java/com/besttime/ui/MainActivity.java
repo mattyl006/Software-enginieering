@@ -29,10 +29,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.besttime.app.App;
 import com.besttime.app.ContactEntry;
 import com.besttime.app.helpers.ContactImporter;
 import com.besttime.app.helpers.WhatsappRedirector;
 import com.besttime.app.mockClasses.MockApp;
+import com.besttime.json.Json;
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
 import com.besttime.workhorse.SmsManager;
@@ -47,6 +49,7 @@ import com.besttime.workhorse.CurrentTime;
 import com.besttime.workhorse.Hours;
 import com.example.besttime.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
@@ -101,6 +104,10 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
     private View backgroundImage;
 
+    private App app;
+
+    private Json json;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
         smsManager.checkSendSmsPermission(this, PERMISSIONS_REQUEST_SEND_SMS);
         intitializeActionBar();
+
+        initializeApp();
 
         initializeData();
 
@@ -129,6 +138,26 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         initializeBackgroundImage();
 
     }
+
+    public void initializeApp(){
+        json = new Json(this);
+
+        try {
+            app = (App) json.deserialize(App.nameToDeserialize);
+        } catch (IOException e) {
+            app = new App();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            finishAndRemoveTask();
+        }
+
+
+        app.setLastLaunch(new CurrentTime().getTime());
+
+
+        json.serialize(App.nameToDeserialize, app);
+    }
+
 
 
     @Override
