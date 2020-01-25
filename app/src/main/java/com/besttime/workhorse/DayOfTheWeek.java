@@ -78,6 +78,10 @@ public class DayOfTheWeek {
         map.put((Hours) myHour, 1);
     }
 
+    public void loadOneTime(Hours hour){
+        map.put(hour, 1);
+    }
+
     /**
      * Converts given time to Enum, used when loading something to map field, because it is using Hours enum.
      * @param hour
