@@ -50,13 +50,14 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements ContactSelectionListenable {
 
     private RecyclerView contactsRecyclerView;
     private ContactsRecyclerViewAdapter contactsAdapter;
-    private ArrayList<ContactEntry> contactsList = new ArrayList<>();
+    private List<ContactEntry> contactsList = new ArrayList<>();
 
     private RelativeLayout staticSidebar;
     private static final int numOfTimeSquaresOnStaticSidebar = 17;
@@ -113,19 +114,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         }
 
 
-        initializeDisplayMetrics();
 
-        shadowMakerAndClickBlocker = findViewById(R.id.shadowMakerAndClickBlocker);
-
-        initializeContactsRecyclerView();
-
-        initializeStaticSidebar();
-
-        initializeMovingSidebar();
-
-        initializeMovingContactItem();
-
-        initializeBackgroundImage();
 
     }
 
@@ -136,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
             app = (App) json.deserialize(App.nameToDeserialize);
 
             app.setAllTransientFields(this);
+
+            getAllContactsFromAppAndInitializeAllViews();
         } catch (IOException e) {
             e.printStackTrace();
             try {
@@ -160,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
 
         app.setLastLaunch(new CurrentTime().getTime());
-
 
         json.serialize(App.nameToDeserialize, app);
     }
@@ -208,6 +198,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
             case App.PERMISSIONS_REQUEST_READ_CONTACTS:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    app.importContacts();
+                    json.serialize(App.nameToDeserialize, app);
+                    getAllContactsFromAppAndInitializeAllViews();
                     app.checkAllPermissions();
 
                 }
@@ -234,6 +227,32 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         }
     }
 
+    private void getAllContactsFromAppAndInitializeAllViews() {
+        try {
+            contactsList = app.getContactList();
+        } catch (IOException e) {
+            e.printStackTrace();
+            finishAndRemoveTask();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            finishAndRemoveTask();
+        }
+
+        initializeDisplayMetrics();
+
+        shadowMakerAndClickBlocker = findViewById(R.id.shadowMakerAndClickBlocker);
+
+        initializeContactsRecyclerView();
+
+        initializeStaticSidebar();
+
+        initializeMovingSidebar();
+
+        initializeMovingContactItem();
+
+        initializeBackgroundImage();
+
+    }
 
 
     private void initializeDisplayMetrics() {

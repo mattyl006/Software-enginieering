@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 
 import com.besttime.app.helpers.ContactImporter;
 import com.besttime.app.helpers.WhatsappRedirector;
+import com.besttime.json.Json;
+import com.besttime.models.Contact;
 import com.besttime.ui.helpers.WhatsappContactIdRetriever;
 import com.besttime.workhorse.FormManager;
 import com.besttime.workhorse.SmsManager;
@@ -28,9 +30,10 @@ public class App implements Serializable {
 
 
     private boolean firstUse;
-    private List<String> contactListNames;
+    private List<String> contactListJsonNames;
     private Date lastLaunch;
     private FormManager formManager = null;
+    private transient Json json;
 
     private transient Context androidContext;
 
@@ -47,9 +50,29 @@ public class App implements Serializable {
      */
     public App(final Context androidContext) throws IOException, GeneralSecurityException {
         this.androidContext = androidContext;
-        contactListNames = new ArrayList<>();
+        contactListJsonNames = new ArrayList<>();
+
+        json = new Json(androidContext);
+
+        firstUse = false;
 
         setAllTransientFields(androidContext);
+
+    }
+
+    public void importContacts() {
+        List<Contact> contacts = contactImporter.getAllContacts();
+
+
+        for (Contact contact :
+                contacts) {
+            ContactEntry newContactEntry = new ContactEntry(contact);
+            String nameToSerialize = newContactEntry.getContactId() + newContactEntry.getContactNumber();
+            if(!contactListJsonNames.contains(nameToSerialize)){
+                contactListJsonNames.add(nameToSerialize);
+                json.serialize(nameToSerialize, newContactEntry);
+            }
+        }
     }
 
     /**
@@ -65,12 +88,32 @@ public class App implements Serializable {
 
     public void setAllTransientFields(Context androidContext) throws IOException, GeneralSecurityException {
         this.androidContext = androidContext;
+        json = new Json(androidContext);
         contactImporter = new ContactImporter(PERMISSIONS_REQUEST_READ_CONTACTS, androidContext);
         whatsappContactIdRetriever =new WhatsappContactIdRetriever(androidContext.getContentResolver());
         whatsappRedirector = new WhatsappRedirector(androidContext, whatsappContactIdRetriever);
         formManager = new FormManager(new SmsManager(androidContext, PERMISSIONS_REQUEST_SEND_SMS));
-
     }
+
+
+
+
+    public List<ContactEntry> getContactList() throws IOException, ClassNotFoundException {
+        return deserializeAllContacts();
+    }
+
+    private List<ContactEntry> deserializeAllContacts() throws IOException, ClassNotFoundException {
+        List<ContactEntry> result = new ArrayList<>();
+
+        for (String nameToDeserialize :
+                contactListJsonNames) {
+            result.add((ContactEntry) json.deserialize(nameToDeserialize));
+        }
+
+        return result;
+    }
+
+
 
     public void appLoop(){
 
@@ -78,11 +121,6 @@ public class App implements Serializable {
 
     public void updateContactList(){
 
-    }
-
-    public List<ContactEntry> getContactList(){
-
-        return null;
     }
 
     public void whatsappForward(ContactEntry contact){
