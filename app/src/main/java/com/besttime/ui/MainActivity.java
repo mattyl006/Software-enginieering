@@ -1,17 +1,6 @@
 package com.besttime.ui;
 
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.selection.SelectionTracker;
-import androidx.recyclerview.selection.StableIdKeyProvider;
-import androidx.recyclerview.selection.StorageStrategy;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
@@ -30,15 +19,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StableIdKeyProvider;
+import androidx.recyclerview.selection.StorageStrategy;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.besttime.app.App;
 import com.besttime.app.ContactEntry;
-import com.besttime.app.helpers.ContactImporter;
-import com.besttime.app.helpers.WhatsappRedirector;
-import com.besttime.app.mockClasses.MockApp;
 import com.besttime.json.Json;
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
-import com.besttime.workhorse.SmsManager;
 import com.besttime.ui.animation.ContactSelectAnimationManager;
 import com.besttime.ui.helpers.WhatsappContactIdRetriever;
 import com.besttime.ui.itemsSelecting.ContactItemDetailsLookup;
@@ -64,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
     private RelativeLayout staticSidebar;
     private static final int numOfTimeSquaresOnStaticSidebar = 17;
-    private static final int PERMISSIONS_REQUEST_SEND_SMS = 121;
 
     private RelativeLayout movingSidebar;
     private boolean isSidebarOpened = false;
@@ -92,15 +87,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     private TextView contactNameTextView;
 
 
-    // TEMPORARILY ADDED
-    private ContactImporter contactImporter;
-
-
-    private MockApp mockApp;
-    private WhatsappContactIdRetriever mockWhatsappContactIdRetriever;
-    private WhatsappRedirector mockWhatsappRedirector;
-
-
     private View backgroundImage;
 
     private App app;
@@ -126,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
             finishAndRemoveTask();
         }
 
-        //initializeData();
 
         initializeDisplayMetrics();
 
@@ -139,8 +124,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         initializeMovingSidebar();
 
         initializeMovingContactItem();
-
-        initializeMockApp();
 
         initializeBackgroundImage();
 
@@ -251,20 +234,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         }
     }
 
-    private void initializeMockApp() {
-        mockWhatsappContactIdRetriever = new WhatsappContactIdRetriever(this.getContentResolver());
-        mockWhatsappRedirector = new WhatsappRedirector(this, mockWhatsappContactIdRetriever);
-        mockApp = new MockApp(mockWhatsappRedirector, this);
 
-        contactsAdapter.setWhatsappCallPerformable(mockApp);
-    }
-
-
-    private void initializeData() {
-        contactImporter = new ContactImporter(App.PERMISSIONS_REQUEST_READ_CONTACTS, this);
-        //initializeSampleDataAndAddItToContactsList();
-        getDataFromContactsImporter();
-    }
 
     private void initializeDisplayMetrics() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -478,18 +448,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                 staticSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-    }
-
-
-    public void getDataFromContactsImporter(){
-        ArrayList<Contact> contacts = contactImporter.getAllContacts();
-        if(contacts != null){
-            for (Contact contact :
-                    contacts) {
-                contactsList.add(new ContactEntry(contact));
-            }
-        }
-
     }
 
     @Override
