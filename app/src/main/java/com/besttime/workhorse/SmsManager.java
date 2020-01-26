@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 
+import java.util.ArrayList;
+
 public class SmsManager {
 
     private android.telephony.SmsManager androidSmsManager;
@@ -19,7 +21,10 @@ public class SmsManager {
 
     public void sendSmsPrompt(Context context, String message){
         if(checkSendSmsPermission(androidContext, sendSmsRequestCode)){
-            androidSmsManager.sendTextMessage(context.getContact().getContactNumber(), null, message, null, null);
+
+            ArrayList<String> parts = androidSmsManager.divideMessage(message);
+
+            androidSmsManager.sendMultipartTextMessage(context.getContact().getContactNumber(), null, parts, null, null);
         }
     }
 
