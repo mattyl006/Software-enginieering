@@ -1,6 +1,8 @@
 package com.besttime.ui;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
@@ -263,6 +265,20 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         initializeDisplayMetrics();
 
         shadowMakerAndClickBlocker = findViewById(R.id.shadowMakerAndClickBlocker);
+        shadowMakerAndClickBlocker.setVisibility(View.GONE);
+
+        shadowMakerAndClickBlocker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isSidebarOpened){
+                    sidebarOpeningWidthAnimation.reverse();
+                    sidebarOpeningAlphaAnimation.reverse();
+                    shadowCastingAnimation.reverse();
+
+                    isSidebarOpened = false;
+                }
+            }
+        });
 
         initializeContactsRecyclerView();
 
@@ -407,6 +423,21 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
         shadowCastingAnimation = ObjectAnimator.ofFloat(shadowMakerAndClickBlocker, "alpha", 0f, shadowValue);
         shadowCastingAnimation.setDuration(sidebarOpeningAnimationDuration);
+        shadowCastingAnimation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation, boolean isReverse) {
+                if(!isReverse){
+                    shadowMakerAndClickBlocker.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation, boolean isReverse) {
+                if(isReverse){
+                    shadowMakerAndClickBlocker.setVisibility(View.GONE);
+                }
+            }
+        });
 
 
         movingSidebar.setOnTouchListener(new OnSwipeTouchListener(this){
@@ -424,10 +455,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     sidebarOpeningWidthAnimation.start();
                     sidebarOpeningAlphaAnimation.start();
                     shadowCastingAnimation.start();
-
-                    shadowMakerAndClickBlocker.setClickable(true);
-                    shadowMakerAndClickBlocker.setFocusable(true);
-
                     isSidebarOpened = true;
                 }
 
@@ -442,10 +469,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     sidebarOpeningWidthAnimation.reverse();
                     sidebarOpeningAlphaAnimation.reverse();
                     shadowCastingAnimation.reverse();
-
-                    shadowMakerAndClickBlocker.setClickable(false);
-                    shadowMakerAndClickBlocker.setFocusable(false);
-
                     isSidebarOpened = false;
                 }
 

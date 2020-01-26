@@ -54,6 +54,7 @@ public class ContactSelectAnimationManager {
             @Override
             public void onAnimationStart(Animator animation, boolean isReverse) {
                 movingContactItem.setVisibility(View.VISIBLE);
+                clickBlocker.setVisibility(View.VISIBLE);
                 clickBlocker.setClickable(true);
                 clickBlocker.setFocusable(true);
             }
@@ -62,6 +63,7 @@ public class ContactSelectAnimationManager {
             public void onAnimationEnd(Animator animation, boolean isReverse) {
                 movingContactItem.setVisibility(View.GONE);
                 viewHolderTo.setActive(true);
+                clickBlocker.setVisibility(View.GONE);
                 clickBlocker.setClickable(false);
                 clickBlocker.setFocusable(false);
             }
