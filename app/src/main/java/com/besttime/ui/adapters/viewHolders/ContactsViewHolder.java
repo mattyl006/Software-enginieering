@@ -1,5 +1,6 @@
 package com.besttime.ui.adapters.viewHolders;
 
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -37,14 +38,16 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         whatsappRedirectButton = itemView.findViewById(R.id.whatsappRedirectButton_itemView);
         this.whatsappCallPerformable = whatsappCallPerformable;
 
-        whatsappRedirectButton.setOnClickListener(new View.OnClickListener() {
+
+        whatsappRedirectButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View v, MotionEvent event) {
                 if(whatsappCallPerformable != null){
                     if(contactEntryWithWhatsappId != null){
                         whatsappCallPerformable.whatsappForward(contactEntryWithWhatsappId.getContactEntry());
                     }
                 }
+                return true;
             }
         });
     }

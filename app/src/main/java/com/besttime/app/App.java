@@ -48,6 +48,8 @@ public class App implements Serializable, WhatsappCallPerformable {
     private transient WhatsappRedirector whatsappRedirector;
     private transient WhatsappContactIdRetriever whatsappContactIdRetriever;
 
+    private transient boolean doingCall;
+
 
     /**
      *
@@ -158,13 +160,16 @@ public class App implements Serializable, WhatsappCallPerformable {
     private ContactEntry lastCalledContact;
 
     public void whatsappForward(ContactEntry contact){
-        whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
-        lastCalledContact = contact;
-
-
+        if(!doingCall){
+            whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
+            lastCalledContact = contact;
+            doingCall = true;
+        }
     }
 
     public void onWhatsappVideoCallEnd(boolean wasCallAnwsered){
+
+        doingCall = false;
 
         if(wasCallAnwsered){
             // do sth
@@ -187,6 +192,8 @@ public class App implements Serializable, WhatsappCallPerformable {
 
 
         json.serialize(App.nameToDeserialize, this);
+
+
 
     }
 
