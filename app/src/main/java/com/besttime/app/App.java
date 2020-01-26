@@ -11,6 +11,8 @@ import com.besttime.app.helpers.WhatsappRedirector;
 import com.besttime.json.Json;
 import com.besttime.models.Contact;
 import com.besttime.ui.helpers.WhatsappContactIdRetriever;
+import com.besttime.workhorse.CurrentTime;
+import com.besttime.workhorse.Form;
 import com.besttime.workhorse.FormManager;
 import com.besttime.workhorse.SmsManager;
 
@@ -28,6 +30,8 @@ public class App implements Serializable, WhatsappCallPerformable {
     public static final int PERMISSIONS_REQUEST_SEND_SMS = 121;
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 199;
     public static final int PERMISSIONS_PHONE_CALL = 197;
+
+    public static final int WHATSAPP_VIDEO_CALL_REQUEST = 11;
 
 
     private boolean firstUse;
@@ -124,8 +128,35 @@ public class App implements Serializable, WhatsappCallPerformable {
 
     }
 
+
+    private ContactEntry lastCalledContact;
+
     public void whatsappForward(ContactEntry contact){
-        whatsappRedirector.redirectToWhatsappVideoCall(contact);
+        whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
+        lastCalledContact = contact;
+
+
+    }
+
+    public void onWhatsappVideoCallEnd(boolean wasCallAnwsered){
+
+        if(wasCallAnwsered){
+            // do sth
+        }
+        else{
+            // do sth else
+        }
+
+        if(lastCalledContact.getCallCount() == 0){
+            Form newForm = new Form(lastCalledContact.getContactId(),
+                    new com.besttime.workhorse.Context(lastCalledContact, new CurrentTime()));
+            formManager.sendForm(newForm);
+        }
+
+        lastCalledContact.addCallCount();
+        json.serialize(lastCalledContact.getContactId() + lastCalledContact.getContactNumber(),
+                lastCalledContact);
+
     }
 
     public void sortContacts(List<ContactEntry> contacts){

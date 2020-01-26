@@ -1,6 +1,7 @@
 package com.besttime.workhorse;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class Form implements Serializable {
     private long id;
     private boolean hasResponded;
     private Date dateWhenResponded;
-    private List<DayOfTheWeek> allDaysAnswers;
+    private List<DayOfTheWeek> allDaysAnswers = new ArrayList<>();
 
     public Form(long id, Context context) {
         this.context = context;

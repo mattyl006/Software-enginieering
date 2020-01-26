@@ -157,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
 
 
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -179,6 +181,25 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                 backgroundImage.setY(backgroundImage.getY() - dy);
             }
         });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == App.WHATSAPP_VIDEO_CALL_REQUEST){
+
+            boolean wasCallAnwsered = false;
+            if(resultCode == RESULT_OK){
+                wasCallAnwsered = true;
+            }
+            if(resultCode == RESULT_CANCELED){
+                wasCallAnwsered = false;
+            }
+            app.onWhatsappVideoCallEnd(wasCallAnwsered);
+
+        }
     }
 
     @Override

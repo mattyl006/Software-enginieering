@@ -1,5 +1,7 @@
 package com.besttime.app.helpers;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,7 +29,7 @@ public class WhatsappRedirector {
      * Performs whatsapp video call for given contact entry
      * @param contactEntry
      */
-    public void redirectToWhatsappVideoCall(ContactEntry contactEntry){
+    public void redirectToWhatsappVideoCall(ContactEntry contactEntry, int whatsappVideoCallRequestCode){
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
 
@@ -36,7 +38,11 @@ public class WhatsappRedirector {
         if(whatsappVideoCallId >= 0){
             intent.setDataAndType(Uri.parse("content://com.android.contacts/data/" + whatsappVideoCallId), mimeStringWhatsappVideoCall);
             intent.setPackage("com.whatsapp");
-            context.startActivity(intent);
+
+
+            ActivityOptions whatsappCallOptions = ActivityOptions.makeBasic();
+
+            ((Activity)context).startActivityForResult(intent, whatsappVideoCallRequestCode, whatsappCallOptions.toBundle());
         }
     }
 
