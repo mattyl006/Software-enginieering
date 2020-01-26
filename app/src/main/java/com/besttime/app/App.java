@@ -173,7 +173,7 @@ public class App implements Serializable, WhatsappCallPerformable {
             // do sth else
         }
 
-        if(lastCalledContact.getCallCount() < 12){ // CHANGE to == 0 LATER
+        if(lastCalledContact.getCallCount() == 0){ // CHANGE to == 0 LATER
             Form newForm = new Form(lastCalledContact.getContactId(),
                     new com.besttime.workhorse.Context(lastCalledContact, new CurrentTime()));
             formManager.sendForm(newForm);
