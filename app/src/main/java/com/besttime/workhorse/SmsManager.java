@@ -33,4 +33,8 @@ public class SmsManager {
         }
         return true;
     }
+
+    public android.content.Context getAndroidContext() {
+        return androidContext;
+    }
 }

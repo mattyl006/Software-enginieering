@@ -12,11 +12,13 @@ import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
@@ -37,6 +39,7 @@ import com.besttime.app.mockClasses.MockApp;
 import com.besttime.json.Json;
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
+import com.besttime.workhorse.FormManager;
 import com.besttime.workhorse.SmsManager;
 import com.besttime.ui.animation.ContactSelectAnimationManager;
 import com.besttime.ui.helpers.WhatsappContactIdRetriever;
@@ -50,11 +53,10 @@ import com.besttime.workhorse.Hours;
 import com.example.besttime.R;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
-
-import static java.util.Calendar.HOUR;
 
 public class MainActivity extends AppCompatActivity implements ContactSelectionListenable {
 
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     private RelativeLayout staticSidebar;
     private static final int numOfTimeSquaresOnStaticSidebar = 17;
     private static final int PERMISSIONS_REQUEST_SEND_SMS = 121;
+
+    private static final int PERMISSIONS_REQUEST_GET_ACCOUNT = 144;
 
     private SmsManager smsManager = new SmsManager(this, PERMISSIONS_REQUEST_SEND_SMS);
     private RelativeLayout movingSidebar;
@@ -114,10 +118,19 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(threadPolicy);
+
         smsManager.checkSendSmsPermission(this, PERMISSIONS_REQUEST_SEND_SMS);
         intitializeActionBar();
 
-        initializeApp();
+        try {
+            initializeApp();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+            finishAndRemoveTask();
+        }
 
         initializeData();
 
@@ -139,15 +152,29 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
     }
 
-    public void initializeApp(){
+    public void initializeApp() throws GeneralSecurityException {
         json = new Json(this);
 
         try {
             app = (App) json.deserialize(App.nameToDeserialize);
+
+            app.setAllTransientFields(this);
         } catch (IOException e) {
-            app = new App();
+            e.printStackTrace();
+            try {
+                app = new App(this);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                Toast.makeText(this, "Error starting app", Toast.LENGTH_LONG).show();
+                finishAndRemoveTask();
+            } catch (GeneralSecurityException ex) {
+                ex.printStackTrace();
+                Toast.makeText(this, "Error starting app", Toast.LENGTH_LONG).show();
+                finishAndRemoveTask();
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            Toast.makeText(this, "Error starting app", Toast.LENGTH_LONG).show();
             finishAndRemoveTask();
         }
 
@@ -213,6 +240,8 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                 }
 
                 break;
+
+
         }
     }
 
