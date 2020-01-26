@@ -1,5 +1,8 @@
 package com.besttime.workhorse;
 
+import android.os.Debug;
+import android.util.Log;
+
 import com.besttime.workhorse.helpers.ParsedRowFromSheet;
 
 import java.io.IOException;
@@ -13,8 +16,13 @@ import java.util.List;
 public class FormManager implements Serializable {
 
     private List<Form> sentForms;
-    private SheetsAndJava dataRetriever;
-    private SmsManager smsManager;
+    private transient SheetsAndJava dataRetriever;
+
+    public void setSmsManager(SmsManager smsManager) {
+        this.smsManager = smsManager;
+    }
+
+    private transient SmsManager smsManager;
 
     public static final String smsMessage = "Hej, zaznacz kiedy jesteś dostępny abym mógł do Ciebie zadzwonić: \n";
     public static final String formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScEiidNdn1cDF3GkJ1Gaysv5fnDebM4BjWzMuRoNDGF6jTKQQ/viewform?usp=pp_url&entry.1877286907=";
@@ -32,7 +40,7 @@ public class FormManager implements Serializable {
     public FormManager(SmsManager smsManager) throws IOException, GeneralSecurityException {
         this.smsManager = smsManager;
         this.sentForms = new ArrayList<>();
-        dataRetriever = new SheetsAndJava();
+        dataRetriever = new SheetsAndJava(smsManager.getAndroidContext());
     }
 
     private String makeSmsMessage(Form form){
