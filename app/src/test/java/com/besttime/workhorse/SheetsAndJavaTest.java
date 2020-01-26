@@ -16,7 +16,7 @@ public class SheetsAndJavaTest {
 
     @Test
     public void getAllFormsAnswers() throws IOException, GeneralSecurityException, ParseException {
-        SheetsAndJava dataRetriever = new SheetsAndJava();
+        SheetsAndJava dataRetriever = new SheetsAndJava(null);
 
         List<List<Object>> allRows = dataRetriever.getAllFormsAnswers();
 
