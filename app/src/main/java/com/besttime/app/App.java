@@ -71,6 +71,7 @@ public class App implements Serializable, WhatsappCallPerformable {
         List<Contact> contacts = contactImporter.getAllContacts();
 
 
+        contactEntries = new ArrayList<>();
         for (Contact contact :
                 contacts) {
             ContactEntry newContactEntry = new ContactEntry(contact);
@@ -78,6 +79,7 @@ public class App implements Serializable, WhatsappCallPerformable {
             if(!contactListJsonNames.contains(nameToSerialize)){
                 contactListJsonNames.add(nameToSerialize);
                 json.serialize(nameToSerialize, newContactEntry);
+                contactEntries.add(newContactEntry);
             }
         }
     }
