@@ -281,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                 contactEntriesWithWhatsappId.add(contactEntryWithWhatsappId);
             }
         }
-        contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId, null, this);
+        contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId, app, this);
         contactsRecyclerView.setAdapter(contactsAdapter);
         SelectionTracker selectionTracker = buildSelectionTracker();
 

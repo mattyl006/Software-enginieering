@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 
 import com.besttime.app.helpers.ContactImporter;
+import com.besttime.app.helpers.WhatsappCallPerformable;
 import com.besttime.app.helpers.WhatsappRedirector;
 import com.besttime.json.Json;
 import com.besttime.models.Contact;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class App implements Serializable {
+public class App implements Serializable, WhatsappCallPerformable {
 
     public final static String nameToDeserialize = "app";
 
@@ -124,8 +125,7 @@ public class App implements Serializable {
     }
 
     public void whatsappForward(ContactEntry contact){
-
-
+        whatsappRedirector.redirectToWhatsappVideoCall(contact);
     }
 
     public void sortContacts(List<ContactEntry> contacts){
