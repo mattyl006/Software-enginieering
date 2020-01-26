@@ -19,6 +19,7 @@ import com.besttime.workhorse.SmsManager;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.GeneralSecurityException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,8 +37,9 @@ public class App implements Serializable, WhatsappCallPerformable {
 
     private boolean firstUse;
     private List<String> contactListJsonNames;
+    private transient List<ContactEntry> contactEntries = new ArrayList<>();
     private Date lastLaunch;
-    private FormManager formManager = null;
+    private transient FormManager formManager;
     private transient Json json;
 
     private transient Context androidContext;
@@ -53,7 +55,7 @@ public class App implements Serializable, WhatsappCallPerformable {
      * @throws IOException
      * @throws GeneralSecurityException When there was error creating formManager
      */
-    public App(final Context androidContext) throws IOException, GeneralSecurityException {
+    public App(final Context androidContext) throws IOException, GeneralSecurityException, ParseException, ClassNotFoundException {
         this.androidContext = androidContext;
         contactListJsonNames = new ArrayList<>();
 
@@ -91,20 +93,42 @@ public class App implements Serializable, WhatsappCallPerformable {
     }
 
 
-    public void setAllTransientFields(Context androidContext) throws IOException, GeneralSecurityException {
+    public void setAllTransientFields(Context androidContext) throws IOException, GeneralSecurityException, ParseException, ClassNotFoundException {
         this.androidContext = androidContext;
         json = new Json(androidContext);
         contactImporter = new ContactImporter(PERMISSIONS_REQUEST_READ_CONTACTS, androidContext);
         whatsappContactIdRetriever =new WhatsappContactIdRetriever(androidContext.getContentResolver());
         whatsappRedirector = new WhatsappRedirector(androidContext, whatsappContactIdRetriever);
-        formManager = new FormManager(new SmsManager(androidContext, PERMISSIONS_REQUEST_SEND_SMS));
+
+        try {
+            formManager = (FormManager) json.deserialize(FormManager.JSON_NAME);
+        }
+        catch (IOException e){
+            formManager = new FormManager();
+        }
+
+        formManager.setTransientFields(new SmsManager(androidContext, PERMISSIONS_REQUEST_SEND_SMS));
+
+        contactEntries = deserializeAllContacts();
+
+
+        formManager.checkResponses(contactEntries);
+
+        for (ContactEntry contactEntry :
+                contactEntries) {
+            json.serialize(contactEntry.getContactId() + contactEntry.getContactNumber(), contactEntry);
+        }
+
+        json.serialize(FormManager.JSON_NAME, formManager);
+
+
     }
 
 
 
 
     public List<ContactEntry> getContactList() throws IOException, ClassNotFoundException {
-        return deserializeAllContacts();
+        return contactEntries;
     }
 
     private List<ContactEntry> deserializeAllContacts() throws IOException, ClassNotFoundException {
@@ -147,15 +171,20 @@ public class App implements Serializable, WhatsappCallPerformable {
             // do sth else
         }
 
-        if(lastCalledContact.getCallCount() == 0){
+        if(lastCalledContact.getCallCount() < 12){ // CHANGE to == 0 LATER
             Form newForm = new Form(lastCalledContact.getContactId(),
                     new com.besttime.workhorse.Context(lastCalledContact, new CurrentTime()));
             formManager.sendForm(newForm);
+            formManager.addNewFormToSentForms(newForm);
+            json.serialize(FormManager.JSON_NAME, formManager);
         }
 
         lastCalledContact.addCallCount();
         json.serialize(lastCalledContact.getContactId() + lastCalledContact.getContactNumber(),
                 lastCalledContact);
+
+
+        json.serialize(App.nameToDeserialize, this);
 
     }
 

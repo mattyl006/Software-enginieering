@@ -48,6 +48,7 @@ import com.example.besttime.R;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
         try {
             initializeApp();
-        } catch (GeneralSecurityException e) {
+        } catch (GeneralSecurityException | ParseException | ClassNotFoundException e) {
             e.printStackTrace();
             finishAndRemoveTask();
         }
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
     }
 
-    public void initializeApp() throws GeneralSecurityException {
+    public void initializeApp() throws GeneralSecurityException, ParseException, ClassNotFoundException {
         json = new Json(this);
 
         try {
@@ -566,6 +567,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     }
 
     private void changeColorsOfTimeSquaresOnSideBar(@NonNull ContactEntry newSelectedContact) {
+        newSelectedContact.getAvailability().swapCurrentDay(new CurrentTime());
         Map<Hours, AvailType> currentDay = newSelectedContact.getAvailability().getCurrentDay();
 
         Calendar rightNow = Calendar.getInstance();

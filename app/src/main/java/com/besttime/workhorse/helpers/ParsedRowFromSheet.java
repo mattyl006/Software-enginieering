@@ -29,8 +29,14 @@ public class ParsedRowFromSheet {
 
         // i = 0 - date, i = size - formId
         for(int i = 1; i < notParsedRow.size() - 1; i ++){
-            notParsedAnswers.add((String) notParsedRow.get(i));
+
+            String[] splitAnswers = ((String)notParsedRow.get(i)).split(",");
+            for (String answer :
+                    splitAnswers) {
+                notParsedAnswers.add(answer);
+            }
         }
+
 
         parseAnswers(notParsedAnswers);
     }
@@ -49,7 +55,7 @@ public class ParsedRowFromSheet {
 
 
             // answer was "Nie moge rozmawiac ... dayNumber"
-            if (notParsedAnswer.charAt(0) == 'N') {
+            if (notParsedAnswer.contains("N")) {
                 getDayWithId(dayNumber).loadDayToBeUndefined();
             }
             else{
@@ -81,7 +87,7 @@ public class ParsedRowFromSheet {
     private Hours parseStringTimeToHoursEnum(String notParsedTime){
 
         int indexOfColon = notParsedTime.indexOf(":");
-        String hourAsString = notParsedTime.substring(0, indexOfColon);
+        String hourAsString = notParsedTime.substring(0, indexOfColon).trim();
         String minutesAsString = notParsedTime.substring(indexOfColon + 1, notParsedTime.length()).trim();
 
         double hour = Integer.parseInt(hourAsString);

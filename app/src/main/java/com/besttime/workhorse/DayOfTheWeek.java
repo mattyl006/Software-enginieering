@@ -1,8 +1,9 @@
 package com.besttime.workhorse;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class DayOfTheWeek {
+public class DayOfTheWeek implements Serializable {
 
     private int id; //0 - niedziela, 1 - pn...
 

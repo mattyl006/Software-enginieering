@@ -3,6 +3,7 @@ package com.besttime.workhorse;
 import android.os.Debug;
 import android.util.Log;
 
+import com.besttime.app.ContactEntry;
 import com.besttime.workhorse.helpers.ParsedRowFromSheet;
 
 import java.io.IOException;
@@ -18,14 +19,12 @@ public class FormManager implements Serializable {
     private List<Form> sentForms;
     private transient SheetsAndJava dataRetriever;
 
-    public void setSmsManager(SmsManager smsManager) {
-        this.smsManager = smsManager;
-    }
-
     private transient SmsManager smsManager;
 
     public static final String smsMessage = "Hej, zaznacz kiedy jesteś dostępny abym mógł do Ciebie zadzwonić: \n";
     public static final String formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScEiidNdn1cDF3GkJ1Gaysv5fnDebM4BjWzMuRoNDGF6jTKQQ/viewform?usp=pp_url&entry.1877286907=";
+
+    public static final String JSON_NAME = "formManager";
 
     public List<Form> getSentForms() {
         return sentForms;
@@ -35,11 +34,13 @@ public class FormManager implements Serializable {
      *
      * @throws IOException When there was error creating forms data retriever
      * @throws GeneralSecurityException When there was error creating forms data retriever
-     * @param smsManager
      */
-    public FormManager(SmsManager smsManager) throws IOException, GeneralSecurityException {
-        this.smsManager = smsManager;
+    public FormManager() throws IOException, GeneralSecurityException {
         this.sentForms = new ArrayList<>();
+    }
+
+    public void setTransientFields(SmsManager smsManager){
+        this.smsManager = smsManager;
         dataRetriever = new SheetsAndJava(smsManager.getAndroidContext());
     }
 
@@ -58,7 +59,7 @@ public class FormManager implements Serializable {
      * @throws IOException When there was error checking responses
      * @throws ParseException Error parsing row
      */
-    public void checkResponses() throws IOException, ParseException {
+    public void checkResponses(List<ContactEntry> contactEntries) throws ParseException {
 
         List<List<Object>> dataFromSheets = dataRetriever.getAllFormsAnswers();
 
@@ -80,10 +81,26 @@ public class FormManager implements Serializable {
                 if(sentForm.getId() == parsedRow.getFormId()){
                     if(!sentForm.hasResponded()){
                         sentForm.updateAllDaysAnswers(parsedRow.getAnswers(), parsedRow.getDateWhenFormFilled());
+
+                        for (ContactEntry contactEntry :
+                                contactEntries) {
+                            if(contactEntry.getContactId() == sentForm.getId()){
+                                QuerySmsComputation querySmsComputation = new QuerySmsComputation(sentForm.generateResult(), new Week());
+                                contactEntry.getAvailability().setAvailability(querySmsComputation.getWeek());
+                            }
+                        }
+
                     }
                     else{
                         if(sentForm.getDateWhenResponded().before(parsedRow.getDateWhenFormFilled())){
                             sentForm.updateAllDaysAnswers(parsedRow.getAnswers(), parsedRow.getDateWhenFormFilled());
+                            for (ContactEntry contactEntry :
+                                    contactEntries) {
+                                if(contactEntry.getContactId() == sentForm.getId()){
+                                    QuerySmsComputation querySmsComputation = new QuerySmsComputation(sentForm.generateResult(), new Week());
+                                    contactEntry.getAvailability().setAvailability(querySmsComputation.getWeek());
+                                }
+                            }
                         }
                     }
                 }

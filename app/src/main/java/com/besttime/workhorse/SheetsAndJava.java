@@ -29,8 +29,9 @@ public class SheetsAndJava {
 
     private List<List<Object>> allRows = null;
 
-    private final String range = "dostepnosc!A2:I100000";
-    public static final DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
+    // TEMPORARY CHANGE OF RANGE, UNTIL WRONG DATA IS REMOVED FROM SHEET
+    private final String range = "dostepnosc!A11:I100000";
+    public static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private Context androidContext;
 

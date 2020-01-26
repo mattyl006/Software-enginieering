@@ -3,9 +3,10 @@ package com.besttime.workhorse;
 
 import com.besttime.app.ContactEntry;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Context {
+public class Context implements Serializable {
 
     private Date time;
     private ContactEntry contact;
