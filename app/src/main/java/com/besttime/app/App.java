@@ -23,6 +23,9 @@ public class App implements Serializable {
     public final static String nameToDeserialize = "app";
 
     public static final int PERMISSIONS_REQUEST_SEND_SMS = 121;
+    public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 199;
+    public static final int PERMISSIONS_PHONE_CALL = 197;
+
 
     private boolean firstUse;
     private List<String> contactListNames;
@@ -62,7 +65,7 @@ public class App implements Serializable {
 
     public void setAllTransientFields(Context androidContext) throws IOException, GeneralSecurityException {
         this.androidContext = androidContext;
-        contactImporter = new ContactImporter(androidContext);
+        contactImporter = new ContactImporter(PERMISSIONS_REQUEST_READ_CONTACTS, androidContext);
         whatsappContactIdRetriever =new WhatsappContactIdRetriever(androidContext.getContentResolver());
         whatsappRedirector = new WhatsappRedirector(androidContext, whatsappContactIdRetriever);
         formManager = new FormManager(new SmsManager(androidContext, PERMISSIONS_REQUEST_SEND_SMS));
@@ -100,5 +103,53 @@ public class App implements Serializable {
     public void setLastLaunch(Date lastLaunch) {
         this.lastLaunch = lastLaunch;
 
+    }
+
+
+    public void checkAllPermissions(){
+        if(!checkReadContactPermission()){
+            requestReadContactPermission();
+        }
+        else if(!checkPhoneCallPermission()){
+            requestPhoneCallPermission();
+        }
+        else if(!checkSendSmsPermission()){
+            requestSendSmsPermission();
+        }
+    }
+
+
+    public boolean checkReadContactPermission(){
+        if(androidContext.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkPhoneCallPermission(){
+        if(androidContext.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkSendSmsPermission(){
+        if(androidContext.checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED){
+            return false;
+        }
+        return true;
+    }
+
+
+    public void requestReadContactPermission(){
+        ((Activity)androidContext).requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+    }
+
+    public void requestPhoneCallPermission(){
+        ((Activity)androidContext).requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSIONS_PHONE_CALL);
+    }
+
+    public void requestSendSmsPermission(){
+        ((Activity)androidContext).requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSIONS_REQUEST_SEND_SMS);
     }
 }

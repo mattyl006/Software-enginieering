@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ContactImporter {
 
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    private final int PERMISSIONS_REQUEST_READ_CONTACTS;
 
     private ArrayList<Contact> contacts;
     private Context context;
@@ -22,7 +22,8 @@ public class ContactImporter {
     public boolean areImported;
 
 
-    public ContactImporter(Context context) {
+    public ContactImporter(int permissions_request_read_contacts, Context context) {
+        PERMISSIONS_REQUEST_READ_CONTACTS = permissions_request_read_contacts;
         this.context = context;
         areImported = false;
     }
