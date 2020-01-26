@@ -1,65 +1,53 @@
 package com.besttime.workhorse;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import android.content.Context;
+import android.os.AsyncTask;
+
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.security.GeneralSecurityException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import javax.annotation.Nullable;
 
 public class SheetsAndJava {
+    private static final String TOKENS_DIRECTORY_PATH = "/bestTime/tokensDirectory";
     private Sheets sheetsService;
     private final String APPLICATION_NAME = "Availability Sheet";
     private final String SPREADSHEET_ID = "1vFmyVumydY92lfRME4bpROJ_7WrwH6yrGXBb8FZpJCc";
 
-    private final String range = "dostepnosc!A2:I100000";
+    public static final String google_api_key = "AIzaSyCEBWOxFJMu2zHUHwnk4KHU8WNfmVI32Do";
 
+
+    private List<List<Object>> allRows = null;
+
+    private final String range = "dostepnosc!A2:I100000";
     public static final DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
 
-    private Credential authorize() throws IOException, GeneralSecurityException {
-        InputStream in = SheetsAndJava.class.getResourceAsStream("/credentials.json");
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
-                JacksonFactory.getDefaultInstance(), new InputStreamReader(in)
-        );
-
-        List<String> scopes = Arrays.asList(SheetsScopes.SPREADSHEETS);
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(),
-                clientSecrets, scopes)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File("tokens")))
-                .setAccessType("offline")
-                .build();
-        Credential credential = new AuthorizationCodeInstalledApp(
-                flow, new LocalServerReceiver())
-                .authorize("user");
-        return credential;
-    }
-
-    private Sheets getSheetsService() throws IOException, GeneralSecurityException {
-        Credential credential = authorize();
-        return new Sheets.Builder(GoogleNetHttpTransport.newTrustedTransport(),
-                JacksonFactory.getDefaultInstance(), credential)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
-    }
+    private Context androidContext;
 
 
-    public SheetsAndJava() throws IOException, GeneralSecurityException {
+    public SheetsAndJava(@Nullable Context androidContext)  {
+        this.androidContext = androidContext;
         sheetsService = getSheetsService();
+    }
+
+    private Sheets getSheetsService() {
+        HttpTransport transport = AndroidHttp.newCompatibleTransport();
+        JsonFactory factory = JacksonFactory.getDefaultInstance();
+        final Sheets sheetsService = new Sheets.Builder(transport, factory, null)
+                .setApplicationName("My Awesome App")
+                .build();
+
+        return sheetsService;
     }
 
 
@@ -69,23 +57,66 @@ public class SheetsAndJava {
      * - date when form was filled
      * - form id
      * - answers about availability
-     * @throws IOException When there was error retrieving rows from spreadsheet
      */
-    public List<List<Object>> getAllFormsAnswers() throws IOException {
-        ValueRange response = null;
+    public List<List<Object>> getAllFormsAnswers()  {
+
+        allRows =null;
+
         try {
-            response = sheetsService.spreadsheets().values().get(SPREADSHEET_ID, range).execute();
-        } catch (IOException e) {
+            allRows =  task.execute().get();
+        } catch (ExecutionException e) {
             e.printStackTrace();
-            throw e;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        List<List<Object>> rows = null;
-        if(response != null){
-            rows = response.getValues();
-        }
+        return allRows;
 
-        return rows;
+
     }
 
+
+
+
+
+
+
+
+
+
+
+     AsyncTask<Void, Void, List<List<Object>>> task = new AsyncTask<Void, Void, List<List<Object>>>() {
+
+        @Override
+        protected List<List<Object>> doInBackground(Void... params) {
+            ValueRange response = null;
+            try {
+                response = sheetsService.spreadsheets().values()
+                        .get(SPREADSHEET_ID, range)
+                        .setKey(google_api_key)
+                        .execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            List<List<Object>> rows = null;
+            if(response != null){
+                rows = response.getValues();
+            }
+
+            allRows = rows;
+            return rows;
+        }
+
+
+
+        @Override
+        protected void onPostExecute(List<List<Object>> lists) {
+            super.onPostExecute(lists);
+        }
+    };
+
 }
+
+
+
