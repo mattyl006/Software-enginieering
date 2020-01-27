@@ -13,6 +13,7 @@ import com.besttime.app.helpers.WhatsappRedirector;
 import com.besttime.json.Json;
 import com.besttime.models.Contact;
 import com.besttime.ui.helpers.WhatsappContactIdRetriever;
+import com.besttime.workhorse.AvailType;
 import com.besttime.workhorse.CurrentTime;
 import com.besttime.workhorse.DayOfTheWeek;
 import com.besttime.workhorse.Form;
@@ -29,7 +30,9 @@ import java.io.Serializable;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -182,16 +185,70 @@ public class App implements Serializable, WhatsappCallPerformable {
     public void whatsappForward(final ContactEntry contact){
         if(!doingCall){
             doingCall = true;
-            if(contact.getCallCount() == 0){
-                askQueriesAndUpdateContactAvailabilityAndDoWhatsappCall(contact);
 
+
+            CurrentTime currentTime = new CurrentTime();
+
+            int currentHour = currentTime.getTime().getHours();
+            int currenMins = currentTime.getTime().getMinutes();
+
+
+
+            Hours currentHourEnum = DayOfTheWeek.timeToEnum(currentHour, currenMins);
+
+            if(currentHourEnum != null){
+                AvailType currentAvailability = contact.getAvailability().getCurrentDay().get(currentHourEnum);
+                // If contact is available just execute withour warnings
+                if(currentAvailability.compareTo(AvailType.unavailable) != 0
+                        && currentAvailability.compareTo(AvailType.undefined) != 0){
+                    if(contact.getCallCount() == 0){
+                        askQueriesAndUpdateContactAvailabilityAndDoWhatsappCall(contact);
+
+                    }
+                    else{
+                        whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
+                        lastCalledContact = contact;
+                    }
+                }
+                // If contact is unavailable or undefined at the moment display warning
+                else{
+                    displayWarningThatContactIsUnavailableAtTheMoment(contact);
+                }
             }
+            // If contact is unavailable or undefined at the moment display warning
             else{
-                whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
-                lastCalledContact = contact;
+                displayWarningThatContactIsUnavailableAtTheMoment(contact);
             }
 
         }
+    }
+
+    private void displayWarningThatContactIsUnavailableAtTheMoment(final ContactEntry contact){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        if(contact.getCallCount() == 0){
+                            askQueriesAndUpdateContactAvailabilityAndDoWhatsappCall(contact);
+
+                        }
+                        else{
+                            whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
+                            lastCalledContact = contact;
+                        }
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        doingCall = false;
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
+        builder.setMessage("Kontakt jest niedostepny lub nie ma informacji o jego dostepnosci. Na pewno chcesz dzwonic?").setPositiveButton("Tak", dialogClickListener)
+                .setNegativeButton("Nie", dialogClickListener).show();
     }
 
     private void askQueriesAndUpdateContactAvailabilityAndDoWhatsappCall(final ContactEntry contact) {

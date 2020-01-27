@@ -89,7 +89,7 @@ public class DayOfTheWeek implements Serializable {
      * @param min
      * @return
      */
-    public Hours timeToEnum(int hour, int min){
+    public static Hours timeToEnum(int hour, int min){
 
         switch (hour){
             case 6:
