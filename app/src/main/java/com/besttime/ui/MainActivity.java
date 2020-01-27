@@ -280,7 +280,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
             }
         });
 
-        initializeContactsRecyclerView();
 
         initializeStaticSidebar();
 
@@ -288,7 +287,11 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
         initializeMovingContactItem();
 
+        initializeContactsRecyclerView();
+
         initializeBackgroundImage();
+
+
 
     }
 
@@ -417,6 +420,8 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
                 movingSidebar.setVisibility(View.GONE);
 
+                contactSelectionChanged(contactsAdapter.getSelectedContact() != null ? contactsAdapter.getSelectedContact().getContactEntry() : null );
+
                 movingSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
@@ -496,7 +501,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     RelativeLayout.LayoutParams timeSquareLayoutParams = (RelativeLayout.LayoutParams) timeSquare.getLayoutParams();
                     timeSquareLayoutParams.height = timeSquaresHeight;
                     timeSquare.setLayoutParams(timeSquareLayoutParams);
-                    timeSquare.setBackgroundResource(R.drawable.time_available_drawable);
+                    //timeSquare.setBackgroundResource(R.drawable.time_available_drawable); // TEST
                     timeSquare.setGravity(Gravity.CENTER);
                 }
 
@@ -507,7 +512,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                 lastTimeSquare.setLayoutParams(lastTimeSquareLayoutParams);
 
 
-                staticSidebar.setVisibility(View.GONE);
+                //staticSidebar.setVisibility(View.GONE); // TEST
 
                 staticSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
@@ -567,16 +572,15 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     @Override
     public void contactSelectionChanged(@Nullable ContactEntry newSelectedContact) {
         if(newSelectedContact != null){
-            if(contactNameTextView != null){
-                contactNameTextView.setText(newSelectedContact.getContactName());
-            }
-
-
-            changeColorsOfTimeSquaresOnSideBar(newSelectedContact);
 
 
             movingSidebar.setVisibility(View.VISIBLE);
             staticSidebar.setVisibility(View.VISIBLE);
+            changeColorsOfTimeSquaresOnSideBar(newSelectedContact);
+
+            if(contactNameTextView != null){
+                contactNameTextView.setText(newSelectedContact.getContactName());
+            }
 
         }
         else if(newSelectedContact == null){

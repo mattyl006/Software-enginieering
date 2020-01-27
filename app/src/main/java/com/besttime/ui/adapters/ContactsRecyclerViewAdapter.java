@@ -60,34 +60,38 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
         this.setHasStableIds(true);
     }
 
+    public ContactEntryWithWhatsappId getSelectedContact() {
+        return selectedContact;
+    }
+
     public void setSelectionTracker(final SelectionTracker selectionTracker) {
         this.selectionTracker = selectionTracker;
-        selectionTracker.select(ghostSelectionKey);
+
         selectionTracker.addObserver(new SelectionTracker.SelectionObserver<Long>() {
             @Override
             public void onItemStateChanged(@NonNull Long key, boolean selected) {
                 super.onItemStateChanged(key, selected);
                 if (!doNothingOnItemStateChanged && !clearingSelection) {
                     int numOfSelectedItems = selectionTracker.getSelection().size();
-                    if (numOfSelectedItems == 1 + 1) {
+                    if (numOfSelectedItems == 1) {
                         previousSelectionKey = key;
-                    } else if (numOfSelectedItems == 2 + 1) {
+                    } else if (numOfSelectedItems == 2) {
                         doNothingOnItemStateChanged = true;
                         selectionTracker.deselect(previousSelectionKey);
                         previousSelectionKey = key;
                         doNothingOnItemStateChanged = false;
                     }
 
-                    else if (numOfSelectedItems == 0 + 1) {
-                        selectedContact = null;
-                        selectedViewHolder = null;
-                        if(contactSelectionChangeListener != null){
-                            contactSelectionChangeListener.contactSelectionChanged(null);
-                        }
+                    else if (numOfSelectedItems == 0) {
+                        doNothingOnItemStateChanged = true;
+                        selectionTracker.select(previousSelectionKey);
+                        doNothingOnItemStateChanged = false;
                     }
                 }
             }
         });
+
+        selectionTracker.select((long)0);
     }
 
     @Override
@@ -148,6 +152,15 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                     holder.setActive(false);
                 }
             }
+            else{
+                if(activeStateInSelectionTracker){
+
+                    selectedContact = contactsListFiltered.get(position);
+                    if(contactSelectionChangeListener != null){
+                        contactSelectionChangeListener.contactSelectionChanged(selectedContact.getContactEntry());
+                    }
+                }
+            }
         }
 
     }
@@ -206,12 +219,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                 selectedContact = null;
                 notifyDataSetChanged();
 
-                if(contactSelectionChangeListener != null){
-                    contactSelectionChangeListener.contactSelectionChanged(null);
+
+                clearingSelection = false;
+
+                if(!contactsListFiltered.isEmpty()){
+                    selectionTracker.select((long)0);
                 }
 
-                selectionTracker.select(ghostSelectionKey);
-                clearingSelection = false;
             }
         };
     }
