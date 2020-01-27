@@ -17,6 +17,7 @@ import com.besttime.workhorse.CurrentTime;
 import com.besttime.workhorse.DayOfTheWeek;
 import com.besttime.workhorse.Form;
 import com.besttime.workhorse.FormManager;
+import com.besttime.workhorse.Hours;
 import com.besttime.workhorse.QueriesType;
 import com.besttime.workhorse.Query;
 import com.besttime.workhorse.QuerySmsComputation;
@@ -30,6 +31,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -282,16 +284,80 @@ public class App implements Serializable, WhatsappCallPerformable {
             json.serialize(FormManager.JSON_NAME, formManager);
         }
 
-        lastCalledContact.addCallCount();
-        json.serialize(lastCalledContact.getContactId() + lastCalledContact.getContactNumber(),
-                lastCalledContact);
 
+
+
+        if(lastCalledContact.getCallCount() < 3){
+            askQuestionAfterCall(lastCalledContact);
+        }
+        else{
+            lastCalledContact.addCallCount();
+            json.serialize(lastCalledContact.getContactId() + lastCalledContact.getContactNumber(),
+                    lastCalledContact);
+        }
 
         json.serialize(App.nameToDeserialize, this);
 
-
-
     }
+
+    private transient Query currentAfterCallQuery;
+
+    private void askQuestionAfterCall(final ContactEntry contact){
+
+
+        currentAfterCallQuery = new Query(QueriesType.question5, new com.besttime.workhorse.Context(contact, new CurrentTime()));
+
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                        new com.besttime.workhorse.Context(contact, new CurrentTime());
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        currentAfterCallQuery.setAnswer(true);
+
+                        DayOfTheWeek result = currentAfterCallQuery.generateResult().get(0);
+
+                        Map<Hours, Integer> timesAndTheirAvailability = result.getMap();
+
+                        Hours hourThatUserSelected = null;
+
+                        for (Hours hour :
+                                timesAndTheirAvailability.keySet()) {
+                            Integer isAvailable = timesAndTheirAvailability.get(hour);
+                            if(isAvailable != 0){
+                                hourThatUserSelected = hour;
+                                break;
+                            }
+                        }
+
+                        // Can be null if hour is past app hours range (6.00 - 22.00)
+                        if(hourThatUserSelected != null){
+                            contact.getAvailability().updateOneHour(hourThatUserSelected, 1, (result.getId() + 1) % 7);
+
+                            if(contactsWithColorsContainer != null){
+                                contactsWithColorsContainer.updateColorsOfCurrentlySelectedContact(contact);
+                            }
+                        }
+
+
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        currentAfterCallQuery.setAnswer(false);
+                        break;
+                }
+
+                contact.addCallCount();
+                json.serialize(contact.getContactId() + contact.getContactNumber(), contact);
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
+        builder.setMessage(currentAfterCallQuery.getQuestion()).setPositiveButton("Tak", dialogClickListener)
+                .setNegativeButton("Nie", dialogClickListener).show();
+    }
+
 
     public void sortContacts(List<ContactEntry> contacts){
 

@@ -52,10 +52,29 @@ public class Availability implements Serializable {
     }
 
 
-    public void updateAvailabilityListByForm(Form form){
+    /**
+     * This method should be called after getting answer for Query of QueriesType.query5
+     * @param hourToUpdate
+     * @param isAvailable 0 - not, 1 - yes
+     * @param dayId 0 - Monday, 1 - Tuesday, ... , 6 - Sunday
+     */
+    public void updateOneHour(Hours hourToUpdate, Integer isAvailable, int dayId){
 
+        if(hourToUpdate != null){
+            AvailType currentAvailability = availability.get(dayId).get(hourToUpdate);
+
+            if(currentAvailability.compareTo(AvailType.available) != 0){
+                if(isAvailable == 0){
+                    availability.get(dayId).put(hourToUpdate, AvailType.unavailable);
+                }
+                else if(isAvailable == 1){
+                    availability.get(dayId).put(hourToUpdate, AvailType.perhaps);
+                }
+            }
+        }
 
     }
+
 
     private Map<Hours,AvailType> fillUndefined(){
         Map<Hours,AvailType> oneDayMap = new HashMap<>();
