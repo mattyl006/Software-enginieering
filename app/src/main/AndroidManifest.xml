@@ -24,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.besttime.ui.MainActivity"></activity>
+        <activity android:name="com.besttime.ui.MainActivity" android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>
