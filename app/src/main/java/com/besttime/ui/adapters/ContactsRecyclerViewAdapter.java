@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.besttime.app.ContactEntry;
+import com.besttime.app.ContactsListSortable;
 import com.besttime.app.helpers.WhatsappCallPerformable;
 import com.besttime.ui.adapters.viewHolders.ContactsViewHolder;
 import com.besttime.ui.animation.ContactSelectAnimationManager;
@@ -19,17 +21,18 @@ import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.example.besttime.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsViewHolder> implements Filterable {
 
-    private ArrayList<ContactEntryWithWhatsappId> contactsList;
-    private ArrayList<ContactEntryWithWhatsappId> contactsListFiltered;
+    private List<ContactEntry> contactsList;
+    private List<ContactEntry> contactsListFiltered;
     private SelectionTracker selectionTracker = null;
     private boolean doNothingOnItemStateChanged;
     private long previousSelectionKey;
     private ContactsViewHolder selectedViewHolder;
-    private ContactEntryWithWhatsappId selectedContact = null;
+    private ContactEntry selectedContact = null;
     private boolean clearingSelection = false;
 
     private boolean isSelectedContactViewHolderRecycled = false;
@@ -39,6 +42,8 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
     private ContactSelectionListenable contactSelectionChangeListener;
 
     private final long ghostSelectionKey = 1111;
+
+    private ContactsListSortable contactsListSorter;
 
 
     public void setAnimationManager(ContactSelectAnimationManager animationManager) {
@@ -51,16 +56,21 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     private ContactSelectAnimationManager animationManager;
 
-    public ContactsRecyclerViewAdapter(ArrayList<ContactEntryWithWhatsappId> contactsList, @Nullable WhatsappCallPerformable whatsappCallPerformable,
-                                       @Nullable ContactSelectionListenable contactSelectionChangeListener) {
+    public ContactsRecyclerViewAdapter(ArrayList<ContactEntry> contactsList, @Nullable WhatsappCallPerformable whatsappCallPerformable,
+                                       @Nullable ContactSelectionListenable contactSelectionChangeListener, @Nullable ContactsListSortable contactsListSorter) {
         this.contactsList = contactsList;
         contactsListFiltered =  new ArrayList<>(contactsList);
         this.whatsappCallPerformable = whatsappCallPerformable;
         this.contactSelectionChangeListener = contactSelectionChangeListener;
+        this.contactsListSorter = contactsListSorter;
         this.setHasStableIds(true);
+
+        if(contactsListSorter != null){
+            contactsListFiltered = contactsListSorter.sortContacts(contactsListFiltered);
+        }
     }
 
-    public ContactEntryWithWhatsappId getSelectedContact() {
+    public ContactEntry getSelectedContact() {
         return selectedContact;
     }
 
@@ -122,7 +132,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
                     // Select contact without animation on view rebind
                     if(selectedContact != null){
-                        if(selectedContact.getContactEntry().getContactId() == holder.getContact().getContactId()){
+                        if(selectedContact.getContactId() == holder.getContact().getContactId()){
                             holder.setActive(true);
                             return;
                         }
@@ -143,7 +153,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                     selectedViewHolder = holder;
                     selectedContact = contactsListFiltered.get(position);
                     if(contactSelectionChangeListener != null){
-                        contactSelectionChangeListener.contactSelectionChanged(selectedContact.getContactEntry());
+                        contactSelectionChangeListener.contactSelectionChanged(selectedContact);
                     }
 
                     isSelectedContactViewHolderRecycled = false;
@@ -157,7 +167,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
                     selectedContact = contactsListFiltered.get(position);
                     if(contactSelectionChangeListener != null){
-                        contactSelectionChangeListener.contactSelectionChanged(selectedContact.getContactEntry());
+                        contactSelectionChangeListener.contactSelectionChanged(selectedContact);
                     }
                 }
             }
@@ -171,7 +181,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
         super.onViewRecycled(holder);
 
         if(selectedContact != null){
-            if(holder.getContactEntryWithWhatsappId().getContactEntry().getContactId() == selectedContact.getContactEntry().getContactId()){
+            if(holder.getContactEntry().getContactId() == selectedContact.getContactId()){
                 isSelectedContactViewHolderRecycled = true;
             }
 
@@ -194,9 +204,9 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
                     contactsListFiltered.addAll(contactsList);
                 }
                 else {
-                    ArrayList<ContactEntryWithWhatsappId> filteredList = new ArrayList<>();
-                    for(ContactEntryWithWhatsappId contact: contactsList){
-                        if(contact.getContactEntry().getContactName().toLowerCase().contains(charString.toLowerCase())){
+                    ArrayList<ContactEntry> filteredList = new ArrayList<>();
+                    for(ContactEntry contact: contactsList){
+                        if(contact.getContactName().toLowerCase().contains(charString.toLowerCase())){
                             filteredList.add(contact);
                         }
                     }
@@ -211,12 +221,17 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                contactsListFiltered = (ArrayList<ContactEntryWithWhatsappId>) filterResults.values;
+                contactsListFiltered = (ArrayList<ContactEntry>) filterResults.values;
 
                 clearingSelection = true;
 
                 selectionTracker.clearSelection();
                 selectedContact = null;
+
+                if(contactsListSorter != null){
+                    contactsListFiltered = contactsListSorter.sortContacts(contactsListFiltered);
+                }
+
                 notifyDataSetChanged();
 
 
@@ -229,4 +244,38 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
             }
         };
     }
+
+
+
+    public void sortContactsAfterAvailabilityChange(){
+
+        if(contactsListSorter != null){
+            contactsListFiltered = contactsListSorter.sortContacts(contactsListFiltered);
+        }
+
+        notifyDataSetChanged();
+
+        selectContact(selectedContact);
+
+    }
+
+    private void selectContact(ContactEntry contactToSelect){
+
+        if(selectionTracker == null || contactToSelect == null){
+            return;
+        }
+
+        int i = 0;
+        for (ContactEntry contact :
+                contactsListFiltered) {
+            if(contact.getContactId() == contactToSelect.getContactId()){
+                selectionTracker.select((long)i);
+                return;
+            }
+            i ++;
+        }
+    }
+
+
+
 }

@@ -40,7 +40,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class App implements Serializable, WhatsappCallPerformable {
+public class App implements Serializable, WhatsappCallPerformable, ContactsListSortable {
 
     public final static String nameToDeserialize = "app";
 
@@ -86,7 +86,7 @@ public class App implements Serializable, WhatsappCallPerformable {
 
         firstUse = false;
 
-        setAllTransientFields(androidContext);
+        setAllTransientFields(androidContext, contactsWithColorsContainer);
 
     }
 
@@ -118,8 +118,10 @@ public class App implements Serializable, WhatsappCallPerformable {
     }
 
 
-    public void setAllTransientFields(Context androidContext) throws IOException, GeneralSecurityException, ParseException, ClassNotFoundException {
+    public void setAllTransientFields(Context androidContext,
+                                      @Nullable ContactsWithColorsContainer contactsWithColorsContainer) throws IOException, GeneralSecurityException, ParseException, ClassNotFoundException {
         this.androidContext = androidContext;
+        this.contactsWithColorsContainer = contactsWithColorsContainer;
         json = new Json(androidContext);
         contactImporter = new ContactImporter(PERMISSIONS_REQUEST_READ_CONTACTS, androidContext);
         whatsappContactIdRetriever =new WhatsappContactIdRetriever(androidContext.getContentResolver());

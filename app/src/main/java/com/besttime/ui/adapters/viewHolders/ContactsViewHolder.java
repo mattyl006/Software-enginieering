@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +25,7 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
 
     private boolean isSelected = false;
 
-    private ContactEntryWithWhatsappId contactEntryWithWhatsappId;
+    private ContactEntry contactEntry;
 
     private WhatsappCallPerformable whatsappCallPerformable;
 
@@ -43,8 +42,8 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(whatsappCallPerformable != null){
-                    if(contactEntryWithWhatsappId != null){
-                        whatsappCallPerformable.whatsappForward(contactEntryWithWhatsappId.getContactEntry());
+                    if(contactEntry != null){
+                        whatsappCallPerformable.whatsappForward(contactEntry);
                     }
                 }
                 return true;
@@ -60,24 +59,18 @@ public class ContactsViewHolder extends RecyclerView.ViewHolder {
         contactNameTextView.setText(contactName);
     }
 
-    public void bind(ContactEntryWithWhatsappId contactEntryWithWhatsappId){
-        this.contactEntryWithWhatsappId = contactEntryWithWhatsappId;
-        contactNameTextView.setText(contactEntryWithWhatsappId.getContactEntry().getContactName());
+    public void bind(ContactEntry contactEntryToBind){
+        this.contactEntry = contactEntryToBind;
+        contactNameTextView.setText(contactEntryToBind.getContactName());
     }
 
-    public ContactEntryWithWhatsappId getContactEntryWithWhatsappId(){
-        return contactEntryWithWhatsappId;
+    public ContactEntry getContactEntry(){
+        return contactEntry;
     }
 
     public ContactEntry getContact(){
-        return contactEntryWithWhatsappId.getContactEntry();
+        return contactEntry;
     }
-
-    public long getWhatsappVideCallId(){
-        return contactEntryWithWhatsappId.getWhatsappVideCallId();
-    }
-
-
 
     public void setActive(boolean isActive){
         if(isActive != this.isViewActive())

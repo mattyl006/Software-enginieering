@@ -20,29 +20,29 @@ public class ContactEntryCurrentAvailabilityComparator implements Comparator<Con
             switch (o1AvailType){
 
                 case unavailable:
-                    return -1;
-                case available:
                     return 1;
+                case available:
+                    return -1;
                 case undefined:
                     switch (o2AvailType){
 
                         case unavailable:
-                            return 1;
+                            return -1;
                         case available:
-                            return -1;
+                            return 1;
                         case perhaps:
-                            return -1;
+                            return 1;
                     }
                     break;
                 case perhaps:
                     switch (o2AvailType){
 
                         case unavailable:
-                            return 1;
-                        case available:
                             return -1;
-                        case undefined:
+                        case available:
                             return 1;
+                        case undefined:
+                            return -1;
                     }
                     break;
             }

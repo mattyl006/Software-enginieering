@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         try {
             app = (App) json.deserialize(App.nameToDeserialize);
 
-            app.setAllTransientFields(this);
+            app.setAllTransientFields(this, this);
 
             getAllContactsFromAppAndInitializeAllViews();
         } catch (IOException e) {
@@ -315,15 +315,15 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         contactsRecyclerView.setLayoutManager(layoutManager);
 
         WhatsappContactIdRetriever whatsappContactIdRetriever = new WhatsappContactIdRetriever(this.getContentResolver());
-        ArrayList<ContactEntryWithWhatsappId> contactEntriesWithWhatsappId = new ArrayList<>();
+        ArrayList<ContactEntry> contactEntriesWithWhatsappId = new ArrayList<>();
         for (ContactEntry contactEntry :
                 contactsList) {
             ContactEntryWithWhatsappId contactEntryWithWhatsappId = new ContactEntryWithWhatsappId(contactEntry, whatsappContactIdRetriever);
             if(contactEntryWithWhatsappId.getWhatsappVideCallId() >= 0){
-                contactEntriesWithWhatsappId.add(contactEntryWithWhatsappId);
+                contactEntriesWithWhatsappId.add(contactEntry);
             }
         }
-        contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId, app, this);
+        contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId, app, this, app);
         contactsRecyclerView.setAdapter(contactsAdapter);
         SelectionTracker selectionTracker = buildSelectionTracker();
 
@@ -421,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
                 movingSidebar.setVisibility(View.GONE);
 
-                contactSelectionChanged(contactsAdapter.getSelectedContact() != null ? contactsAdapter.getSelectedContact().getContactEntry() : null );
+                contactSelectionChanged(contactsAdapter.getSelectedContact() != null ? contactsAdapter.getSelectedContact() : null );
 
                 movingSidebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
@@ -778,5 +778,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     @Override
     public void updateColorsOfCurrentlySelectedContact(ContactEntry selectedContact) {
         changeColorsOfTimeSquaresOnSideBar(selectedContact);
+
+        contactsAdapter.sortContactsAfterAvailabilityChange();
     }
 }
