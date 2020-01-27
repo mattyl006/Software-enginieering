@@ -148,6 +148,7 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
 
         json.serialize(FormManager.JSON_NAME, formManager);
 
+        formManager.sendRemindersThatFormCanBeUpdated();
 
     }
 

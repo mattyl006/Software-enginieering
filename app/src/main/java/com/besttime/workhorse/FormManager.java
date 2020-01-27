@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,7 +24,10 @@ public class FormManager implements Serializable {
     private transient SmsManager smsManager;
 
     public static final String smsMessage = "Hej, zaznacz kiedy jesteś dostępny abym mógł do Ciebie zadzwonić: \n";
+    public static final String remindingSmsMessage = "Hej, przypominam, że w każdej chwili możesz zmienić godziny swojej dostępności do rozmowy:\n";
     public static final String formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScEiidNdn1cDF3GkJ1Gaysv5fnDebM4BjWzMuRoNDGF6jTKQQ/viewform?usp=pp_url&entry.1877286907=";
+
+
 
     public static final String JSON_NAME = "formManager";
 
@@ -51,6 +56,30 @@ public class FormManager implements Serializable {
 
     public void sendForm(Form form){
         smsManager.sendSmsPrompt(form.getContext(), makeSmsMessage(form));
+    }
+
+    public void sendRemindersThatFormCanBeUpdated(){
+        for (Form sentForm :
+                sentForms) {
+            if(sentForm.hasResponded()){
+
+                Date respondDate = sentForm.getDateWhenResponded();
+                Calendar respondDateCalendar = Calendar.getInstance();
+                respondDateCalendar.setTime(respondDate);
+
+                Date currentdate = new Date();
+                Calendar currentDateCalendar = Calendar.getInstance();
+                currentDateCalendar.setTime(currentdate);
+
+                int dayOfYearWhenResponded = respondDateCalendar.get(Calendar.DAY_OF_YEAR);
+                int dayOfYearNow = currentDateCalendar.get(Calendar.DAY_OF_YEAR);
+
+                if((dayOfYearWhenResponded - dayOfYearNow) >= 30){
+                    smsManager.sendSmsPrompt(sentForm.getContext(), remindingSmsMessage + formUrl + sentForm.getContext().getContact().getContactId());
+                }
+
+            }
+        }
     }
 
 
