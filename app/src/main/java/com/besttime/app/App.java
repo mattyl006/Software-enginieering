@@ -24,6 +24,7 @@ import com.besttime.workhorse.Query;
 import com.besttime.workhorse.QuerySmsComputation;
 import com.besttime.workhorse.SmsManager;
 import com.besttime.workhorse.Week;
+import com.besttime.workhorse.helpers.ContactEntryCurrentAvailabilityComparator;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -31,6 +32,7 @@ import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -221,6 +223,11 @@ public class App implements Serializable, WhatsappCallPerformable {
             }
 
         }
+    }
+
+    public List<ContactEntry> sortContacts(List<ContactEntry> contactsToSort){
+        Collections.sort(contactsToSort, new ContactEntryCurrentAvailabilityComparator());
+        return contactsToSort;
     }
 
     private void displayWarningThatContactIsUnavailableAtTheMoment(final ContactEntry contact){
@@ -415,11 +422,6 @@ public class App implements Serializable, WhatsappCallPerformable {
                 .setNegativeButton("Nie", dialogClickListener).show();
     }
 
-
-    public void sortContacts(List<ContactEntry> contacts){
-
-
-    }
 
     public Date getLastLaunch() {
         return lastLaunch;
