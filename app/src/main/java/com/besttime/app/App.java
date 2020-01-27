@@ -2,7 +2,9 @@ package com.besttime.app;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 
 import com.besttime.app.helpers.ContactImporter;
@@ -12,9 +14,14 @@ import com.besttime.json.Json;
 import com.besttime.models.Contact;
 import com.besttime.ui.helpers.WhatsappContactIdRetriever;
 import com.besttime.workhorse.CurrentTime;
+import com.besttime.workhorse.DayOfTheWeek;
 import com.besttime.workhorse.Form;
 import com.besttime.workhorse.FormManager;
+import com.besttime.workhorse.QueriesType;
+import com.besttime.workhorse.Query;
+import com.besttime.workhorse.QuerySmsComputation;
 import com.besttime.workhorse.SmsManager;
+import com.besttime.workhorse.Week;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -23,6 +30,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class App implements Serializable, WhatsappCallPerformable {
 
@@ -50,15 +59,20 @@ public class App implements Serializable, WhatsappCallPerformable {
 
     private transient boolean doingCall;
 
+    private transient ContactsWithColorsContainer contactsWithColorsContainer;
+
 
     /**
      *
      * @param androidContext
+     * @param contactsWithColorsContainer
      * @throws IOException
      * @throws GeneralSecurityException When there was error creating formManager
      */
-    public App(final Context androidContext) throws IOException, GeneralSecurityException, ParseException, ClassNotFoundException {
+    public App(final Context androidContext,
+               @Nullable ContactsWithColorsContainer contactsWithColorsContainer) throws IOException, GeneralSecurityException, ParseException, ClassNotFoundException {
         this.androidContext = androidContext;
+        this.contactsWithColorsContainer = contactsWithColorsContainer;
         contactListJsonNames = new ArrayList<>();
 
         json = new Json(androidContext);
@@ -157,15 +171,97 @@ public class App implements Serializable, WhatsappCallPerformable {
     }
 
 
-    private ContactEntry lastCalledContact;
+    private transient ContactEntry lastCalledContact;
 
-    public void whatsappForward(ContactEntry contact){
+
+    private transient List<Query> currentQueries;
+    private transient int currentQueryInd;
+
+    public void whatsappForward(final ContactEntry contact){
         if(!doingCall){
-            whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
-            lastCalledContact = contact;
             doingCall = true;
+            if(contact.getCallCount() == 0){
+                askQueriesAndUpdateContactAvailabilityAndDoWhatsappCall(contact);
+
+            }
+            else{
+                whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
+                lastCalledContact = contact;
+            }
+
         }
     }
+
+    private void askQueriesAndUpdateContactAvailabilityAndDoWhatsappCall(final ContactEntry contact) {
+        currentQueries = new ArrayList<>();
+        currentQueryInd = 0;
+
+        for (QueriesType queryType :
+                QueriesType.values()) {
+            if(queryType.compareTo(QueriesType.question5) != 0){
+                currentQueries.add(new Query(queryType, new com.besttime.workhorse.Context(contact, new CurrentTime())));
+            }
+        }
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        currentQueries.get(currentQueryInd).setAnswer(true);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        currentQueries.get(currentQueryInd).setAnswer(false);
+                        break;
+                }
+
+                if(currentQueryInd < currentQueries.size() - 1){
+                    currentQueryInd ++;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
+                    builder.setMessage(currentQueries.get(currentQueryInd).getQuestion()).setPositiveButton("Tak", this)
+                            .setNegativeButton("Nie", this).show();
+                }
+                // All queries asked
+                else{
+
+                    Week emptySmsWeek = new Week();
+                    Week queryWeek = new Week();
+                    for (Query query :
+                            currentQueries) {
+
+                        List<DayOfTheWeek> generatedResultsFromQueryAnswer = query.generateResult();
+
+                        for (DayOfTheWeek result :
+                                generatedResultsFromQueryAnswer) {
+                            queryWeek.updateDay(result);
+                        }
+
+                    }
+                    QuerySmsComputation querySmsComputation = new QuerySmsComputation(emptySmsWeek, queryWeek);
+
+                    contact.getAvailability().setAvailability(querySmsComputation.getWeek());
+
+                    if(contactsWithColorsContainer != null){
+                        contactsWithColorsContainer.updateColorsOfCurrentlySelectedContact(contact);
+                    }
+
+
+
+                    lastCalledContact = contact;
+                    json.serialize(lastCalledContact.getContactId() + lastCalledContact.getContactNumber(),
+                            lastCalledContact);
+                    whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
+
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
+        builder.setMessage(currentQueries.get(currentQueryInd).getQuestion()).setPositiveButton("Tak", dialogClickListener)
+                .setNegativeButton("Nie", dialogClickListener).show();
+    }
+
 
     public void onWhatsappVideoCallEnd(boolean wasCallAnwsered){
 
@@ -178,7 +274,7 @@ public class App implements Serializable, WhatsappCallPerformable {
             // do sth else
         }
 
-        if(lastCalledContact.getCallCount() == 0){ // CHANGE to == 0 LATER
+        if(lastCalledContact.getCallCount() == 0){
             Form newForm = new Form(lastCalledContact.getContactId(),
                     new com.besttime.workhorse.Context(lastCalledContact, new CurrentTime()));
             formManager.sendForm(newForm);

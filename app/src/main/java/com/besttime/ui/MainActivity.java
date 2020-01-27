@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.besttime.app.App;
 import com.besttime.app.ContactEntry;
+import com.besttime.app.ContactsWithColorsContainer;
 import com.besttime.json.Json;
 import com.besttime.models.Contact;
 import com.besttime.ui.adapters.ContactsRecyclerViewAdapter;
@@ -56,7 +57,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements ContactSelectionListenable {
+public class MainActivity extends AppCompatActivity implements ContactSelectionListenable, ContactsWithColorsContainer {
 
     private RecyclerView contactsRecyclerView;
     private ContactsRecyclerViewAdapter contactsAdapter;
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                app = new App(this);
+                app = new App(this, this);
             } catch (IOException ex) {
                 ex.printStackTrace();
                 Toast.makeText(this, "Error starting app", Toast.LENGTH_LONG).show();
@@ -772,5 +773,10 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
             }
 
         }
+    }
+
+    @Override
+    public void updateColorsOfCurrentlySelectedContact(ContactEntry selectedContact) {
+        changeColorsOfTimeSquaresOnSideBar(selectedContact);
     }
 }
