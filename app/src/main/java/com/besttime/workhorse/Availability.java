@@ -2,6 +2,7 @@ package com.besttime.workhorse;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,26 @@ public class Availability implements Serializable {
 
     public Map<Hours, AvailType> getCurrentDay() {
         return currentDay;
+    }
+
+
+    public AvailType getCurrentAvailability(){
+
+        Date currentTime = new CurrentTime().getTime();
+
+        int currentHour = currentTime.getHours();
+        int currentMins = currentTime.getMinutes();
+
+        Hours currentHourEnum = DayOfTheWeek.timeToEnum(currentHour, currentMins);
+
+        if(currentHourEnum == null){
+            return AvailType.unavailable;
+        }
+
+
+        AvailType currentAvailability = getCurrentDay().get(currentHourEnum);
+        return currentAvailability;
+
     }
 
 
