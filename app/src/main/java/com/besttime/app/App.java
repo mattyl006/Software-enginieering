@@ -348,9 +348,16 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
             }
         };
 
+        DialogInterface.OnDismissListener onDismissDialogListener = new DialogInterface.OnDismissListener(){
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                doingCall = false;
+            }
+        };
+
         AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
         builder.setMessage(currentQueries.get(currentQueryInd).getQuestion()).setPositiveButton("Tak", dialogClickListener)
-                .setNegativeButton("Nie", dialogClickListener).show();
+                .setNegativeButton("Nie", dialogClickListener).setOnDismissListener(onDismissDialogListener).show();
     }
 
 
