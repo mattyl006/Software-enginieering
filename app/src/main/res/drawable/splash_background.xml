@@ -7,8 +7,9 @@
     <item
         android:gravity="center">
         <bitmap
+            android:mipMap="true"
             android:gravity="center"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/besttime_logo_v_1_"/>
     </item>
 
 </layer-list>
