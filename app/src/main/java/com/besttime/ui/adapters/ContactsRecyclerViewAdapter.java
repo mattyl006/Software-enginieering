@@ -56,7 +56,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
 
     private ContactSelectAnimationManager animationManager;
 
-    public ContactsRecyclerViewAdapter(ArrayList<ContactEntry> contactsList, @Nullable WhatsappCallPerformable whatsappCallPerformable,
+    public ContactsRecyclerViewAdapter(List<ContactEntry> contactsList, @Nullable WhatsappCallPerformable whatsappCallPerformable,
                                        @Nullable ContactSelectionListenable contactSelectionChangeListener, @Nullable ContactsListSortable contactsListSorter) {
         this.contactsList = contactsList;
         contactsListFiltered =  new ArrayList<>(contactsList);
@@ -246,6 +246,14 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
     }
 
 
+    public void setContactsList(List<ContactEntry> contactsList){
+        this.contactsList = contactsList;
+        contactsListFiltered =  new ArrayList<>(contactsList);
+        if(contactsListSorter != null){
+            contactsListFiltered = contactsListSorter.sortContacts(contactsListFiltered);
+        }
+        notifyDataSetChanged();
+    }
 
     public void sortContactsAfterAvailabilityChange(){
 

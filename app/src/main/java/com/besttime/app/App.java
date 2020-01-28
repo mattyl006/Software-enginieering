@@ -13,6 +13,7 @@ import com.besttime.app.helpers.WhatsappRedirector;
 import com.besttime.json.Json;
 import com.besttime.models.Contact;
 import com.besttime.ui.helpers.WhatsappContactIdRetriever;
+import com.besttime.ui.viewModels.ContactEntryWithWhatsappId;
 import com.besttime.workhorse.AvailType;
 import com.besttime.workhorse.CurrentTime;
 import com.besttime.workhorse.DayOfTheWeek;
@@ -94,7 +95,9 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
         List<Contact> contacts = contactImporter.getAllContacts();
 
 
-        contactEntries = new ArrayList<>();
+        if(contactEntries == null){
+            contactEntries = new ArrayList<>();
+        }
         for (Contact contact :
                 contacts) {
             ContactEntry newContactEntry = new ContactEntry(contact);
@@ -152,10 +155,29 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
 
     }
 
+    public List<ContactEntry> getListOfContactsCallableByWhatsapp(){
+
+        if(whatsappContactIdRetriever != null && contactEntries != null){
+            ArrayList<ContactEntry> contactEntriesWithWhatsappId = new ArrayList<>();
+            for (ContactEntry contactEntry :
+                    contactEntries) {
+                ContactEntryWithWhatsappId contactEntryWithWhatsappId = new ContactEntryWithWhatsappId(contactEntry, whatsappContactIdRetriever);
+                if(contactEntryWithWhatsappId.getWhatsappVideCallId() >= 0){
+                    contactEntriesWithWhatsappId.add(contactEntry);
+                }
+            }
+
+            return contactEntriesWithWhatsappId;
+        }
+
+        return null;
+
+    }
 
 
 
-    public List<ContactEntry> getContactList() throws IOException, ClassNotFoundException {
+
+    public List<ContactEntry> getContactList() {
         return contactEntries;
     }
 

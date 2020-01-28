@@ -175,6 +175,19 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                 Intent i = new Intent(this, AboutActivity.class);
                 startActivity(i);
                 return true;
+
+            case R.id.importContactsOption:
+                if(app != null){
+                    app.importContacts();
+
+                    contactsList = app.getListOfContactsCallableByWhatsapp();
+
+                    if(contactsAdapter != null){
+                        contactsAdapter.setContactsList(contactsList);
+                    }
+
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -257,15 +270,8 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     }
 
     private void getAllContactsFromAppAndInitializeAllViews() {
-        try {
-            contactsList = app.getContactList();
-        } catch (IOException e) {
-            e.printStackTrace();
-            finishAndRemoveTask();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            finishAndRemoveTask();
-        }
+
+        contactsList = app.getContactList();
 
         initializeDisplayMetrics();
 
@@ -318,15 +324,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         contactsRecyclerView.setLayoutManager(layoutManager);
 
-        WhatsappContactIdRetriever whatsappContactIdRetriever = new WhatsappContactIdRetriever(this.getContentResolver());
-        ArrayList<ContactEntry> contactEntriesWithWhatsappId = new ArrayList<>();
-        for (ContactEntry contactEntry :
-                contactsList) {
-            ContactEntryWithWhatsappId contactEntryWithWhatsappId = new ContactEntryWithWhatsappId(contactEntry, whatsappContactIdRetriever);
-            if(contactEntryWithWhatsappId.getWhatsappVideCallId() >= 0){
-                contactEntriesWithWhatsappId.add(contactEntry);
-            }
-        }
+
+        List<ContactEntry> contactEntriesWithWhatsappId = app.getListOfContactsCallableByWhatsapp();
+
         contactsAdapter = new ContactsRecyclerViewAdapter(contactEntriesWithWhatsappId, app, this, app);
         contactsRecyclerView.setAdapter(contactsAdapter);
         SelectionTracker selectionTracker = buildSelectionTracker();
