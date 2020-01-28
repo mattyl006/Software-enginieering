@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="30dp"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/contactItemDefault">
 
     <TextView
         android:id="@+id/timeSquare_textView_6.00"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_alignParentTop="true"
         android:text="6" />
 
