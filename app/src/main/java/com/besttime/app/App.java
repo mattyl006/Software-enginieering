@@ -25,7 +25,7 @@ import com.besttime.workhorse.Query;
 import com.besttime.workhorse.QuerySmsComputation;
 import com.besttime.workhorse.SmsManager;
 import com.besttime.workhorse.Week;
-import com.besttime.workhorse.helpers.ContactEntryCurrentAvailabilityComparator;
+import com.besttime.workhorse.helpers.ContactEntryComparator;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -317,7 +317,7 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
     }
 
     public List<ContactEntry> sortContacts(List<ContactEntry> contactsToSort){
-        Collections.sort(contactsToSort, new ContactEntryCurrentAvailabilityComparator());
+        Collections.sort(contactsToSort, new ContactEntryComparator());
         return contactsToSort;
     }
 
