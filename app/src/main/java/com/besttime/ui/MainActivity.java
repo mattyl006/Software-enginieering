@@ -207,7 +207,8 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                backgroundImage.setY(backgroundImage.getY() - dy);
+                // Remove comments to allow cat movement on scroll
+                //backgroundImage.setY(backgroundImage.getY() - dy);
             }
         });
     }
