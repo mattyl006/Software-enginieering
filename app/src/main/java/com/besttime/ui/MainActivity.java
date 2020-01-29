@@ -196,6 +196,17 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
                 }
                 return true;
+
+
+            case R.id.sendReminder:
+
+                boolean reminderWasSent = app.sendReminderToContact(contactsAdapter.getSelectedContact());
+
+                if(!reminderWasSent){
+                    Toast.makeText(this, contactsAdapter.getSelectedContact().getContactName() + " hasn't been called before.", Toast.LENGTH_LONG).show();
+                }
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

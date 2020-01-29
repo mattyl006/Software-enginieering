@@ -32,10 +32,8 @@ import java.io.Serializable;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -130,8 +128,6 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
 
         }
         json.serialize(App.nameToDeserialize, this);
-
-
 
 
 
@@ -241,6 +237,10 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
     }
 
 
+    public boolean sendReminderToContact(ContactEntry contactToSendTo){
+
+        return formManager.sendReminderThatFormCanBeUpdated(contactToSendTo);
+    }
 
 
     public List<ContactEntry> getContactList() {

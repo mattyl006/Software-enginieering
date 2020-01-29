@@ -84,6 +84,28 @@ public class FormManager implements Serializable {
 
 
     /**
+     * Sends reminder to contact, that he/she can fill form again to update his availability time.
+     * @param contactToSendTo
+     * @return True if form to this contact has already been sent before and reminder now can be sent, false if no sms was sent before with form url.
+     */
+    public boolean sendReminderThatFormCanBeUpdated(ContactEntry contactToSendTo){
+
+
+        for (Form sentForm:
+             sentForms) {
+            if(sentForm.getContext().getContact().getContactId() == contactToSendTo.getContactId()){
+                smsManager.sendSmsPrompt(sentForm.getContext(), remindingSmsMessage + formUrl + sentForm.getContext().getContact().getContactId());
+                return true;
+            }
+        }
+
+
+        return false;
+
+    }
+
+
+    /**
      * Checks whether some of the forms has been filled, fetches answers for these forms and updates them.
      * @throws IOException When there was error checking responses
      * @throws ParseException Error parsing row

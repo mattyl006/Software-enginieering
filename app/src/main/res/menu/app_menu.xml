@@ -15,4 +15,8 @@
     <item android:id="@+id/aboutWindow"
         android:title="About"
         app:showAsAction="never"/>
+
+    <item android:id="@+id/sendReminder"
+        android:title="Send reminder"
+        app:showAsAction="never"/>
 </menu>
