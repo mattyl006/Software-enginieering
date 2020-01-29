@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
     private ValueAnimator sidebarOpeningWidthAnimation;
     private ValueAnimator sidebarOpeningAlphaAnimation;
     private ValueAnimator shadowCastingAnimation;
-    private long sidebarOpeningAnimationDuration = 500;
+    private long sidebarOpeningAnimationDuration = 400;
 
 
     private View movingContactItem;
@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         actionBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                contactsAdapter.setAnimationManager(new ContactSelectAnimationManager(movingContactItem, shadowMakerAndClickBlocker, 500, actionBar.getHeight()));
+                contactsAdapter.setAnimationManager(new ContactSelectAnimationManager(movingContactItem, shadowMakerAndClickBlocker, sidebarOpeningAnimationDuration, actionBar.getHeight()));
 
                 actionBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
