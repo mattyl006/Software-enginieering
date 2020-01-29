@@ -641,9 +641,6 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
         }
 
 
-
-
-
         // Iterate over all hours in current day and set background of time squares based on avail type
         for (Hours hour:
              currentDay.keySet()) {
@@ -708,7 +705,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     availType = currentDay.get(Hours.h16_00);
                     break;
                 case h16_30:
-                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_16_00);
+                    if(currentDay.get(Hours.h16_00) != AvailType.available){
+                        timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_16_00);
+                    }
                     timeRectangleOnMovingSidebar = movingSidebar.findViewById(R.id.timeRectangle_16_30_movingSideBar);
                     availType = currentDay.get(Hours.h16_30);
                     break;
@@ -718,7 +717,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     availType = currentDay.get(Hours.h17_00);
                     break;
                 case h17_30:
-                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_17_00);
+                    if(currentDay.get(Hours.h17_00) != AvailType.available){
+                        timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_16_00);
+                    }
                     timeRectangleOnMovingSidebar = movingSidebar.findViewById(R.id.timeRectangle_17_30_movingSideBar);
                     availType = currentDay.get(Hours.h17_30);
                     break;
@@ -728,7 +729,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     availType = currentDay.get(Hours.h18_00);
                     break;
                 case h18_30:
-                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_18_00);
+                    if(currentDay.get(Hours.h18_00) != AvailType.available){
+                        timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_16_00);
+                    }
                     timeRectangleOnMovingSidebar = movingSidebar.findViewById(R.id.timeRectangle_18_30_movingSideBar);
                     availType = currentDay.get(Hours.h18_30);
                     break;
@@ -738,7 +741,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     availType = currentDay.get(Hours.h19_00);
                     break;
                 case h19_30:
-                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_19_00);
+                    if(currentDay.get(Hours.h19_00) != AvailType.available){
+                        timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_16_00);
+                    }
                     timeRectangleOnMovingSidebar = movingSidebar.findViewById(R.id.timeRectangle_19_30_movingSideBar);
                     availType = currentDay.get(Hours.h19_30);
                     break;
@@ -748,7 +753,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     availType = currentDay.get(Hours.h20_00);
                     break;
                 case h20_30:
-                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_20_00);
+                    if(currentDay.get(Hours.h20_00) != AvailType.available){
+                        timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_16_00);
+                    }
                     timeRectangleOnMovingSidebar = movingSidebar.findViewById(R.id.timeRectangle_20_30_movingSideBar);
                     availType = currentDay.get(Hours.h20_30);
                     break;
@@ -758,7 +765,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                     availType = currentDay.get(Hours.h21_00);
                     break;
                 case h21_30:
-                    timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_21_00);
+                    if(currentDay.get(Hours.h21_00) != AvailType.available){
+                        timeSquareOnStaticSidebar = staticSidebar.findViewById(R.id.timeSquare_textView_16_00);
+                    }
                     timeRectangleOnMovingSidebar = movingSidebar.findViewById(R.id.timeRectangle_21_30_movingSideBar);
                     availType = currentDay.get(Hours.h21_30);
                     break;
