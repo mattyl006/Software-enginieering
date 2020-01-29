@@ -108,6 +108,8 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
                 contactEntries.add(newContactEntry);
             }
         }
+        
+        json.serialize(App.nameToDeserialize, this);
     }
 
     /**
@@ -278,6 +280,7 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
             }
         };
 
+        // TODO: Add on OnDismissListener
         AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
         builder.setMessage("Kontakt jest niedostepny lub nie ma informacji o jego dostepnosci. Na pewno chcesz dzwonic?").setPositiveButton("Tak", dialogClickListener)
                 .setNegativeButton("Nie", dialogClickListener).show();
@@ -309,6 +312,7 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
 
                 if(currentQueryInd < currentQueries.size() - 1){
                     currentQueryInd ++;
+                    // TODO: add on dismiss listener
                     AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
                     builder.setMessage(currentQueries.get(currentQueryInd).getQuestion()).setPositiveButton("Tak", this)
                             .setNegativeButton("Nie", this).show();
