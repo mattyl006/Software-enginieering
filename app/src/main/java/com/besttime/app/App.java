@@ -361,7 +361,7 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
 
         for (QueriesType queryType :
                 QueriesType.values()) {
-            if(queryType.compareTo(QueriesType.question5) != 0){
+            if(queryType.compareTo(QueriesType.question5) != 0 && queryType.compareTo(QueriesType.question4) != 0){
                 currentQueries.add(new Query(queryType, new com.besttime.workhorse.Context(contact, new CurrentTime())));
             }
         }
