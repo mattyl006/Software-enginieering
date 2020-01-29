@@ -18,19 +18,19 @@ public class Query {
 
         switch (queriesType) {
             case question1:
-                this.question = "Czy rozmawia Pan z ta osoba czesciej w weekendy niż od poniedzialku do piatku?";
+                this.question = "Is it more likely for you to speak with this person on a weekend than between Monday and Friday?";
                 break;
             case question2:
-                this.question = "Czy czesto rozmawia Pan z ta osoba od poniedzialku do piatku?";
+                this.question = "Do you often speak with this person between Monday and Friday?";
                 break;
             case question3:
-                this.question = "Czy rozmawia Pan z ta osoba czesciej w godzinach 6:00-16:00 niz w godzinach 16:00-24:00? ";
+                this.question = "Is it more likely for you tospeak with this person between4PM and 12AMthan between 6AM and 4PM? ";
                 break;
             case question4:
-                this.question = "Czy ta osoba zazwyczaj jest dostepna i moze rozmawiac, gdy Pan do niej dzwoni?";
+                this.question = "-";
                 break;
             case question5:
-                this.question = "Czy regularnie rozmawia Pan z ta osoba o tej samej godzinie i dniu tygodnia co dzisiaj?";
+                this.question = "Do you speak with this person at the same timeand the same day of the weekas todayon a regular basis?";
                 break;
         }
     }
