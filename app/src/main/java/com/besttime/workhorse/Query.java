@@ -24,13 +24,13 @@ public class Query {
                 this.question = "Do you often speak with this person between Monday and Friday?";
                 break;
             case question3:
-                this.question = "Is it more likely for you tospeak with this person between4PM and 12AMthan between 6AM and 4PM? ";
+                this.question = "Is it more likely for you to speak with this person between 4PM and 12AM than between 6AM and 4PM? ";
                 break;
             case question4:
                 this.question = "-";
                 break;
             case question5:
-                this.question = "Do you speak with this person at the same timeand the same day of the weekas todayon a regular basis?";
+                this.question = "Do you speak with this person at the same time and the same day of the week as today on a regular basis?";
                 break;
         }
     }
