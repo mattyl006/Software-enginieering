@@ -200,9 +200,8 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
         }
 
         formManager.setTransientFields(new SmsManager(androidContext, PERMISSIONS_REQUEST_SEND_SMS));
-
-        contactEntries = deserializeAllContacts();
-
+        
+        importContacts();
 
         formManager.checkResponses(contactEntries);
 

@@ -29,6 +29,6 @@
         android:textColor="@color/actionBarColor"
         android:fontFamily="sans-serif-condensed-light"
         android:alpha="0.65"
-        android:text="Best Time v1.0"/>
+        android:text="Best Time beta v1.3"/>
 
 </RelativeLayout>
