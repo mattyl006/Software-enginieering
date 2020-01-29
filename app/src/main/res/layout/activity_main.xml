@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.besttime.ui.MainActivity">
+    tools:context="com.besttime.ui.MainActivity"
+    android:background="@color/contactItemDefault">
 
     <include
         android:id="@+id/actionBar"
@@ -58,7 +59,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/actionBar"
         android:layout_toRightOf="@id/static_sidebar"
         android:background="@color/contactItemDefault"/>
