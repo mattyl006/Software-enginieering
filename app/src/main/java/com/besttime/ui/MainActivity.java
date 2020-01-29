@@ -781,7 +781,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
                         timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_available_drawable_active);
                         break;
                     case undefined:
-                        if(timeSquareOnStaticSidebar!= null){timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable_active);}
+                        if(timeSquareOnStaticSidebar!= null){
+                            timeSquareOnStaticSidebar.setBackgroundResource(R.drawable.time_undefined_drawable_active);
+                        }
                         timeRectangleOnMovingSidebar.setBackgroundResource(R.drawable.time_undefined_drawable_active);
                         break;
                     case perhaps:
