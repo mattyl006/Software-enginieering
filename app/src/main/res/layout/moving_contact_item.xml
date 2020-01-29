@@ -6,7 +6,7 @@
     android:background="@color/contactItemSelected"
     android:alpha="0.7"
     android:translationZ="2dp"
-    android:visibility="gone">
+    android:visibility="invisible">
 
     <Button
         android:id="@+id/whatsappRedirectButton_movingContactItem"
