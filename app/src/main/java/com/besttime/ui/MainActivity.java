@@ -325,9 +325,9 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
         initializeMovingSidebar();
 
-        initializeMovingContactItem();
-
         initializeContactsRecyclerView();
+
+        initializeMovingContactItem();
 
         initializeBackgroundImage();
 

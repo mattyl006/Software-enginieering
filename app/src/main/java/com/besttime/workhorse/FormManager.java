@@ -112,52 +112,60 @@ public class FormManager implements Serializable {
      */
     public void checkResponses(List<ContactEntry> contactEntries) throws ParseException {
 
-        List<List<Object>> dataFromSheets = dataRetriever.getAllFormsAnswers();
 
-        List<ParsedRowFromSheet> parsedRowsFromSheet = new ArrayList<>();
+        if(contactEntries != null){
+             if(!contactEntries.isEmpty()){
 
-        for (List<Object> notParsedRowFromSheet :
-                dataFromSheets) {
-            parsedRowsFromSheet.add(new ParsedRowFromSheet(notParsedRowFromSheet));
+                 List<List<Object>> dataFromSheets = dataRetriever.getAllFormsAnswers();
+
+                 List<ParsedRowFromSheet> parsedRowsFromSheet = new ArrayList<>();
+
+                 for (List<Object> notParsedRowFromSheet :
+                         dataFromSheets) {
+                     parsedRowsFromSheet.add(new ParsedRowFromSheet(notParsedRowFromSheet));
+                 }
+
+                 // Iterate over all parsed rows and check if there are some forms updated and update them
+                 for (ParsedRowFromSheet parsedRow :
+                         parsedRowsFromSheet) {
+
+                     for (Form sentForm :
+                             sentForms) {
+
+                         if(sentForm.getId() == parsedRow.getFormId()){
+                             if(!sentForm.hasResponded()){
+                                 sentForm.updateAllDaysAnswers(parsedRow.getAnswers(), parsedRow.getDateWhenFormFilled());
+
+                                 for (ContactEntry contactEntry :
+                                         contactEntries) {
+                                     if(contactEntry.getContactId() == sentForm.getId()){
+                                         QuerySmsComputation querySmsComputation = new QuerySmsComputation(sentForm.generateResult(), new Week());
+                                         contactEntry.getAvailability().setAvailability(querySmsComputation.getWeek());
+                                     }
+                                 }
+
+                             }
+                             else{
+                                 if(sentForm.getDateWhenResponded().before(parsedRow.getDateWhenFormFilled())){
+                                     sentForm.updateAllDaysAnswers(parsedRow.getAnswers(), parsedRow.getDateWhenFormFilled());
+                                     for (ContactEntry contactEntry :
+                                             contactEntries) {
+                                         if(contactEntry.getContactId() == sentForm.getId()){
+                                             QuerySmsComputation querySmsComputation = new QuerySmsComputation(sentForm.generateResult(), new Week());
+                                             contactEntry.getAvailability().setAvailability(querySmsComputation.getWeek());
+                                         }
+                                     }
+                                 }
+                             }
+                         }
+
+                     }
+                 }
+
+             }
         }
 
 
-        // Iterate over all parsed rows and check if there are some forms updated and update them
-        for (ParsedRowFromSheet parsedRow :
-                parsedRowsFromSheet) {
-
-            for (Form sentForm :
-                    sentForms) {
-
-                if(sentForm.getId() == parsedRow.getFormId()){
-                    if(!sentForm.hasResponded()){
-                        sentForm.updateAllDaysAnswers(parsedRow.getAnswers(), parsedRow.getDateWhenFormFilled());
-
-                        for (ContactEntry contactEntry :
-                                contactEntries) {
-                            if(contactEntry.getContactId() == sentForm.getId()){
-                                QuerySmsComputation querySmsComputation = new QuerySmsComputation(sentForm.generateResult(), new Week());
-                                contactEntry.getAvailability().setAvailability(querySmsComputation.getWeek());
-                            }
-                        }
-
-                    }
-                    else{
-                        if(sentForm.getDateWhenResponded().before(parsedRow.getDateWhenFormFilled())){
-                            sentForm.updateAllDaysAnswers(parsedRow.getAnswers(), parsedRow.getDateWhenFormFilled());
-                            for (ContactEntry contactEntry :
-                                    contactEntries) {
-                                if(contactEntry.getContactId() == sentForm.getId()){
-                                    QuerySmsComputation querySmsComputation = new QuerySmsComputation(sentForm.generateResult(), new Week());
-                                    contactEntry.getAvailability().setAvailability(querySmsComputation.getWeek());
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
 
     }
 

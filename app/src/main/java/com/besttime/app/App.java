@@ -92,66 +92,71 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
     public void importContacts() throws ClassNotFoundException, IOException {
         List<Contact> importedContacts = contactImporter.getAllContacts();
 
-
-        if(contactEntries != null){
-            contactEntries.clear();
-
-        }
+        if(importedContacts != null){
 
 
-        // Check if something was deleted
-        int jsonNamesSize = contactListJsonNames.size();
-        for (int i = 0; i < jsonNamesSize; i++) {
-            String jsonName = contactListJsonNames.get(i);
-            String[] contactInfoFromJsonName = ContactEntry.getContactInfoFromJsonName(jsonName);
-            int contactIdFromJsonName = Integer.parseInt(contactInfoFromJsonName[0]);
-            String contactPhoneNumFromJsonName = contactInfoFromJsonName[1];
+            if(contactEntries != null){
+                contactEntries.clear();
 
-            boolean wasOnImportedContactsList = false;
+            }
 
-            for (Contact importedContact :
+
+            // Check if something was deleted
+            int jsonNamesSize = contactListJsonNames.size();
+            for (int i = 0; i < jsonNamesSize; i++) {
+                String jsonName = contactListJsonNames.get(i);
+                String[] contactInfoFromJsonName = ContactEntry.getContactInfoFromJsonName(jsonName);
+                int contactIdFromJsonName = Integer.parseInt(contactInfoFromJsonName[0]);
+                String contactPhoneNumFromJsonName = contactInfoFromJsonName[1];
+
+                boolean wasOnImportedContactsList = false;
+
+                for (Contact importedContact :
+                        importedContacts) {
+
+                    if(importedContact.getId() == contactIdFromJsonName
+                            && importedContact.getPhoneNumber().equals(contactPhoneNumFromJsonName)){
+                        wasOnImportedContactsList = true;
+                        break;
+                    }
+
+                }
+                if(!wasOnImportedContactsList){
+                    contactListJsonNames.remove(i);
+                    jsonNamesSize --;
+                    i --;
+                }
+
+
+            }
+            json.serialize(App.nameToDeserialize, this);
+
+
+
+
+
+            for (Contact contact :
                     importedContacts) {
-
-                if(importedContact.getId() == contactIdFromJsonName
-                        && importedContact.getPhoneNumber().equals(contactPhoneNumFromJsonName)){
-                    wasOnImportedContactsList = true;
-                    break;
+                ContactEntry newContactEntry = new ContactEntry(contact);
+                String nameToSerialize = newContactEntry.generateNameForJson();
+                if(!contactListJsonNames.contains(nameToSerialize)){
+                    contactListJsonNames.add(nameToSerialize);
+                    json.serialize(nameToSerialize, newContactEntry);
                 }
-
-            }
-            if(!wasOnImportedContactsList){
-                contactListJsonNames.remove(i);
-                jsonNamesSize --;
-                i --;
-            }
-
-
-        }
-        json.serialize(App.nameToDeserialize, this);
-
-
-
-
-
-        for (Contact contact :
-                importedContacts) {
-            ContactEntry newContactEntry = new ContactEntry(contact);
-            String nameToSerialize = newContactEntry.generateNameForJson();
-            if(!contactListJsonNames.contains(nameToSerialize)){
-                contactListJsonNames.add(nameToSerialize);
-                json.serialize(nameToSerialize, newContactEntry);
-            }
-            // Check if contact name has changed ...
-            else{
-                ContactEntry storedContact = deserializeContact(nameToSerialize);
-                if(!storedContact.getContactName().equals(newContactEntry.getContactName())){
-                    storedContact.changeContactName(newContactEntry.getContactName());
-                    json.serialize(nameToSerialize, storedContact);
+                // Check if contact name has changed ...
+                else{
+                    ContactEntry storedContact = deserializeContact(nameToSerialize);
+                    if(!storedContact.getContactName().equals(newContactEntry.getContactName())){
+                        storedContact.changeContactName(newContactEntry.getContactName());
+                        json.serialize(nameToSerialize, storedContact);
+                    }
                 }
             }
+
+            json.serialize(App.nameToDeserialize, this);
         }
 
-        json.serialize(App.nameToDeserialize, this);
+
 
         contactEntries = deserializeAllContacts();
     }

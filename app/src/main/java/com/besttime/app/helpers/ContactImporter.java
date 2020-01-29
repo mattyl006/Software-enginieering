@@ -37,9 +37,6 @@ public class ContactImporter {
 
         if (context.checkSelfPermission(Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
-
-            ((Activity)context).requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
-                    PERMISSIONS_REQUEST_READ_CONTACTS);
             return false;
         }
         return true;
