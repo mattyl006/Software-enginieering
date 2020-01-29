@@ -59,15 +59,17 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
     public ContactsRecyclerViewAdapter(List<ContactEntry> contactsList, @Nullable WhatsappCallPerformable whatsappCallPerformable,
                                        @Nullable ContactSelectionListenable contactSelectionChangeListener, @Nullable ContactsListSortable contactsListSorter) {
         this.contactsList = contactsList;
-        contactsListFiltered =  new ArrayList<>(contactsList);
         this.whatsappCallPerformable = whatsappCallPerformable;
         this.contactSelectionChangeListener = contactSelectionChangeListener;
         this.contactsListSorter = contactsListSorter;
         this.setHasStableIds(true);
 
         if(contactsListSorter != null){
-            contactsListFiltered = contactsListSorter.sortContacts(contactsListFiltered);
+            this.contactsList = contactsListSorter.sortContacts(this.contactsList);
         }
+
+        contactsListFiltered =  new ArrayList<>(contactsList);
+
     }
 
     public ContactEntry getSelectedContact() {
@@ -258,6 +260,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsVi
     public void sortContactsAfterAvailabilityChange(){
 
         if(contactsListSorter != null){
+            contactsList = contactsListSorter.sortContacts(contactsList);
             contactsListFiltered = contactsListSorter.sortContacts(contactsListFiltered);
         }
 

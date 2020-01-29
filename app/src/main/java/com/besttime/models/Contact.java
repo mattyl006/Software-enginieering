@@ -26,4 +26,8 @@ public class Contact implements Serializable {
     public String getPhoneNumber() {
         return mPhoneNumber;
     }
+
+    public void changeName(String newName){
+        mName = newName;
+    }
 }

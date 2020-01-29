@@ -178,12 +178,20 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
 
             case R.id.importContactsOption:
                 if(app != null){
-                    app.importContacts();
+                    try {
+                        app.importContacts();
 
-                    contactsList = app.getListOfContactsCallableByWhatsapp();
+                        contactsList = app.getListOfContactsCallableByWhatsapp();
 
-                    if(contactsAdapter != null){
-                        contactsAdapter.setContactsList(contactsList);
+                        if(contactsAdapter != null){
+                            contactsAdapter.setContactsList(contactsList);
+                        }
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Error importing contacts", Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Error importing contacts", Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -240,10 +248,19 @@ public class MainActivity extends AppCompatActivity implements ContactSelectionL
             case App.PERMISSIONS_REQUEST_READ_CONTACTS:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    app.importContacts();
-                    json.serialize(App.nameToDeserialize, app);
-                    getAllContactsFromAppAndInitializeAllViews();
-                    app.checkAllPermissions();
+                    try {
+                        app.importContacts();
+                        json.serialize(App.nameToDeserialize, app);
+                        getAllContactsFromAppAndInitializeAllViews();
+                        app.checkAllPermissions();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Error importing contacts", Toast.LENGTH_LONG).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Error importing contacts", Toast.LENGTH_LONG).show();
+                    }
+
 
                 }
                 else {

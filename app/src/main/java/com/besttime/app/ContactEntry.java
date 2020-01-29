@@ -38,4 +38,28 @@ public class ContactEntry implements Serializable {
     public Availability getAvailability() {
         return availability;
     }
+
+    public void changeContactName(String newName){
+        contactInfo.changeName(newName);
+    }
+
+    public String generateNameForJson(){
+        return getContactId()+ "_" + getContactNumber();
+    }
+
+
+    /**
+     *
+     * @param jsonName String in format {id}_{phoneNum}.
+     * @return String[2] result:
+     * - result[0] - id
+     * - result[1] - phone num
+     */
+    public static String[] getContactInfoFromJsonName(String jsonName){
+
+        String[] result = jsonName.split("_");
+
+        return result;
+
+    }
 }

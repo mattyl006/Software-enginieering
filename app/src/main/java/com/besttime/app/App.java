@@ -91,25 +91,89 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
 
     }
 
-    public void importContacts() {
-        List<Contact> contacts = contactImporter.getAllContacts();
+    public void importContacts() throws ClassNotFoundException, IOException {
+        List<Contact> importedContacts = contactImporter.getAllContacts();
 
 
-        if(contactEntries == null){
-            contactEntries = new ArrayList<>();
+        if(contactEntries != null){
+            contactEntries.clear();
+
         }
+
+
+        // Check if something was deleted
+        int jsonNamesSize = contactListJsonNames.size();
+        for (int i = 0; i < jsonNamesSize; i++) {
+            String jsonName = contactListJsonNames.get(i);
+            String[] contactInfoFromJsonName = ContactEntry.getContactInfoFromJsonName(jsonName);
+            int contactIdFromJsonName = Integer.parseInt(contactInfoFromJsonName[0]);
+            String contactPhoneNumFromJsonName = contactInfoFromJsonName[1];
+
+            boolean wasOnImportedContactsList = false;
+
+            for (Contact importedContact :
+                    importedContacts) {
+
+                if(importedContact.getId() == contactIdFromJsonName
+                        && importedContact.getPhoneNumber().equals(contactPhoneNumFromJsonName)){
+                    wasOnImportedContactsList = true;
+                    break;
+                }
+
+            }
+            if(!wasOnImportedContactsList){
+                contactListJsonNames.remove(i);
+                jsonNamesSize --;
+                i --;
+            }
+
+
+        }
+        json.serialize(App.nameToDeserialize, this);
+
+
+
+
+
+
+
         for (Contact contact :
-                contacts) {
+                importedContacts) {
             ContactEntry newContactEntry = new ContactEntry(contact);
-            String nameToSerialize = newContactEntry.getContactId() + newContactEntry.getContactNumber();
+            String nameToSerialize = newContactEntry.generateNameForJson();
             if(!contactListJsonNames.contains(nameToSerialize)){
                 contactListJsonNames.add(nameToSerialize);
                 json.serialize(nameToSerialize, newContactEntry);
-                contactEntries.add(newContactEntry);
+            }
+            // Check if contact name has changed ...
+            else{
+                ContactEntry storedContact = deserializeContact(nameToSerialize);
+                if(!storedContact.getContactName().equals(newContactEntry.getContactName())){
+                    storedContact.changeContactName(newContactEntry.getContactName());
+                    json.serialize(nameToSerialize, storedContact);
+                }
             }
         }
 
         json.serialize(App.nameToDeserialize, this);
+
+        contactEntries = deserializeAllContacts();
+    }
+
+    private ContactEntry deserializeContact(String nameToSerialize) throws IOException, ClassNotFoundException {
+
+        ContactEntry storedContact = null;
+        try {
+            storedContact = (ContactEntry) json.deserialize(nameToSerialize);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+        return storedContact;
     }
 
     /**
@@ -148,7 +212,7 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
 
         for (ContactEntry contactEntry :
                 contactEntries) {
-            json.serialize(contactEntry.getContactId() + contactEntry.getContactNumber(), contactEntry);
+            json.serialize(contactEntry.generateNameForJson(), contactEntry);
         }
 
         json.serialize(FormManager.JSON_NAME, formManager);
@@ -280,7 +344,6 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
             }
         };
 
-        // TODO: Add on OnDismissListener
         DialogInterface.OnDismissListener onDismissDialogListener = new DialogInterface.OnDismissListener(){
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -356,7 +419,7 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
 
 
                     lastCalledContact = contact;
-                    json.serialize(lastCalledContact.getContactId() + lastCalledContact.getContactNumber(),
+                    json.serialize(lastCalledContact.generateNameForJson(),
                             lastCalledContact);
                     whatsappRedirector.redirectToWhatsappVideoCall(contact, WHATSAPP_VIDEO_CALL_REQUEST);
 
@@ -404,7 +467,7 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
         }
         else{
             lastCalledContact.addCallCount();
-            json.serialize(lastCalledContact.getContactId() + lastCalledContact.getContactNumber(),
+            json.serialize(lastCalledContact.generateNameForJson(),
                     lastCalledContact);
         }
 
@@ -461,7 +524,7 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
                 }
 
                 contact.addCallCount();
-                json.serialize(contact.getContactId() + contact.getContactNumber(), contact);
+                json.serialize(contact.generateNameForJson(), contact);
             }
         };
 
