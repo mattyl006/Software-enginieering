@@ -351,8 +351,8 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
-        builder.setMessage("Kontakt jest niedostepny lub nie ma informacji o jego dostepnosci. Na pewno chcesz dzwonic?").setPositiveButton("Tak", dialogClickListener)
-                .setNegativeButton("Nie", dialogClickListener).setOnDismissListener(onDismissDialogListener).show();
+        builder.setMessage("Contact is not available at the moment. Are you sure you want to call?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).setOnDismissListener(onDismissDialogListener).show();
     }
 
     private void askQueriesAndUpdateContactAvailabilityAndDoWhatsappCall(final ContactEntry contact) {
@@ -389,8 +389,8 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
                         }
                     };
                     AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
-                    builder.setMessage(currentQueries.get(currentQueryInd).getQuestion()).setPositiveButton("Tak", this)
-                            .setNegativeButton("Nie", this).setOnDismissListener(onDismissDialogListener).show();
+                    builder.setMessage(currentQueries.get(currentQueryInd).getQuestion()).setPositiveButton("Yes", this)
+                            .setNegativeButton("No", this).setOnDismissListener(onDismissDialogListener).show();
                 }
                 // All queries asked
                 else{
@@ -435,8 +435,8 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
-        builder.setMessage(currentQueries.get(currentQueryInd).getQuestion()).setPositiveButton("Tak", dialogClickListener)
-                .setNegativeButton("Nie", dialogClickListener).setOnDismissListener(onDismissDialogListener).show();
+        builder.setMessage(currentQueries.get(currentQueryInd).getQuestion()).setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).setOnDismissListener(onDismissDialogListener).show();
     }
 
 
@@ -529,8 +529,8 @@ public class App implements Serializable, WhatsappCallPerformable, ContactsListS
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(androidContext);
-        builder.setMessage(currentAfterCallQuery.getQuestion()).setPositiveButton("Tak", dialogClickListener)
-                .setNegativeButton("Nie", dialogClickListener).show();
+        builder.setMessage(currentAfterCallQuery.getQuestion()).setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
     }
 
 
