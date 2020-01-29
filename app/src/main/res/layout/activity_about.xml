@@ -9,7 +9,13 @@
     tools:context="com.besttime.ui.AboutActivity">
 
 
+    <include
+        android:id="@+id/actionBar_about"
+        layout="@layout/action_bar" />
+
+
     <ImageView
+        android:layout_below="@+id/actionBar_about"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.8"
